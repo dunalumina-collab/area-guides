@@ -16,9 +16,12 @@ const WHATSAPP_ICON = (
 export default function GuideHeader({
   sections,
   whatsappHref,
+  extraLink,
 }: {
   sections: { id: string; label: string }[];
   whatsappHref: string;
+  /** Optional external nav link rendered after the in-page anchors (homepage uses this for dunagroup.ae). */
+  extraLink?: { label: string; href: string };
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -33,6 +36,11 @@ export default function GuideHeader({
               {s.label}
             </a>
           ))}
+          {extraLink && (
+            <a href={extraLink.href} target="_blank" rel="noopener noreferrer">
+              {extraLink.label}
+            </a>
+          )}
         </nav>
         <a className="g-header-cta" href={whatsappHref} target="_blank" rel="noopener noreferrer">
           {WHATSAPP_ICON}

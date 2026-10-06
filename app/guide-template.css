@@ -414,3 +414,57 @@ footer.fine a{color:#8a8275;text-decoration:underline}
 
 /* ---- Mobile safety ---- */
 @media (max-width:480px){.wrap{padding-inline:16px}.g-header-inner{padding-inline:16px}}
+
+/* =========================================================================
+   HOMEPAGE — Oct 2026 redesign: brought onto the same premium system as the
+   guide pages (g-header/g-section/sec-intro/card-row/g-footer, all defined
+   above). Content, copy, section order and every link/href are unchanged —
+   this block is presentation only. */
+
+.home-hero{padding-block:clamp(56px,8vw,96px) clamp(40px,6vw,64px)}
+.home-hero .eyebrow{color:var(--gold-tint);display:block;margin-bottom:12px}
+.home-hero h1{color:#fff;font-size:clamp(2.1rem,4.8vw,3.4rem);line-height:1.08;max-width:19ch;margin:0}
+.home-hero-lead{color:#d9d3c2;margin-top:18px;font-size:1.02rem;max-width:62ch;line-height:1.7}
+.home-hero-note{margin-top:26px;max-width:66ch;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-left:3px solid var(--gold)}
+.home-hero-note p{color:#e9e4d8}
+.home-hero-note p b{color:#fff}
+
+/* Guide cards (area/project) — distinct card treatment from the plain
+   info-card stat blocks below, with its own hover affordance. */
+.card-plain.guide-card{display:flex;flex-direction:column;gap:8px;min-height:150px}
+.guide-card .n{font-family:"Playfair Display",serif;font-size:1.2rem;font-weight:700;color:var(--forest);margin-top:2px}
+.guide-card .l{display:block;font-size:.82rem;color:#6b6458}
+.guide-card .l2{display:block;margin-top:auto;font-size:.74rem;color:#8a8275;padding-top:8px;border-top:1px solid var(--line)}
+.guide-card .arrow{display:block;font-size:.78rem;font-weight:700;color:var(--forest);margin-top:2px}
+.guide-status{font-size:.66rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:999px;width:fit-content}
+.guide-status.live{background:var(--gold-tint);color:#6b4e1b}
+.guide-status.soon{background:#efece3;color:#8a8275}
+.guides-note{margin-top:18px;font-size:.82rem;color:#8a8275}
+.guide-group{margin-bottom:28px}
+.guide-group:last-of-type{margin-bottom:0}
+.guide-group-label{font-family:"Montserrat",sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);margin-bottom:14px}
+
+/* "Why" stat cards — card-stat base (serif number + gold left accent)
+   repurposed for a number + paragraph instead of number + short label, so
+   the homepage reads differently from the guide-card grid above it. */
+.card-stat.home-stat{display:flex;gap:16px;align-items:flex-start}
+.card-stat.home-stat .n{font-size:1.9rem;flex:none;min-width:1.6em}
+.card-stat.home-stat .l{font-size:.9rem;text-transform:none;letter-spacing:normal;color:#4a443a;line-height:1.65;margin-top:3px}
+@media (max-width:560px){.card-stat.home-stat{flex-direction:column;gap:6px}}
+
+#list .leader-table table,#invest .leader-table table{min-width:560px}
+.leader-table thead th.mid,.leader-table tbody td.mid{text-align:center}
+#list .leader-table tbody tr:last-child td,#invest .leader-table tbody tr:last-child td{font-weight:700;color:var(--forest)}
+#list .leader-note,#invest .leader-note{max-width:70ch;line-height:1.55}
+#platform .mp-block{margin-block:0}
+
+/* ---- Empty-state message (genuine data gaps only, never a masked bug) ---- */
+.g-empty{border:1px dashed var(--line);border-radius:8px;padding:20px;text-align:center;font-size:.86rem;color:#8a8275;background:rgba(163,123,44,.04)}
+.g-section.tone-forest .g-empty{border-color:rgba(255,255,255,.22);color:#c3bdaf;background:rgba(255,255,255,.04)}
+
+/* ---- KPI / stat-tile color variety (forest/gold alternation instead of a
+   single flat accent on every tile) ---- */
+.kpi:nth-child(3n+2) .n,.stat-strip .cell:nth-child(3n+2) .v{color:var(--gold)}
+.g-section.tone-forest .kpi:nth-child(3n+2) .n{color:var(--gold-tint)}
+.card-stat:nth-child(3n+2){border-left-color:var(--forest)}
+.card-stat:nth-child(3n+2) .n{color:var(--forest)}

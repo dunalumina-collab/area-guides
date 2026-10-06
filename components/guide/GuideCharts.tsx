@@ -7,6 +7,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import type { GuideDataset, HistoryRow, RentRecord, SaleRecord } from "@/lib/types";
+import EmptyState from "./EmptyState";
 
 const PALETTE = ["#2C4A3E", "#A37B2C", "#7A8C78", "#C9A769", "#50605A"];
 
@@ -76,7 +77,7 @@ function HistoryChart({
                   fill={tip?.text.startsWith(String(r.year)) ? PALETTE[1] : PALETTE[0]}
                   rx={3}
                   style={{ cursor: "pointer" }}
-                  onMouseEnter={(e) => {
+                  onMouseEnter={() => {
                     const rect = svgRef.current!.getBoundingClientRect();
                     setTip({
                       x: (x + barW / 2) * (rect.width / W),
@@ -333,6 +334,9 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
           ))}
         </select>
       </div>
+      {rows.length === 0 ? (
+        <EmptyState label={`no registered ${txn.toLowerCase()} records match this filter`} />
+      ) : (
       <div className="table-wrap">
         <table>
           <thead>
@@ -366,7 +370,8 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
           </tbody>
         </table>
       </div>
-      <div className="count-note">{countNote}</div>
+      )}
+      {rows.length > 0 && <div className="count-note">{countNote}</div>}
     </>
   );
 }

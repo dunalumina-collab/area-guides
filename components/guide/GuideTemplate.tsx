@@ -19,6 +19,7 @@ import GuideHeader from "./GuideHeader";
 import GuideFooter from "./GuideFooter";
 import Accordion from "./Accordion";
 import PlaceholderImage from "./PlaceholderImage";
+import EmptyState from "./EmptyState";
 
 const PLAY_ICON = (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -192,6 +193,9 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
           </div>
 
           <Accordion title="Top 5 selling projects in Dubai Marina" sub="Apartment sale volume, trailing 90 days vs the prior 90 days">
+            {c.market.topSellingRows.length === 0 ? (
+              <EmptyState label="no top-selling project leaderboard registered for this window" />
+            ) : (
             <div className="leader-table" style={{ marginBottom: 0 }}>
               <table>
                 <thead>
@@ -214,6 +218,7 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
                 </tbody>
               </table>
             </div>
+            )}
             <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topSellingNote}</p>
           </Accordion>
 
@@ -221,6 +226,9 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
             title="Top 5 rented buildings in Dubai Marina"
             sub="Ranked by number of rental contracts registered this year (the data source does not provide a 3-month window or pricing for this leaderboard)"
           >
+            {c.market.topRentedRows.length === 0 ? (
+              <EmptyState label="no top-rented building leaderboard registered for this window" />
+            ) : (
             <div className="leader-table" style={{ marginBottom: 0 }}>
               <table>
                 <thead>
@@ -241,6 +249,7 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
                 </tbody>
               </table>
             </div>
+            )}
             <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topRentedNote}</p>
           </Accordion>
 

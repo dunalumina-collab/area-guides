@@ -17,6 +17,7 @@ import GuideHeader from "./GuideHeader";
 import GuideFooter from "./GuideFooter";
 import Accordion from "./Accordion";
 import PlaceholderImage from "./PlaceholderImage";
+import EmptyState from "./EmptyState";
 
 const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -217,6 +218,9 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
           </div>
 
           <Accordion title="Top-selling clusters / sub-communities" defaultOpen>
+            {c.market.topSellingRows.length === 0 ? (
+              <EmptyState label="no top-selling cluster leaderboard registered for this window" />
+            ) : (
             <div className="leader-table" style={{ marginBottom: 0 }}>
               <table>
                 <thead>
@@ -239,10 +243,14 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
                 </tbody>
               </table>
             </div>
+            )}
             <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topSellingNote}</p>
           </Accordion>
 
           <Accordion title="Top-rented clusters / sub-communities">
+            {c.market.topRentedRows.length === 0 ? (
+              <EmptyState label="no top-rented cluster leaderboard registered for this window" />
+            ) : (
             <div className="leader-table" style={{ marginBottom: 0 }}>
               <table>
                 <thead>
@@ -263,6 +271,7 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
                 </tbody>
               </table>
             </div>
+            )}
             <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topRentedNote}</p>
           </Accordion>
 

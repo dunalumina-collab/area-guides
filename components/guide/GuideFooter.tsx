@@ -3,6 +3,8 @@
 // Platform link. Forest/ivory/gold accents only. Replaces the plain
 // text-strip footer on project/area guide pages (homepage footer unchanged).
 
+import Link from "next/link";
+
 export default function GuideFooter({
   sections,
   whatsappHref,
@@ -55,7 +57,7 @@ export default function GuideFooter({
             <ul>
               <li><a href="https://dunagroup.ae/" target="_blank" rel="noopener noreferrer">Official Website</a></li>
               <li><a href="https://market.dunagroup.ae/" target="_blank" rel="noopener noreferrer">Duna Intelligence Platform</a></li>
-              <li><a href="/" >All Area &amp; Project Guides</a></li>
+              <li><Link href="/">All Area &amp; Project Guides</Link></li>
             </ul>
           </div>
         </div>

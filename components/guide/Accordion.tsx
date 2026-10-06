@@ -6,7 +6,7 @@
 // guide templates. Headline KPIs/stat strips are rendered outside this
 // component by the templates, never hidden inside one, per the redesign brief.
 
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export default function Accordion({
   title,
@@ -20,7 +20,19 @@ export default function Accordion({
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
+  const [maxHeight, setMaxHeight] = useState<number>(defaultOpen ? 2000 : 0);
   const bodyRef = useRef<HTMLDivElement>(null);
+
+  // Measuring the body's real scrollHeight (rather than reading the ref
+  // during render) keeps this a pure effect — never a render-time ref read —
+  // while still giving the accordion a smooth, content-sized open transition.
+  useEffect(() => {
+    if (open) {
+      setMaxHeight(bodyRef.current?.scrollHeight ?? 2000);
+    } else {
+      setMaxHeight(0);
+    }
+  }, [open, children]);
 
   return (
     <div className={`gacc${open ? " open" : ""}`}>
@@ -36,11 +48,7 @@ export default function Accordion({
         </span>
         <span className="gacc-ico" aria-hidden="true" />
       </button>
-      <div
-        className="gacc-body"
-        ref={bodyRef}
-        style={{ maxHeight: open ? bodyRef.current?.scrollHeight ?? 2000 : 0 }}
-      >
+      <div className="gacc-body" ref={bodyRef} style={{ maxHeight }}>
         <div className="gacc-inner">{children}</div>
       </div>
     </div>
