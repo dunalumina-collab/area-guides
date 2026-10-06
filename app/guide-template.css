@@ -384,7 +384,7 @@ footer.fine a{color:#8a8275;text-decoration:underline}
 .g-section.tone-forest .specialist-grid .social-pill{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.2);color:#f1ede3}
 .g-section.tone-forest .specialist-grid .social-pill:hover{border-color:var(--gold);color:var(--gold-tint);background:rgba(255,255,255,.1)}
 .g-section.tone-forest .spec-photo{border:1px solid rgba(255,255,255,.2)}
-.g-section.tone-forest .spec-photo::after{background:var(--gold)}
+.g-section.tone-forest .spec-photo::after{background:transparent;border-color:var(--gold)}
 .spec-photo{transition:transform .3s}
 .specialist-grid:hover .spec-photo img{transform:scale(1.03)}
 .spec-photo img{transition:transform .4s}
