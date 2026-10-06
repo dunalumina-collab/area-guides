@@ -115,6 +115,9 @@ export interface GuideContent {
     title: string;
     buildingName: string;
     areaLabel: string;
+    /** Real exterior/community photo for the overview media slot. Omit to show PlaceholderImage. */
+    heroImageSrc?: string;
+    heroImageAlt?: string;
   };
   hero: {
     kicker: string;

@@ -98,7 +98,15 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
 
           <div className="split">
             <div className="media">
-              <PlaceholderImage label={`${c.meta.areaLabel} — community imagery`} />
+              {c.meta.heroImageSrc ? (
+                <img
+                  className="media-photo"
+                  src={c.meta.heroImageSrc}
+                  alt={c.meta.heroImageAlt ?? `${c.meta.areaLabel} community`}
+                />
+              ) : (
+                <PlaceholderImage label={`${c.meta.areaLabel} — community imagery`} />
+              )}
             </div>
             <div className="copy">
               <div className="card-row cols-2" style={{ marginBottom: 4 }}>

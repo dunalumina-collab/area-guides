@@ -10,6 +10,8 @@ const guide: GuideData = {
       title: "Stella Maris Owner Report - Vesna Gjeleva, Duna Group",
       buildingName: "Stella Maris",
       areaLabel: "Dubai Marina",
+      heroImageSrc: "/stella-maris-exterior.jpg",
+      heroImageAlt: "Stella Maris tower rising above Dubai Marina at sunset",
     },
     hero: {
       kicker: "Dubai Marina · Stella Maris",

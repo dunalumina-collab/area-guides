@@ -10,6 +10,8 @@ const guide: GuideData = {
       title: "Cayan Tower Owner Report - Vesna Gjeleva, Duna Group",
       buildingName: "Cayan Tower",
       areaLabel: "Dubai Marina",
+      heroImageSrc: "/cayan-tower-exterior.jpg",
+      heroImageAlt: "Cayan Tower's twisting silhouette at sunset, Dubai Marina",
     },
     hero: {
       kicker: "Dubai Marina · Cayan Tower",

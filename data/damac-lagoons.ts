@@ -16,6 +16,8 @@ const guide: GuideData = {
       title: "Darko - Damac Lagoons, Duna Group",
       buildingName: "Damac Lagoons",
       areaLabel: "Damac Lagoons",
+      heroImageSrc: "/damac-lagoons-hero.jpg",
+      heroImageAlt: "Mediterranean-style villas and lagoon at Damac Lagoons",
     },
     hero: {
       kicker: "Dubai · Damac Lagoons",

@@ -57,7 +57,15 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
 
           <div className="split">
             <div className="media">
-              <PlaceholderImage label={`${c.meta.buildingName} — exterior / architecture`} />
+              {c.meta.heroImageSrc ? (
+                <img
+                  className="media-photo"
+                  src={c.meta.heroImageSrc}
+                  alt={c.meta.heroImageAlt ?? `${c.meta.buildingName} exterior`}
+                />
+              ) : (
+                <PlaceholderImage label={`${c.meta.buildingName} — exterior / architecture`} />
+              )}
             </div>
             <div className="copy">
               <div className="card-row cols-2">
