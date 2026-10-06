@@ -210,6 +210,79 @@ export function RentHistoryChart({ history }: { history: HistoryRow[] }) {
   return <HistoryChart rows={history} dataKey="rent" mode="line" fmt={(v) => `AED ${v.toLocaleString()}/yr`} />;
 }
 
+// Groups the dataset's own sale/rent records by calendar month, computed
+// directly from each record's real date field (DD-MM-YYYY) — no separate
+// monthly dataset is stored or invented. Renders one card per month in
+// `months` (in order); a month with zero matching records in the sample
+// still renders its card with an honest "no records in this sample" line
+// rather than a blank table.
+export function MonthlyActivity({
+  dataset,
+  months,
+}: {
+  dataset: GuideDataset;
+  months: { label: string; month: number; year: number }[];
+}) {
+  const { sale, rent, isSample } = dataset;
+
+  function monthOf(dateStr: string): { m: number; y: number } {
+    const [, m, y] = dateStr.split("-").map(Number);
+    return { m, y };
+  }
+
+  return (
+    <div className="monthly-table-grid">
+      {months.map(({ label, month, year }) => {
+        const saleRows = sale.filter((r) => {
+          const { m, y } = monthOf(r.date);
+          return m === month && y === year;
+        });
+        const rentRows = rent.filter((r) => {
+          const { m, y } = monthOf(r.start);
+          return m === month && y === year;
+        });
+        const saleTotal = saleRows.reduce((sum, r) => sum + r.price, 0);
+        const rentTotal = rentRows.reduce((sum, r) => sum + r.rent, 0);
+        return (
+          <div className="monthly-table-card" key={label}>
+            <h4>{label}</h4>
+            {saleRows.length === 0 && rentRows.length === 0 ? (
+              <p className="monthly-table-empty">
+                No {isSample ? "sampled " : ""}records fall in this month{isSample ? " (sample shows most-recently-registered records only)" : ""}.
+              </p>
+            ) : (
+              <table>
+                <tbody>
+                  <tr>
+                    <td>Sales{isSample ? " (sample)" : ""}</td>
+                    <td>{saleRows.length}</td>
+                  </tr>
+                  <tr>
+                    <td>Rent contracts{isSample ? " (sample)" : ""}</td>
+                    <td>{rentRows.length}</td>
+                  </tr>
+                  {saleRows.length > 0 && (
+                    <tr>
+                      <td>Avg sale price (AED)</td>
+                      <td>{Math.round(saleTotal / saleRows.length).toLocaleString()}</td>
+                    </tr>
+                  )}
+                  {rentRows.length > 0 && (
+                    <tr>
+                      <td>Avg annual rent (AED)</td>
+                      <td>{Math.round(rentTotal / rentRows.length).toLocaleString()}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
   const { sale, rent, bedroomTypes, isSample, sampleTotals } = dataset;
   const [txn, setTxn] = useState<"Sale" | "Rent">("Sale");

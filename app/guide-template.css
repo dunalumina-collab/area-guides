@@ -189,6 +189,23 @@ a.fact-card:hover{border-color:var(--gold);transform:translateY(-2px)}
 .fact-card .l2{margin-top:auto;font-size:.74rem;color:#8a8275;padding-top:8px;border-top:1px solid var(--line)}
 .fact-card .arrow{font-size:.78rem;font-weight:700;color:var(--forest)}
 .guides-note{margin-top:18px;font-size:.82rem;color:#8a8275}
+.guide-group{margin-bottom:28px}
+.guide-group:last-of-type{margin-bottom:0}
+.guide-group-label{font-family:"Montserrat",sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);margin-bottom:14px}
+
+.floor-plans-toggle{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--forest);color:#fff;border:none;cursor:pointer;padding:16px 22px;border-radius:999px;font-size:.95rem;font-weight:700;letter-spacing:.02em;margin-bottom:12px;font-family:"Montserrat",sans-serif}
+.floor-plans-toggle:hover{background:#243d33}
+.floor-plans-panel{border:1px solid var(--line);border-radius:8px;padding:20px;margin-bottom:36px;background:var(--card)}
+.floor-plans-panel .facts-grid{margin-bottom:12px}
+
+.monthly-table-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:12px}
+@media (max-width:860px){.monthly-table-grid{grid-template-columns:1fr}}
+.monthly-table-card{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
+.monthly-table-card h4{background:var(--forest);color:#fff;margin:0;padding:10px 14px;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em}
+.monthly-table-card table{width:100%;border-collapse:collapse;font-size:.85rem}
+.monthly-table-card td{padding:8px 14px;border-top:1px solid var(--line)}
+.monthly-table-card td:last-child{text-align:right;font-weight:700;color:var(--forest)}
+.monthly-table-empty{padding:14px;font-size:.82rem;color:#8a8275}
 
 #list .why-grid,#invest .why-grid{margin-bottom:36px}
 #list .leader-table,#invest .leader-table{margin-bottom:12px}

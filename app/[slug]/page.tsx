@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import GuideTemplate from "@/components/guide/GuideTemplate";
+import AreaGuideTemplate from "@/components/guide/AreaGuideTemplate";
 import { getPublishedGuides, getRegistryEntry, loadGuideData } from "@/lib/registry";
 
 export async function generateStaticParams() {
@@ -28,5 +29,5 @@ export default async function GuidePage({
   const entry = getRegistryEntry(slug);
   if (!entry || entry.status !== "published") notFound();
   const data = await loadGuideData(entry);
-  return <GuideTemplate data={data} />;
+  return entry.type === "area" ? <AreaGuideTemplate data={data} /> : <GuideTemplate data={data} />;
 }

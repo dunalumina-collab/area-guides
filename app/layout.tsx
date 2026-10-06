@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   title: "Duna Area & Project Guides",
   description:
     "Dubai area and project investment guides by DUNA GROUP.",
+  icons: {
+    icon: "/duna-logo.png",
+    shortcut: "/duna-logo.png",
+    apple: "/duna-logo.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

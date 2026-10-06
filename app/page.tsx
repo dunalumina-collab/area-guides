@@ -5,16 +5,31 @@
 // Never hand-edit this to "simplify" copy — it is a literal spec.
 import Link from "next/link";
 import { registry } from "@/lib/registry";
+import type { GuideRegistryEntry } from "@/lib/types";
 
-function liveHref(slug: string) {
-  const entry = registry.find((g) => g.slug === slug);
-  return entry?.status === "published" ? `/${slug}` : null;
+function GuideCard({ entry }: { entry: GuideRegistryEntry }) {
+  const live = entry.status === "published";
+  const body = (
+    <>
+      <span className={`guide-status ${live ? "live" : "soon"}`}>{live ? "Live guide" : "In progress"}</span>
+      <div className="n">{entry.name}</div>
+      <span className="l">{entry.areaLabel}</span>
+      <span className="l2">{entry.specialist}</span>
+      {live && <span className="arrow">Open report &rarr;</span>}
+    </>
+  );
+  return live ? (
+    <Link className="fact-card guide-card" href={`/${entry.slug}`}>
+      {body}
+    </Link>
+  ) : (
+    <div className="fact-card guide-card">{body}</div>
+  );
 }
 
 export default function Home() {
-  const stellaHref = liveHref("stella-maris");
-  const cayanHref = liveHref("cayan-tower");
-  const damacHref = liveHref("damac-lagoons");
+  const areaGuides = registry.filter((g) => g.type === "area");
+  const projectGuides = registry.filter((g) => g.type === "project");
 
   return (
     <>
@@ -64,72 +79,20 @@ export default function Home() {
               unit-type pricing, transaction history and a live transaction table.
             </p>
           </div>
-          <div className="guide-grid">
-            {stellaHref ? (
-              <Link className="fact-card guide-card" href={stellaHref}>
-                <span className="guide-status live">Live guide</span>
-                <div className="n">Stella Maris</div>
-                <span className="l">Dubai Marina &middot; apartments, resale &amp; rental</span>
-                <span className="l2">Vesna Gjeleva, area specialist</span>
-                <span className="arrow">Open report &rarr;</span>
-              </Link>
-            ) : (
-              <div className="fact-card guide-card">
-                <span className="guide-status soon">In progress</span>
-                <div className="n">Stella Maris</div>
-                <span className="l">Dubai Marina &middot; apartments, resale &amp; rental</span>
-                <span className="l2">Vesna Gjeleva, area specialist</span>
-              </div>
-            )}
-            {cayanHref ? (
-              <Link className="fact-card guide-card" href={cayanHref}>
-                <span className="guide-status live">Live guide</span>
-                <div className="n">Cayan Tower</div>
-                <span className="l">Dubai Marina &middot; apartments, resale &amp; rental</span>
-                <span className="l2">Vesna Gjeleva, area specialist</span>
-                <span className="arrow">Open report &rarr;</span>
-              </Link>
-            ) : (
-              <div className="fact-card guide-card">
-                <span className="guide-status soon">In progress</span>
-                <div className="n">Cayan Tower</div>
-                <span className="l">Dubai Marina &middot; apartments, resale &amp; rental</span>
-                <span className="l2">Vesna Gjeleva, area specialist</span>
-              </div>
-            )}
-            {damacHref ? (
-              <Link className="fact-card guide-card" href={damacHref}>
-                <span className="guide-status live">Live guide</span>
-                <div className="n">DAMAC Lagoons</div>
-                <span className="l">Villas &amp; townhouses &middot; off-plan &amp; resale</span>
-                <span className="l2">Darko Nestorovi&#263;, area specialist</span>
-                <span className="arrow">Open report &rarr;</span>
-              </Link>
-            ) : (
-              <div className="fact-card guide-card">
-                <span className="guide-status soon">In progress</span>
-                <div className="n">DAMAC Lagoons</div>
-                <span className="l">Villas &amp; townhouses &middot; off-plan &amp; resale</span>
-                <span className="l2">Darko Nestorovi&#263;, area specialist</span>
-              </div>
-            )}
-            <div className="fact-card guide-card">
-              <span className="guide-status soon">In progress</span>
-              <div className="n">Downtown Dubai</div>
-              <span className="l">Apartments &middot; resale &amp; rental</span>
-              <span className="l2">Specialist assignment pending</span>
+          <div className="guide-group">
+            <h3 className="guide-group-label">Area Guides</h3>
+            <div className="guide-grid">
+              {areaGuides.map((entry) => (
+                <GuideCard key={entry.slug} entry={entry} />
+              ))}
             </div>
-            <div className="fact-card guide-card">
-              <span className="guide-status soon">In progress</span>
-              <div className="n">Palm Jumeirah</div>
-              <span className="l">Villas &amp; apartments &middot; resale</span>
-              <span className="l2">Specialist assignment pending</span>
-            </div>
-            <div className="fact-card guide-card">
-              <span className="guide-status soon">In progress</span>
-              <div className="n">JVC</div>
-              <span className="l">Apartments &middot; off-plan &amp; rental</span>
-              <span className="l2">Specialist assignment pending</span>
+          </div>
+          <div className="guide-group">
+            <h3 className="guide-group-label">Project Guides</h3>
+            <div className="guide-grid">
+              {projectGuides.map((entry) => (
+                <GuideCard key={entry.slug} entry={entry} />
+              ))}
             </div>
           </div>
           <p className="guides-note">

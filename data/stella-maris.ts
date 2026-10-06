@@ -80,8 +80,8 @@ const guide: GuideData = {
         'All 4-bed-and-up units (Duplex + Townhouse + Penthouse, 20 units) sit inside one DLD bucket of 16 "4 Bed" records sized 3,020&ndash;9,910 sqft: <b>zero resales</b> in the last 12 months and <b>2 rent contracts</b> at AED 600,000&ndash;680,000/yr. There isn\'t a registered deal for every sub-type, so a separate price per sub-type (including a "Sky Villa" line) can\'t be backed by data &mdash; that label doesn\'t appear in Bloom Property\'s own unit list or floor plans either; their split is Duplex (12), Townhouse (6) and Penthouse (2). The 2 Penthouse sizes above are confirmed against the developer\'s own floor plans, which match your 9,476&ndash;9,883 sqft range almost exactly.',
         "<b>Service charge:</b> AED 16.25/sqft/yr is the confirmed rate for Stella Maris' retail units. No residential rate is separately published; the Dubai Marina community average of roughly AED 17&ndash;20/sqft/yr is the closest available benchmark for an apartment here.",
       ],
-      mediaHref: "vesna-stella-maris-media.html",
-      mediaLabel: "View floor plans & unit-walkthrough videos — opens separately, grouped by unit type →",
+      mediaHref: "stella-maris-floor-plans",
+      mediaLabel: "View floor plans & unit types →",
       footnote: "All figures on this page are registered DLD transaction and rental-contract data for Stella Maris and Dubai Marina; where a figure conflicts with another source, registered data takes precedence.",
     },
     market: {

@@ -1,15 +1,15 @@
-// The Stella Maris master design, ported once and shared by every guide.
-// Structure, classes and copy placement are ported verbatim from the
-// original static HTML — only content comes from props. Never redesign
-// this component per guide; edit copy/data in data/<slug>.ts instead.
+// Area Guide template — structure/section order per the area-guide redesign
+// brief (overview → location/connectivity → clusters/pricing → sales &
+// rental market → monthly activity → yields/investment case → floor plans
+// (collapsible) → why/CTA → specialist (near bottom) → Duna Intelligence
+// Platform → footer). Same DUNA branding tokens as the project-guide
+// GuideTemplate (ivory background, forest green dominant, gold accents,
+// Playfair/Montserrat/Cormorant fonts) — re-skinned structure only, no new
+// colors or fonts introduced. Shares GuideData with GuideTemplate so a
+// guide's data/<slug>.ts file never needs two shapes.
 
-import type { GuideData } from "@/lib/types";
-import {
-  HistoryCharts,
-  KpiRow,
-  RentHistoryChart,
-  TransactionBrowser,
-} from "./GuideCharts";
+import type { GuideData, SaleRecord, RentRecord } from "@/lib/types";
+import { HistoryCharts, KpiRow, MonthlyActivity, RentHistoryChart, TransactionBrowser } from "./GuideCharts";
 import FloorPlans from "./FloorPlans";
 
 const WHATSAPP_ICON = (
@@ -18,14 +18,27 @@ const WHATSAPP_ICON = (
   </svg>
 );
 
-const PLAY_ICON = (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M8 5v14l11-7z" />
-  </svg>
-);
+const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export default function GuideTemplate({ data }: { data: GuideData }) {
+// Derives the (up to 3) most recent calendar months actually present in the
+// guide's own sale/rent records — computed from each record's real date,
+// never hardcoded to a specific quarter, so this keeps working as new
+// guides/data land.
+function recentMonths(sale: SaleRecord[], rent: RentRecord[]) {
+  const seen = new Map<string, { month: number; year: number }>();
+  for (const r of [...sale.map((s) => s.date), ...rent.map((r) => r.start)]) {
+    const [, m, y] = r.split("-").map(Number);
+    seen.set(`${y}-${m}`, { month: m, year: y });
+  }
+  return Array.from(seen.values())
+    .sort((a, b) => a.year - b.year || a.month - b.month)
+    .slice(-3)
+    .map(({ month, year }) => ({ label: `${MONTH_NAMES[month]} ${year}`, month, year }));
+}
+
+export default function AreaGuideTemplate({ data }: { data: GuideData }) {
   const { content: c, dataset } = data;
+  const months = recentMonths(dataset.sale, dataset.rent);
 
   return (
     <>
@@ -42,8 +55,8 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
       <div className="wrap">
         <section className="about">
           <div className="section-head">
-            <span className="eyebrow">The Building</span>
-            <h2>{c.about.heading}</h2>
+            <span className="eyebrow">Area Overview</span>
+            <h1 style={{ fontSize: "clamp(1.8rem,4vw,2.6rem)" }}>{c.about.heading}</h1>
             <p className="section-sub">{c.about.intro}</p>
           </div>
 
@@ -69,16 +82,19 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
             ))}
           </div>
 
-          <div className="amenity-row">
-            {c.about.amenities.map((a, i) => (
-              <span className="amenity-tag" key={i} dangerouslySetInnerHTML={{ __html: a }} />
-            ))}
-          </div>
+          {c.about.amenities.length > 0 && (
+            <div className="amenity-row">
+              {c.about.amenities.map((a, i) => (
+                <span className="amenity-tag" key={i} dangerouslySetInnerHTML={{ __html: a }} />
+              ))}
+            </div>
+          )}
 
           <div className="about-note">
             <p dangerouslySetInnerHTML={{ __html: c.about.whyMattersNote }} />
           </div>
 
+          {/* Community / project clusters + pricing */}
           <div className="section-head" style={{ borderTop: "none", paddingTop: 8, marginBottom: 16 }}>
             <h2 style={{ fontSize: "1.2rem" }}>{c.about.pricingHeading}</h2>
             <p className="section-sub">{c.about.pricingSub}</p>
@@ -118,7 +134,6 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
 
           {c.about.mediaHref.startsWith("http") ? (
             <a className="long-btn" href={c.about.mediaHref} target="_blank" rel="noopener">
-              {PLAY_ICON}
               {c.about.mediaLabel}
             </a>
           ) : (
@@ -134,7 +149,7 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
 
         <section className="market">
           <div className="section-head">
-            <span className="eyebrow">Market Report</span>
+            <span className="eyebrow">Sales &amp; Rental Market</span>
             <h2>{c.market.heading}</h2>
             <p className="section-sub">{c.market.intro}</p>
           </div>
@@ -147,7 +162,7 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
           <KpiRow tiles={dataset.kpisYtd} />
 
           <div className="chart-title" style={{ marginBottom: 10 }}>
-            Activity by bedroom type <span className="mini">- sales YTD &middot; leases last 3mo</span>
+            Activity by bedroom type
           </div>
           <div className="bed-pills">
             {c.market.bedPills.map((pill, i) => (
@@ -158,40 +173,54 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
             {c.market.bedPillsNote}
           </p>
 
-          <div className="section-head" style={{ paddingTop: 8 }}>
-            <span className="eyebrow">{c.market.sinceEyebrow}</span>
-            <h2 style={{ fontSize: "1.4rem" }}>{c.market.sinceHeading}</h2>
-            <p className="section-sub">{c.market.sinceSub}</p>
-          </div>
+          {months.length > 0 && (
+            <>
+              <div className="section-head" style={{ paddingTop: 8 }}>
+                <span className="eyebrow">Transaction Activity</span>
+                <h2 style={{ fontSize: "1.4rem" }}>Monthly activity, {months[0].label} &ndash; {months[months.length - 1].label}</h2>
+                <p className="section-sub">
+                  Sale and rent records in this guide&rsquo;s own dataset, grouped by the month each record actually registered &mdash;
+                  computed directly from the data, not a separate hand-entered table.
+                </p>
+              </div>
+              <MonthlyActivity dataset={dataset} months={months} />
+            </>
+          )}
 
-          <HistoryCharts history={dataset.history} />
-
-          <div className="chart-block">
-            <div className="chart-title">
-              Annual rent, year on year <span className="mini">- median new-lease rent, AED/yr</span>
-            </div>
-            <RentHistoryChart history={dataset.history} />
-            <p className="leader-note">{c.market.rentChartNote}</p>
-          </div>
+          {dataset.history.length > 0 && (
+            <>
+              <div className="section-head" style={{ paddingTop: 8 }}>
+                <span className="eyebrow">{c.market.sinceEyebrow}</span>
+                <h2 style={{ fontSize: "1.4rem" }}>{c.market.sinceHeading}</h2>
+                <p className="section-sub">{c.market.sinceSub}</p>
+              </div>
+              <HistoryCharts history={dataset.history} />
+              <div className="chart-block">
+                <div className="chart-title">
+                  Annual rent, year on year <span className="mini">- median new-lease rent, AED/yr</span>
+                </div>
+                <RentHistoryChart history={dataset.history} />
+                <p className="leader-note">{c.market.rentChartNote}</p>
+              </div>
+            </>
+          )}
 
           <div className="insight">
             <span className="eyebrow">{c.market.insightEyebrow}</span>
-            <h3>What the data means if you&apos;re thinking of selling or renting out</h3>
+            <h3>What the data means for the investment case</h3>
             <p dangerouslySetInnerHTML={{ __html: c.market.insightText }} />
           </div>
 
           <div className="section-head" style={{ paddingTop: 8 }}>
-            <span className="eyebrow">Dubai Marina Context</span>
-            <h2 style={{ fontSize: "1.5rem" }}>Top 5 selling projects in Dubai Marina</h2>
-            <p className="section-sub">Apartment sale volume, trailing 90 days vs the prior 90 days.</p>
+            <h2 style={{ fontSize: "1.35rem" }}>Top-selling clusters / sub-communities</h2>
           </div>
           <div className="leader-table">
             <table>
               <thead>
                 <tr>
-                  <th>Project</th>
-                  <th>Sales (90d)</th>
-                  <th>vs prior 90d</th>
+                  <th>Cluster</th>
+                  <th>Sales</th>
+                  <th>vs prior period</th>
                   <th>Median price (AED)</th>
                   <th>AED / sqft</th>
                 </tr>
@@ -210,19 +239,15 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
           <p className="leader-note">{c.market.topSellingNote}</p>
 
           <div className="section-head" style={{ paddingTop: 8 }}>
-            <span className="eyebrow">Dubai Marina Context</span>
-            <h2 style={{ fontSize: "1.5rem" }}>Top 5 rented buildings in Dubai Marina</h2>
-            <p className="section-sub">
-              Ranked by number of rental contracts registered this year (the data source does not provide a 3-month window or pricing for this leaderboard).
-            </p>
+            <h2 style={{ fontSize: "1.35rem" }}>Top-rented clusters / sub-communities</h2>
           </div>
           <div className="leader-table">
             <table>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Building</th>
-                  <th>Rent contracts (this year)</th>
+                  <th>Cluster</th>
+                  <th>Rent contracts</th>
                 </tr>
               </thead>
               <tbody>
@@ -246,8 +271,8 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
 
         <section className="why">
           <div className="section-head">
-            <span className="eyebrow">For Owners</span>
-            <h2>Why list your property with us</h2>
+            <span className="eyebrow">Investment Case</span>
+            <h2>Why buy, rent or list here with us</h2>
             <p className="section-sub">{c.why.intro}</p>
           </div>
           <div className="why-grid">
@@ -272,7 +297,12 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
                 <span className="eyebrow">{card.eyebrow}</span>
                 <h3>{card.heading}</h3>
                 <p dangerouslySetInnerHTML={{ __html: card.body }} />
-                <a className="cta-btn" href={card.href} target={card.href.startsWith("mailto:") ? undefined : "_blank"} rel={card.href.startsWith("mailto:") ? undefined : "noopener"}>
+                <a
+                  className="cta-btn"
+                  href={card.href}
+                  target={card.href.startsWith("mailto:") ? undefined : "_blank"}
+                  rel={card.href.startsWith("mailto:") ? undefined : "noopener"}
+                >
                   {card.label}
                 </a>
               </div>
@@ -280,6 +310,7 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
           </div>
         </section>
 
+        {/* Specialist near the bottom — section 6 of the redesign brief */}
         <section className="specialist">
           <div className="specialist-grid">
             <div className="photo-col">
@@ -300,7 +331,7 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
                 {c.specialist.eyebrowBuilding}
                 <span className="spec-eyebrow-2">{c.specialist.eyebrowRole}</span>
               </span>
-              <h1 className="spec-name">{c.specialist.name}</h1>
+              <div className="spec-name">{c.specialist.name}</div>
               <div className="spec-contact">
                 <a href={c.specialist.whatsappHref} target="_blank" rel="noopener">
                   {c.specialist.phoneDisplay}
@@ -326,11 +357,11 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
         <section className="market-platform">
           <div className="mp-block">
             <div>
-              <span className="eyebrow">Beyond This Building</span>
-              <h2>Duna Market Platform &mdash; Dubai Market Data &amp; Global Market Comparison</h2>
+              <span className="eyebrow">Beyond {c.meta.areaLabel}</span>
+              <h2>Duna Intelligence Platform &mdash; Dubai Market Data &amp; Global Market Comparator</h2>
               <p>{c.platform.bodyText}</p>
               <a className="mp-cta" href="https://market.dunagroup.ae/" target="_blank" rel="noopener">
-                Open the Market Platform &rarr;
+                Open Duna Intelligence &rarr;
               </a>
             </div>
             <div className="mp-features">
@@ -339,21 +370,10 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
                 <span>Live pricing, yields and transaction volume for every area and project we track, updated as deals register.</span>
               </div>
               <div className="mp-feature">
-                <b>Global Market Comparison</b>
+                <b>Global Market Comparator</b>
                 <span>Side-by-side yield, price growth and entry cost against other international cities, for owners and investors weighing Dubai against alternatives.</span>
               </div>
             </div>
-          </div>
-
-          <div className="webinar-block" style={{ marginTop: 24 }}>
-            <div>
-              <span className="eyebrow">Learn With Us</span>
-              <h2>Decoded with Duna &mdash; Webinars &amp; replays</h2>
-              <p>Register for an upcoming session or catch up on a past Duna Group webinar at your own pace.</p>
-            </div>
-            <a className="webinar-cta" href="https://dunagroup.ae/event-calendar" target="_blank" rel="noopener">
-              View Event Calendar &rarr;
-            </a>
           </div>
         </section>
       </div>
