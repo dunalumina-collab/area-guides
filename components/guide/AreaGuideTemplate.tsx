@@ -83,7 +83,14 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
     <div className="guide-page" id="top">
       <GuideHeader sections={SECTIONS} whatsappHref={c.specialist.whatsappHref} />
 
-      <GuideHero kicker={c.hero.kicker} heading={c.hero.heading} lead={c.hero.lead} stats={c.hero.stats} />
+      <GuideHero
+        kicker={c.hero.kicker}
+        heading={c.hero.heading}
+        lead={c.hero.lead}
+        stats={c.hero.stats}
+        imageSrc={c.meta.heroImageSrc}
+        imageAlt={c.meta.heroImageAlt}
+      />
 
       {/* OVERVIEW — area intro, image+text, community facts, accordions for
           unit types/clusters/location detail (cluster-by-cluster table kept

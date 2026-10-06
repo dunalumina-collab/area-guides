@@ -25,18 +25,33 @@ export default function GuideHero({
   heading,
   lead,
   stats,
+  imageSrc,
+  imageAlt,
 }: {
   kicker: string;
   heading: string;
   lead: string;
   stats: HeroStat[];
+  /** Real project/area photo. When present, the hero splits into a text
+      column + photo column with a blended forest-to-photo transition,
+      matching the reference's integrated hero composition. */
+  imageSrc?: string;
+  imageAlt?: string;
 }) {
   return (
     <div className="guide-hero">
-      <div className="guide-hero-inner">
-        <span className="kicker">{kicker}</span>
-        <h1>{renderHeading(heading)}</h1>
-        <p className="guide-hero-lead">{lead}</p>
+      <div className={`guide-hero-split${imageSrc ? "" : " no-image"}`}>
+        <div className="guide-hero-inner">
+          <span className="kicker">{kicker}</span>
+          <h1>{renderHeading(heading)}</h1>
+          <p className="guide-hero-lead">{lead}</p>
+        </div>
+        {imageSrc && (
+          <div className="guide-hero-media">
+            <img src={imageSrc} alt={imageAlt ?? ""} />
+            <div className="guide-hero-media-fade" aria-hidden="true" />
+          </div>
+        )}
       </div>
       <div className="hero-stats">
         {stats.map((s, i) => (

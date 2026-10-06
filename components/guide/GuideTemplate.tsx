@@ -43,7 +43,14 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
     <div className="guide-page" id="top">
       <GuideHeader sections={SECTIONS} whatsappHref={c.specialist.whatsappHref} />
 
-      <GuideHero kicker={c.hero.kicker} heading={c.hero.heading} lead={c.hero.lead} stats={c.hero.stats} />
+      <GuideHero
+        kicker={c.hero.kicker}
+        heading={c.hero.heading}
+        lead={c.hero.lead}
+        stats={c.hero.stats}
+        imageSrc={c.meta.heroImageSrc}
+        imageAlt={c.meta.heroImageAlt}
+      />
 
       {/* OVERVIEW — building intro, image+text, facts, accordions for unit
           types/amenities/pricing detail. */}
