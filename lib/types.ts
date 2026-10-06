@@ -173,6 +173,20 @@ export interface GuideContent {
     topRentedNote: string;
     browseHeading: string;
     countNoteSuffix?: string; // extra clause appended for sampled datasets
+    /**
+     * Optional headline-stat card (Oct 2026 density pass, modeled on the
+     * Jebel Ali reference's headline-number + chart pairing). Every value
+     * here must already be a real, verified figure stated elsewhere in this
+     * guide's own copy/dataset — this field restructures existing real
+     * numbers for display, it never introduces a new one.
+     */
+    headline?: {
+      label: string;
+      value: string;
+      deltaText: string;
+      deltaPositive: boolean;
+      secondary: { k: string; v: string }[];
+    };
   };
   why: {
     intro: string;

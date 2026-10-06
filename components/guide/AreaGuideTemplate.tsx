@@ -10,7 +10,7 @@
 // unchanged — this is a presentation rebuild only.
 
 import type { GuideData, SaleRecord, RentRecord } from "@/lib/types";
-import { HistoryCharts, KpiRow, MonthlyActivity, RentHistoryChart, TransactionBrowser } from "./GuideCharts";
+import { HBarList, HistoryCharts, KpiRow, MonthlyActivity, RentHistoryChart, TransactionBrowser } from "./GuideCharts";
 import FloorPlans from "./FloorPlans";
 import GuideHero from "./GuideHero";
 import GuideHeader from "./GuideHeader";
@@ -34,6 +34,34 @@ const SECTIONS = [
 // guide's own sale/rent records — computed from each record's real date,
 // never hardcoded to a specific quarter, so this keeps working as new
 // guides/data land.
+function bedLabelShort(b: number): string {
+  return b === 0 ? "Studio" : `${b} Bed`;
+}
+
+function fmtAed(v: number): string {
+  return v >= 1000000 ? `AED ${(v / 1000000).toFixed(2)}M` : `AED ${Math.round(v).toLocaleString()}`;
+}
+
+// Real average sale price per bedroom count, computed directly from this
+// guide's own registered sale records (item 4 of the Oct 2026 density pass —
+// horizontal bar-list, modeled on the Jebel Ali reference's "average asking
+// price by home type"). Restricted to villas/townhouses (3+ beds), the only
+// segment with a resale/rental market today — apartments are off-plan only.
+function avgSalePriceByBeds(sale: SaleRecord[]) {
+  const groups = new Map<number, number[]>();
+  for (const r of sale) {
+    if (r.beds < 3) continue;
+    if (!groups.has(r.beds)) groups.set(r.beds, []);
+    groups.get(r.beds)!.push(r.price);
+  }
+  return Array.from(groups.entries())
+    .sort((a, b) => a[0] - b[0])
+    .map(([beds, prices]) => {
+      const avg = prices.reduce((s, p) => s + p, 0) / prices.length;
+      return { label: bedLabelShort(beds), value: avg, display: fmtAed(avg) };
+    });
+}
+
 function recentMonths(sale: SaleRecord[], rent: RentRecord[]) {
   const seen = new Map<string, { month: number; year: number }>();
   for (const r of [...sale.map((s) => s.date), ...rent.map((r) => r.start)]) {
@@ -49,6 +77,7 @@ function recentMonths(sale: SaleRecord[], rent: RentRecord[]) {
 export default function AreaGuideTemplate({ data }: { data: GuideData }) {
   const { content: c, dataset } = data;
   const months = recentMonths(dataset.sale, dataset.rent);
+  const avgPriceRows = avgSalePriceByBeds(dataset.sale);
 
   return (
     <div className="guide-page" id="top">
@@ -181,6 +210,35 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
           <span className="range-tag">{c.market.rangeTagYtd}</span>
           <KpiRow tiles={dataset.kpisYtd} />
 
+          {c.market.headline && avgPriceRows.length > 0 && (
+            <div className="hc-row">
+              <div className="hc-card">
+                <div className="hc-label">{c.market.headline.label}</div>
+                <div className="hc-value">
+                  {c.market.headline.value}
+                  <span className="hc-unit"> leases</span>
+                </div>
+                <div className="hc-delta" style={{ color: c.market.headline.deltaPositive ? "var(--pos)" : "var(--neg)" }}>
+                  {c.market.headline.deltaText}
+                </div>
+                <div className="hc-secondary">
+                  {c.market.headline.secondary.map((s, i) => (
+                    <div key={i}>
+                      <div className="hs-k">{s.k}</div>
+                      <div className="hs-v">{s.v}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="hc-card hc-chart-card">
+                <div className="chart-title">
+                  Average sale price by bedroom count <span className="mini">- villas & townhouses, Jul–Sep 2026</span>
+                </div>
+                <HBarList rows={avgPriceRows} />
+              </div>
+            </div>
+          )}
+
           <Accordion title="Activity by bedroom type" sub="Sales and leases by bedroom count, this reporting window">
             <div className="bed-pills">
               {c.market.bedPills.map((pill, i) => (
@@ -218,64 +276,74 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
             <p dangerouslySetInnerHTML={{ __html: c.market.insightText }} />
           </div>
 
-          <Accordion title="Top-selling clusters / sub-communities" defaultOpen>
-            {c.market.topSellingRows.length === 0 ? (
-              <EmptyState label="no top-selling cluster leaderboard registered for this window" />
-            ) : (
-            <div className="leader-table" style={{ marginBottom: 0 }}>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Cluster</th>
-                    <th>Sales</th>
-                    <th>vs prior period</th>
-                    <th>Median price (AED)</th>
-                    <th>AED / sqft</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {c.market.topSellingRows.map((row, i) => (
-                    <tr key={i}>
-                      {row.cells.map((cell, j) => (
-                        <td key={j}>
-                          {j === 2 ? <DeltaCell value={cell} /> : j === 3 ? <StrongCell value={cell} /> : cell}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          {/* Top-selling / top-rented leaderboards shown side by side (item 5,
+              Oct 2026 density pass) — the one natural two-column split this
+              dataset actually supports: sales leaderboard vs rental
+              leaderboard, same clusters, both real. No bedroom/collection
+              split exists for this community (see topSellingNote). */}
+          <Accordion title="Top-selling & top-rented clusters / sub-communities" defaultOpen>
+            <div className="table-pair">
+              <div>
+                <h4>By sales</h4>
+                {c.market.topSellingRows.length === 0 ? (
+                  <EmptyState label="no top-selling cluster leaderboard registered for this window" />
+                ) : (
+                  <div className="leader-table" style={{ marginBottom: 0 }}>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Cluster</th>
+                          <th>Sales</th>
+                          <th>vs prior</th>
+                          <th>Median (AED)</th>
+                          <th>AED/sqft</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {c.market.topSellingRows.map((row, i) => (
+                          <tr key={i}>
+                            {row.cells.map((cell, j) => (
+                              <td key={j}>
+                                {j === 2 ? <DeltaCell value={cell} /> : j === 3 ? <StrongCell value={cell} /> : cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topSellingNote}</p>
+              </div>
+              <div>
+                <h4>By rentals</h4>
+                {c.market.topRentedRows.length === 0 ? (
+                  <EmptyState label="no top-rented cluster leaderboard registered for this window" />
+                ) : (
+                  <div className="leader-table" style={{ marginBottom: 0 }}>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Cluster</th>
+                          <th>Rent contracts</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {c.market.topRentedRows.map((row, i) => (
+                          <tr key={i}>
+                            {row.cells.map((cell, j) => (
+                              <td key={j}>{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topRentedNote}</p>
+              </div>
             </div>
-            )}
-            <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topSellingNote}</p>
-          </Accordion>
-
-          <Accordion title="Top-rented clusters / sub-communities">
-            {c.market.topRentedRows.length === 0 ? (
-              <EmptyState label="no top-rented cluster leaderboard registered for this window" />
-            ) : (
-            <div className="leader-table" style={{ marginBottom: 0 }}>
-              <table>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Cluster</th>
-                    <th>Rent contracts</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {c.market.topRentedRows.map((row, i) => (
-                    <tr key={i}>
-                      {row.cells.map((cell, j) => (
-                        <td key={j}>{cell}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            )}
-            <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topRentedNote}</p>
           </Accordion>
 
           <Accordion title={c.market.browseHeading} sub="Filter and sort every registered transaction behind this report">

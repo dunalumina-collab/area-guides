@@ -193,67 +193,76 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
             <p dangerouslySetInnerHTML={{ __html: c.market.insightText }} />
           </div>
 
-          <Accordion title="Top 5 selling projects in Dubai Marina" sub="Apartment sale volume, trailing 90 days vs the prior 90 days">
-            {c.market.topSellingRows.length === 0 ? (
-              <EmptyState label="no top-selling project leaderboard registered for this window" />
-            ) : (
-            <div className="leader-table" style={{ marginBottom: 0 }}>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Project</th>
-                    <th>Sales (90d)</th>
-                    <th>vs prior 90d</th>
-                    <th>Median price (AED)</th>
-                    <th>AED / sqft</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {c.market.topSellingRows.map((row, i) => (
-                    <tr key={i}>
-                      {row.cells.map((cell, j) => (
-                        <td key={j}>
-                          {j === 2 ? <DeltaCell value={cell} /> : j === 3 ? <StrongCell value={cell} /> : cell}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            )}
-            <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topSellingNote}</p>
-          </Accordion>
-
+          {/* Selling vs rented leaderboards shown side by side (item 5, Oct
+              2026 density pass) — the natural two-column split this
+              dataset supports (sales leaderboard vs rental leaderboard);
+              no bedroom/collection split exists for a single building. */}
           <Accordion
-            title="Top 5 rented buildings in Dubai Marina"
-            sub="Ranked by number of rental contracts registered this year (the data source does not provide a 3-month window or pricing for this leaderboard)"
+            title="Top 5 selling & top 5 rented in Dubai Marina"
+            sub="Apartment sale volume, trailing 90 days vs prior 90 days · rent contracts, this year"
           >
-            {c.market.topRentedRows.length === 0 ? (
-              <EmptyState label="no top-rented building leaderboard registered for this window" />
-            ) : (
-            <div className="leader-table" style={{ marginBottom: 0 }}>
-              <table>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Building</th>
-                    <th>Rent contracts (this year)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {c.market.topRentedRows.map((row, i) => (
-                    <tr key={i}>
-                      {row.cells.map((cell, j) => (
-                        <td key={j}>{cell}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="table-pair">
+              <div>
+                <h4>By sales</h4>
+                {c.market.topSellingRows.length === 0 ? (
+                  <EmptyState label="no top-selling project leaderboard registered for this window" />
+                ) : (
+                  <div className="leader-table" style={{ marginBottom: 0 }}>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Project</th>
+                          <th>Sales (90d)</th>
+                          <th>vs prior</th>
+                          <th>Median (AED)</th>
+                          <th>AED/sqft</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {c.market.topSellingRows.map((row, i) => (
+                          <tr key={i}>
+                            {row.cells.map((cell, j) => (
+                              <td key={j}>
+                                {j === 2 ? <DeltaCell value={cell} /> : j === 3 ? <StrongCell value={cell} /> : cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topSellingNote}</p>
+              </div>
+              <div>
+                <h4>By rentals</h4>
+                {c.market.topRentedRows.length === 0 ? (
+                  <EmptyState label="no top-rented building leaderboard registered for this window" />
+                ) : (
+                  <div className="leader-table" style={{ marginBottom: 0 }}>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Building</th>
+                          <th>Rent contracts</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {c.market.topRentedRows.map((row, i) => (
+                          <tr key={i}>
+                            {row.cells.map((cell, j) => (
+                              <td key={j}>{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topRentedNote}</p>
+              </div>
             </div>
-            )}
-            <p className="leader-note" style={{ marginTop: 10 }}>{c.market.topRentedNote}</p>
           </Accordion>
 
           <Accordion title={c.market.browseHeading} sub="Filter and sort every registered transaction behind this report">

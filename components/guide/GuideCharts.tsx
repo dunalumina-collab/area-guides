@@ -39,12 +39,15 @@ function HistoryChart({
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [tip, setTip] = useState<{ x: number; y: number; text: string } | null>(null);
-  const W = 640,
-    H = 220,
-    padT = 16,
-    padB = 34,
-    padR = 16;
-  const padL = mode === "line" ? 60 : 54;
+  // Oct 2026 density pass: smaller canvas, tighter padding, lighter stroke
+  // weight — matches the Jebel Ali reference's compact, low-chrome charts
+  // instead of a full-bleed oversized chart.
+  const W = 480,
+    H = 170,
+    padT = 12,
+    padB = 26,
+    padR = 10;
+  const padL = mode === "line" ? 48 : 42;
   const innerW = W - padL - padR;
   const innerH = H - padT - padB;
 
@@ -62,7 +65,7 @@ function HistoryChart({
             return (
               <g key={i}>
                 <line x1={padL} y1={y} x2={W - padR} y2={y} stroke="#DDD2BC" strokeWidth={1} />
-                <text x={padL - 8} y={y + 4} fontSize={11} fill="#8a8275" textAnchor="end" fontFamily="Montserrat,sans-serif">
+                <text x={padL - 8} y={y + 4} fontSize={9.5} fill="#8a8275" textAnchor="end" fontFamily="Montserrat,sans-serif">
                   {Math.round((maxVal * i) / 4).toLocaleString()}
                 </text>
               </g>
@@ -84,7 +87,7 @@ function HistoryChart({
                   height={Math.max(h, 2)}
                   fill={barColor}
                   opacity={tip?.text.startsWith(String(r.year)) ? 1 : 0.88}
-                  rx={3}
+                  rx={2}
                   style={{ cursor: "pointer" }}
                   onMouseEnter={() => {
                     const rect = svgRef.current!.getBoundingClientRect();
@@ -96,7 +99,7 @@ function HistoryChart({
                   }}
                   onMouseLeave={() => setTip(null)}
                 />
-                <text x={padL + i * groupW + groupW / 2} y={H - 10} fontSize={12} fill="#1A1714" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
+                <text x={padL + i * groupW + groupW / 2} y={H - 8} fontSize={10} fill="#1A1714" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
                   {r.year}
                 </text>
               </g>
@@ -143,13 +146,13 @@ function HistoryChart({
           return (
             <g key={i}>
               <line x1={padL} y1={y} x2={W - padR} y2={y} stroke="#DDD2BC" strokeWidth={1} />
-              <text x={padL - 8} y={y + 4} fontSize={11} fill="#8a8275" textAnchor="end" fontFamily="Montserrat,sans-serif">
+              <text x={padL - 8} y={y + 4} fontSize={9.5} fill="#8a8275" textAnchor="end" fontFamily="Montserrat,sans-serif">
                 {val.toLocaleString()}
               </text>
             </g>
           );
         })}
-        <path d={pathD} fill="none" stroke={PALETTE[0]} strokeWidth={2.5} />
+        <path d={pathD} fill="none" stroke={PALETTE[0]} strokeWidth={1.75} />
         {data.map((r, i) => {
           const [x, y] = xy(i);
           const active = tip?.text.startsWith(String(r.year));
@@ -161,7 +164,7 @@ function HistoryChart({
               <circle
                 cx={x}
                 cy={y}
-                r={9}
+                r={7}
                 fill="transparent"
                 style={{ cursor: "pointer" }}
                 onMouseEnter={() => {
@@ -170,8 +173,8 @@ function HistoryChart({
                 }}
                 onMouseLeave={() => setTip(null)}
               />
-              <circle cx={x} cy={y} r={active ? 6 : 4} fill={dotColor} />
-              <text x={x} y={H - 10} fontSize={12} fill="#1A1714" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
+              <circle cx={x} cy={y} r={active ? 4.5 : 3} fill={dotColor} />
+              <text x={x} y={H - 8} fontSize={10} fill="#1A1714" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
                 {r.year}
               </text>
             </g>
@@ -183,6 +186,31 @@ function HistoryChart({
           {tip.text}
         </div>
       )}
+    </div>
+  );
+}
+
+// Horizontal bar-list (image-2 "Average asking price by home type"
+// pattern): label left, thin bar, value right, tight row spacing. Callers
+// pass real computed/display values — this component never invents data,
+// it only lays rows out proportional to `value`.
+export function HBarList({
+  rows,
+}: {
+  rows: { label: string; value: number; display: string }[];
+}) {
+  const maxVal = Math.max(1, ...rows.map((r) => r.value));
+  return (
+    <div className="hbar-list">
+      {rows.map((r, i) => (
+        <div className="hbar-row" key={i}>
+          <div className="hbar-label">{r.label}</div>
+          <div className="hbar-track">
+            <div className="hbar-fill" style={{ width: `${Math.max(4, (r.value / maxVal) * 100)}%` }} />
+          </div>
+          <div className="hbar-value">{r.display}</div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -214,6 +242,17 @@ function YoyLegend() {
 }
 
 export function HistoryCharts({ history }: { history: HistoryRow[] }) {
+  // Headline-stat + chart pairing (item 2, Oct 2026 density pass — modeled
+  // on the Jebel Ali reference): the latest year's psf, its real % change
+  // over the prior year, and the 2 preceding years as secondary stats,
+  // beside a correspondingly-sized (not full-bleed) line-chart card. Every
+  // figure here is read straight out of this guide's own yearly history —
+  // nothing is invented.
+  const latest = history[history.length - 1];
+  const prior = history.length > 1 ? history[history.length - 2] : null;
+  const pctChange = prior && prior.psf ? ((latest.psf - prior.psf) / prior.psf) * 100 : null;
+  const secondaryYears = history.slice(Math.max(0, history.length - 4), history.length - 1).reverse();
+
   return (
     <>
       <div className="chart-block">
@@ -224,10 +263,42 @@ export function HistoryCharts({ history }: { history: HistoryRow[] }) {
         <YoyLegend />
       </div>
       <div className="chart-block">
-        <div className="chart-title">
-          Sale price per sqft, year on year <span className="mini">- median AED/sqft</span>
-        </div>
-        <HistoryChart rows={history} dataKey="psf" mode="line" fmt={(v) => `AED ${v.toLocaleString()}/sqft`} />
+        {latest && pctChange !== null ? (
+          <div className="hc-row" style={{ marginBottom: 8 }}>
+            <div className="hc-card">
+              <div className="hc-label">Sale price, {latest.year}</div>
+              <div className="hc-value">
+                AED {latest.psf.toLocaleString()}
+                <span className="hc-unit">/sqft</span>
+              </div>
+              <div className="hc-delta" style={{ color: pctChange >= 0 ? "var(--pos)" : "var(--neg)" }}>
+                {pctChange >= 0 ? "+" : ""}
+                {pctChange.toFixed(1)}% vs {prior!.year}
+              </div>
+              <div className="hc-secondary">
+                {secondaryYears.map((row) => (
+                  <div key={row.year}>
+                    <div className="hs-k">{row.year}</div>
+                    <div className="hs-v">AED {row.psf.toLocaleString()}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="hc-card hc-chart-card">
+              <div className="chart-title">
+                Sale price per sqft, year on year <span className="mini">- median AED/sqft</span>
+              </div>
+              <HistoryChart rows={history} dataKey="psf" mode="line" fmt={(v) => `AED ${v.toLocaleString()}/sqft`} />
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="chart-title">
+              Sale price per sqft, year on year <span className="mini">- median AED/sqft</span>
+            </div>
+            <HistoryChart rows={history} dataKey="psf" mode="line" fmt={(v) => `AED ${v.toLocaleString()}/sqft`} />
+          </>
+        )}
         <YoyLegend />
       </div>
     </>

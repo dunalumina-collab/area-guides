@@ -148,6 +148,20 @@ const guide: GuideData = {
         "Source: Damac Lagoons villa/townhouse rent contracts registered Jul–Sep 2026, ranked by contract count (labelled “this year” by the shared template; the real window is the Jul–Sep 2026 quarter — see dataIssues).",
       browseHeading: "Browse every Damac Lagoons transaction",
       countNoteSuffix: " across apartments and villas/townhouses, all 11 clusters plus Valencia and Lagoon Views",
+      // Restates the real, already-verified July→September rent-contract
+      // figures from secondaryNote/insightText above as a structured
+      // headline card — same numbers, no new ones.
+      headline: {
+        label: "Villa & townhouse leasing momentum, Jul–Sep 2026",
+        value: "170",
+        deltaText: "+48% vs July",
+        deltaPositive: true,
+        secondary: [
+          { k: "July", v: "115 leases" },
+          { k: "September", v: "170 leases" },
+          { k: "Quarter total", v: "418 rent contracts" },
+        ],
+      },
     },
     why: {
       intro:
