@@ -69,10 +69,13 @@ export function validateGuide(entry: GuideRegistryEntry, data: GuideData): Valid
   }
 
   // --- Broken CTA / media links (static shape checks; live-link checks happen in the browser QA pass) ---
+  // Accepts WhatsApp, mailto, or Duna's own https domains — a guide's CTA
+  // strip isn't always three WhatsApp buttons (e.g. Damac Lagoons links out
+  // to the market-data platform, the event calendar and a valuation form).
   const ctaHrefs = data.content.cta.cards.map((c) => c.href);
   for (const href of ctaHrefs) {
-    if (!/^https:\/\/wa\.me\/\d+$|^mailto:.+@.+/.test(href)) {
-      push("error", "broken-cta", `CTA href doesn't match expected WhatsApp/mailto pattern: ${href}`);
+    if (!/^https:\/\/wa\.me\/\d+$|^mailto:.+@.+|^https:\/\/([a-z0-9-]+\.)*dunagroup\.ae\//.test(href)) {
+      push("error", "broken-cta", `CTA href doesn't match expected WhatsApp/mailto/dunagroup.ae pattern: ${href}`);
     }
   }
   if (!data.content.about.mediaHref || data.content.about.mediaHref.trim() === "") {

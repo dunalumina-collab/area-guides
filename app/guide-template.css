@@ -157,17 +157,54 @@ tbody tr:nth-child(even){background:rgba(163,123,44,.045)}
 
 footer{text-align:center;padding:28px 24px 40px;font-size:.76rem;color:#8a8275;border-top:1px solid var(--line)}
 
-/* --- Homepage hub additions (same design system, new section-level classes) --- */
-.hub-hero{padding-block:64px 32px}
-.hub-hero h1{font-size:clamp(2.2rem,5vw,3.2rem);line-height:1.08;margin-top:10px}
-.hub-hero p{color:#6b6458;font-size:1rem;margin-top:16px;max-width:62ch;line-height:1.7}
-.guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-@media (max-width:900px){.guide-grid{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:620px){.guide-grid{grid-template-columns:1fr}}
-.guide-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px 20px;text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:border-color .15s,transform .1s}
-.guide-card:hover{border-color:var(--gold);transform:translateY(-2px)}
-.guide-card .status-pill{align-self:flex-start;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 10px;margin-bottom:6px}
-.guide-card .status-pill.live{background:var(--gold-tint);color:var(--forest)}
-.guide-card .status-pill.progress{background:#eee;color:#8a8275}
-.guide-card h3{font-size:1.1rem}
-.guide-card .area{font-size:.78rem;color:#8a8275;text-transform:uppercase;letter-spacing:.06em}
+/* --- Homepage hub additions, ported verbatim from the approved homepage
+   mockup. Several class names (.fact-card, .why-grid, .leader-table,
+   .market-platform, footer) are shared with GuideTemplate.tsx — every
+   override below that differs from the shared guide-page rule is scoped to
+   a homepage-only ancestor (#guides/.guides, #list/#invest, #platform) so
+   no guide page's styling changes. See the class-name grep in the commit
+   history before touching any selector here. --- */
+.topnav{display:flex;gap:20px;font-size:.82rem;font-weight:600}
+.topnav a{text-decoration:none;color:var(--ink)}
+.topnav a:hover{color:var(--forest)}
+@media (max-width:720px){.topnav{display:none}}
+
+.hero{padding-block:56px 40px}
+.hero h1{font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.08;max-width:17ch}
+.hero .lead{margin-top:16px;font-size:1.02rem;color:#4a443a;max-width:60ch;line-height:1.7}
+.hero .about-note{margin-top:24px;max-width:66ch}
+
+.guides{padding-block:48px}
+.guides .guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:860px){.guides .guide-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.guides .guide-grid{grid-template-columns:1fr}}
+.fact-card.guide-card{display:flex;flex-direction:column;gap:8px;min-height:150px}
+a.fact-card{text-decoration:none;color:inherit;transition:border-color .15s,transform .1s}
+a.fact-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.guide-status{font-size:.66rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:999px;width:fit-content}
+.guide-status.live{background:var(--gold-tint);color:#6b4e1b}
+.guide-status.soon{background:#efece3;color:#8a8275}
+.guides .fact-card .n{font-size:1.2rem;margin-top:2px}
+.guides .fact-card .l{font-size:.78rem;color:#6b6458;text-transform:none;letter-spacing:normal;margin-top:0}
+.fact-card .l2{margin-top:auto;font-size:.74rem;color:#8a8275;padding-top:8px;border-top:1px solid var(--line)}
+.fact-card .arrow{font-size:.78rem;font-weight:700;color:var(--forest)}
+.guides-note{margin-top:18px;font-size:.82rem;color:#8a8275}
+
+#list .why-grid,#invest .why-grid{margin-bottom:36px}
+#list .leader-table,#invest .leader-table{margin-bottom:12px}
+#list .leader-table table,#invest .leader-table table{min-width:560px}
+.leader-table thead th.mid,.leader-table tbody td.mid{text-align:center}
+#list .leader-table tbody tr:last-child td,#invest .leader-table tbody tr:last-child td{font-weight:700;color:var(--forest)}
+#list .leader-note,#invest .leader-note{max-width:70ch;line-height:1.55}
+
+#platform.market-platform{padding-block:16px 48px}
+
+.footer-wrap{border-top:1px solid var(--line);padding-block:32px 36px;margin-top:8px}
+.footer-grid{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-start}
+.footer-brand{font-family:"Playfair Display",serif;font-weight:700;font-size:1.05rem}
+.footer-contact{margin-top:10px;font-size:.84rem;color:#4a443a;display:flex;flex-wrap:wrap;gap:4px 12px}
+.footer-contact a{color:#4a443a;text-decoration:none}
+.footer-contact a:hover{text-decoration:underline}
+.footer-socials{display:flex;gap:8px;flex-wrap:wrap}
+footer.fine{text-align:center;padding:18px 24px 40px;font-size:.76rem;color:#8a8275;border-top:1px solid var(--line)}
+footer.fine a{color:#8a8275;text-decoration:underline}
