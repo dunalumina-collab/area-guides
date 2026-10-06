@@ -5,18 +5,19 @@
 // on a guide's typed dataset instead of two global `EMBEDDED_DATA`/
 // `HISTORY` variables, so one component serves every guide.
 
-import { useMemo, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import type { GuideDataset, HistoryRow, RentRecord, SaleRecord } from "@/lib/types";
 import EmptyState from "./EmptyState";
 
-// Functional market-movement colors (point 5 of the Oct 2026 pass): a bar/
-// point colors green when its value rose vs the prior year, coral when it
-// fell, and gold-tan for the first year (no prior point to compare). All
-// chart cards render on the dark forest surface, so this must read against
-// a dark background too — a forest-green neutral would disappear into it.
+// Color system (Oct 2026 reference-match pass): green/coral communicate a
+// positive/negative CHANGE value (delta text, dot on the chart), never a
+// blanket per-bar/per-period traffic-light coding — the reference's
+// historical bars and line are muted grey/gold throughout, not red/green.
 const POS = "#2F7A4F";
 const NEG = "#B2453F";
-const NEUTRAL = "#C9A769";
+const GOLD = "#C9A769";
+const GOLD_SOFT = "#E8D9B5";
+const MUTED_BAR = "#4A5A54"; // charcoal-grey for non-latest historical bars
 
 function bedLabel(b: number): string {
   return b === 0 ? "Studio" : `${b} Bed${b > 1 ? "s" : ""}`;
@@ -39,6 +40,7 @@ function HistoryChart({
   fmt: (v: number) => string;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const gradId = useId();
   const [tip, setTip] = useState<{ x: number; y: number; text: string } | null>(null);
   // Oct 2026 density pass: smaller canvas, tighter padding, lighter stroke
   // weight — matches the Jebel Ali reference's compact, low-chrome charts
@@ -65,8 +67,8 @@ function HistoryChart({
             const y = padT + innerH - (innerH * i) / 4;
             return (
               <g key={i}>
-                <line x1={padL} y1={y} x2={W - padR} y2={y} stroke="#DDD2BC" strokeWidth={1} />
-                <text x={padL - 8} y={y + 4} fontSize={9.5} fill="#8a8275" textAnchor="end" fontFamily="Montserrat,sans-serif">
+                <line x1={padL} y1={y} x2={W - padR} y2={y} stroke="rgba(255,255,255,.14)" strokeWidth={1} />
+                <text x={padL - 8} y={y + 4} fontSize={9.5} fill="#aab3ac" textAnchor="end" fontFamily="Montserrat,sans-serif">
                   {Math.round((maxVal * i) / 4).toLocaleString()}
                 </text>
               </g>
@@ -74,8 +76,8 @@ function HistoryChart({
           })}
           {rows.map((r, i) => {
             const val = r[dataKey] as number;
-            const prev = i > 0 ? (rows[i - 1][dataKey] as number) : null;
-            const barColor = prev === null ? NEUTRAL : val >= prev ? POS : NEG;
+            const isLatest = i === rows.length - 1;
+            const barColor = isLatest ? GOLD : MUTED_BAR;
             const h = innerH * (val / maxVal);
             const x = padL + i * groupW + groupW / 2 - barW / 2;
             const y = padT + innerH - h;
@@ -100,7 +102,7 @@ function HistoryChart({
                   }}
                   onMouseLeave={() => setTip(null)}
                 />
-                <text x={padL + i * groupW + groupW / 2} y={H - 8} fontSize={10} fill="#1A1714" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
+                <text x={padL + i * groupW + groupW / 2} y={H - 8} fontSize={10} fill="#f1ede3" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
                   {r.year}
                 </text>
               </g>
@@ -136,30 +138,43 @@ function HistoryChart({
       return `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`;
     })
     .join(" ");
+  const areaD =
+    data.length > 1
+      ? `${pathD} L${(padL + (data.length - 1) * stepX).toFixed(1)},${(padT + innerH).toFixed(1)} L${padL.toFixed(1)},${(padT + innerH).toFixed(1)} Z`
+      : "";
   const gridSteps = Array.from({ length: 5 }, (_, i) => i);
+  const lastVal = data[data.length - 1]?.[dataKey] as number | undefined;
+  const prevVal = data.length > 1 ? (data[data.length - 2][dataKey] as number) : null;
+  const lastColor = prevVal !== null && lastVal !== undefined && lastVal < prevVal ? NEG : GOLD;
 
   return (
     <div className="hist-wrap">
       <svg ref={svgRef} className="chart" viewBox={`0 0 ${W} ${H}`}>
+        <defs>
+          <linearGradient id={`${gradId}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={GOLD_SOFT} stopOpacity={0.3} />
+            <stop offset="100%" stopColor={GOLD_SOFT} stopOpacity={0} />
+          </linearGradient>
+        </defs>
         {gridSteps.map((i) => {
           const y = padT + innerH - (innerH * i) / 4;
           const val = Math.round(minVal + (span * i) / 4);
           return (
             <g key={i}>
-              <line x1={padL} y1={y} x2={W - padR} y2={y} stroke="#DDD2BC" strokeWidth={1} />
-              <text x={padL - 8} y={y + 4} fontSize={9.5} fill="#8a8275" textAnchor="end" fontFamily="Montserrat,sans-serif">
+              <line x1={padL} y1={y} x2={W - padR} y2={y} stroke="rgba(255,255,255,.14)" strokeWidth={1} />
+              <text x={padL - 8} y={y + 4} fontSize={9.5} fill="#aab3ac" textAnchor="end" fontFamily="Montserrat,sans-serif">
                 {val.toLocaleString()}
               </text>
             </g>
           );
         })}
-        <path d={pathD} fill="none" stroke={NEUTRAL} strokeWidth={1.75} />
+        {areaD && <path d={areaD} fill={`url(#${gradId})`} stroke="none" />}
+        <path d={pathD} fill="none" stroke={GOLD} strokeWidth={1.75} />
         {data.map((r, i) => {
           const [x, y] = xy(i);
           const active = tip?.text.startsWith(String(r.year));
-          const prevVal = i > 0 ? (data[i - 1][dataKey] as number) : null;
-          const val = r[dataKey] as number;
-          const dotColor = prevVal === null ? NEUTRAL : val >= prevVal ? POS : NEG;
+          const isLast = i === data.length - 1;
+          const dotColor = isLast ? lastColor : GOLD;
           return (
             <g key={r.year}>
               <circle
@@ -175,7 +190,7 @@ function HistoryChart({
                 onMouseLeave={() => setTip(null)}
               />
               <circle cx={x} cy={y} r={active ? 4.5 : 3} fill={dotColor} />
-              <text x={x} y={H - 8} fontSize={10} fill="#1A1714" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
+              <text x={x} y={H - 8} fontSize={10} fill="#f1ede3" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
                 {r.year}
               </text>
             </g>
@@ -230,13 +245,18 @@ export function KpiRow({ tiles }: { tiles: [string | number, string][] }) {
 }
 
 function YoyLegend() {
+  // Bars/lines no longer traffic-light-code every historical period green/
+  // red (Oct 2026 reference-match pass) — green/coral now live only on the
+  // delta text above. This legend instead keys the chart's two chart
+  // colors: gold for the latest/highlighted period, muted grey for prior
+  // periods, matching the reference's bar treatment.
   return (
     <div className="legend">
       <span>
-        <i style={{ background: POS }} /> rose vs prior year
+        <i style={{ background: GOLD }} /> latest period
       </span>
       <span>
-        <i style={{ background: NEG }} /> fell vs prior year
+        <i style={{ background: MUTED_BAR }} /> prior periods
       </span>
     </div>
   );
