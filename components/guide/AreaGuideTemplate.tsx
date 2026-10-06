@@ -11,6 +11,7 @@
 import type { GuideData, SaleRecord, RentRecord } from "@/lib/types";
 import { HistoryCharts, KpiRow, MonthlyActivity, RentHistoryChart, TransactionBrowser } from "./GuideCharts";
 import FloorPlans from "./FloorPlans";
+import GuideHero from "./GuideHero";
 
 const WHATSAPP_ICON = (
   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -52,11 +53,13 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
         </div>
       </div>
 
+      <GuideHero kicker={c.hero.kicker} heading={c.hero.heading} lead={c.hero.lead} stats={c.hero.stats} />
+
       <div className="wrap">
         <section className="about">
           <div className="section-head">
             <span className="eyebrow">Area Overview</span>
-            <h1 style={{ fontSize: "clamp(1.8rem,4vw,2.6rem)" }}>{c.about.heading}</h1>
+            <h2 style={{ fontSize: "clamp(1.8rem,4vw,2.6rem)" }}>{c.about.heading}</h2>
             <p className="section-sub">{c.about.intro}</p>
           </div>
 
@@ -132,8 +135,8 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
             <p className="full-note" key={i} dangerouslySetInnerHTML={{ __html: note }} />
           ))}
 
-          {c.about.mediaHref.startsWith("http") ? (
-            <a className="long-btn" href={c.about.mediaHref} target="_blank" rel="noopener">
+          {c.about.mediaHref.startsWith("http") || c.about.mediaHref.startsWith("/") ? (
+            <a className="long-btn" href={c.about.mediaHref} target="_blank" rel="noopener noreferrer">
               {c.about.mediaLabel}
             </a>
           ) : (

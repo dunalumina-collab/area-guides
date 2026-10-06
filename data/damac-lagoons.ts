@@ -17,6 +17,18 @@ const guide: GuideData = {
       buildingName: "Damac Lagoons",
       areaLabel: "Damac Lagoons",
     },
+    hero: {
+      kicker: "Dubai · Damac Lagoons",
+      heading: "A Mediterranean community, **clearly priced.**",
+      lead:
+        "A large resort-style villa and townhouse community inspired by the Mediterranean's most iconic destinations — eleven themed clusters, lagoons, beaches and family-focused amenities throughout.",
+      stats: [
+        { k: "Themed clusters", v: "11" },
+        { k: "Villa/townhouse units", v: "9,507" },
+        { k: "Launch span", v: "Nov 2021 – Jun 2023" },
+        { k: "Fully handed over", v: "6 of 11 clusters" },
+      ],
+    },
     specialist: {
       eyebrowBuilding: "Area Specialist - Damac Lagoons",
       eyebrowRole: "Property Consultant, Duna Lumina",

@@ -11,6 +11,18 @@ const guide: GuideData = {
       buildingName: "Cayan Tower",
       areaLabel: "Dubai Marina",
     },
+    hero: {
+      kicker: "Dubai Marina · Cayan Tower",
+      heading: "A twisting icon, **clearly priced.**",
+      lead:
+        "A 73-storey, 307m residential tower at the entrance to Dubai Marina that twists a full 90° from base to top — handed over in 2013, with thirteen years of registered resale and rental history.",
+      stats: [
+        { k: "Storeys + basement", v: "73 + 5" },
+        { k: "Total units", v: "456" },
+        { k: "Handover", v: "2013" },
+        { k: "Developer", v: "Cayan" },
+      ],
+    },
     specialist: {
       eyebrowBuilding: "Cayan Tower Area Specialist",
       eyebrowRole: "Co-Founder & CEO of Duna Group",
@@ -82,7 +94,7 @@ const guide: GuideData = {
         'DLD groups Cayan Tower\'s 4-bed apartments, duplexes and the full-floor penthouse into one "4 Bed" bucket, which is why the registered size range (1,039&ndash;5,489 sqft) is far wider than the developer\'s own 4BR-apartment range — one 5,489 sqft sale on 2 Oct 2026 at AED 9,910,523 is almost certainly a full-floor penthouse resale, not a standard 4-bed. We\'ve kept it in the bucket rather than guess which line it belongs to. The 3-bed line is a single data point (not an average) — treat it as one reference sale, not a market price.',
         "<b>Service charge:</b> AED 18.00/sqft/yr is the currently published residential rate for Cayan Tower (retail units are billed separately at a higher rate). This is the confirmed current figure, not the Dubai Marina community average.",
       ],
-      mediaHref: "cayan-tower-floor-plans",
+      mediaHref: "/cayan-tower/floor-plans",
       mediaLabel: "View floor plans & unit types →",
       footnote: "All figures on this page are registered DLD transaction and rental-contract data for Cayan Tower and Dubai Marina, plus the developer's own published building specifications; where a figure conflicts with another source, registered data takes precedence.",
     },

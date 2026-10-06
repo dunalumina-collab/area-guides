@@ -105,11 +105,22 @@ export interface MetricProvenance {
   status: MetricStatus;
 }
 
+export interface HeroStat {
+  k: string; // kicker/label, e.g. "Median AED/sqft"
+  v: string; // value, e.g. "AED 1,480"
+}
+
 export interface GuideContent {
   meta: {
     title: string;
     buildingName: string;
     areaLabel: string;
+  };
+  hero: {
+    kicker: string;
+    heading: string; // plain text; a trailing emphasized phrase can be marked with ** **
+    lead: string;
+    stats: HeroStat[];
   };
   specialist: {
     eyebrowBuilding: string; // "<Building> Area Specialist"
@@ -185,6 +196,32 @@ export interface GuideData {
 
 export type GuideType = "area" | "project";
 export type GuideStatus = "draft" | "published";
+
+// Floor-plan / media sub-page content (app/[slug]/floor-plans/page.tsx).
+// Real content ported from the two uploaded reference pages — every link
+// is a real external source (YouTube, Bayut, PropJunction); nothing here
+// is fabricated.
+export interface MediaItem {
+  href: string;
+  icon: "play" | "external";
+  title: string;
+  sub: string;
+}
+
+export interface MediaGroup {
+  heading: string;
+  note?: string;
+  items: MediaItem[];
+}
+
+export interface FloorPlanMediaContent {
+  guideName: string;
+  areaLabel: string;
+  backHref: string;
+  intro: string;
+  groups: MediaGroup[];
+  closingNote?: string;
+}
 
 export interface GuideRegistryEntry {
   slug: string;

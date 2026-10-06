@@ -11,6 +11,7 @@ import {
   TransactionBrowser,
 } from "./GuideCharts";
 import FloorPlans from "./FloorPlans";
+import GuideHero from "./GuideHero";
 
 const WHATSAPP_ICON = (
   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -38,6 +39,8 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
           </a>
         </div>
       </div>
+
+      <GuideHero kicker={c.hero.kicker} heading={c.hero.heading} lead={c.hero.lead} stats={c.hero.stats} />
 
       <div className="wrap">
         <section className="about">
@@ -116,8 +119,8 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
             <p className="full-note" key={i} dangerouslySetInnerHTML={{ __html: note }} />
           ))}
 
-          {c.about.mediaHref.startsWith("http") ? (
-            <a className="long-btn" href={c.about.mediaHref} target="_blank" rel="noopener">
+          {c.about.mediaHref.startsWith("http") || c.about.mediaHref.startsWith("/") ? (
+            <a className="long-btn" href={c.about.mediaHref} target="_blank" rel="noopener noreferrer">
               {PLAY_ICON}
               {c.about.mediaLabel}
             </a>
