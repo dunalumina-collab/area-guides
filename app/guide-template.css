@@ -78,7 +78,7 @@ a{color:inherit}
 @media (max-width:760px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
 .secondary-note{font-size:.84rem;color:#6b6458;margin-bottom:28px}
 
-.chart-block{margin-bottom:28px}
+.chart-block{margin-bottom:18px}
 .chart-title{font-weight:600;font-size:.88rem;margin-bottom:3px}
 .chart-title .mini{font-weight:400;color:#8a8275;font-size:.78rem}
 .chart-wrap{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px 12px 6px;overflow-x:auto}
@@ -90,7 +90,7 @@ svg.chart{display:block;min-width:380px}
 /* ---- Headline-stat + chart two-column layout (image-1 reference pattern):
    a dark/contained "headline number" card beside a correspondingly-sized,
    contained chart card — not a full-bleed oversized chart. ---- */
-.hc-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;margin-bottom:28px}
+.hc-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;margin-bottom:18px}
 @media (max-width:820px){.hc-row{grid-template-columns:1fr}}
 .hc-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:20px 20px 16px;display:flex;flex-direction:column}
 .g-section.tone-forest .hc-card{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.16)}
@@ -122,7 +122,7 @@ svg.chart{display:block;min-width:380px}
 .hbar-value{font-size:.78rem;font-weight:700;color:var(--forest);text-align:right;white-space:nowrap}
 .g-section.tone-forest .hbar-value{color:var(--gold-tint)}
 
-.insight{background:var(--forest);color:var(--ivory);border-radius:8px;padding:28px 28px;margin-bottom:40px}
+.insight{background:var(--forest);color:var(--ivory);border-radius:8px;padding:22px 24px;margin-bottom:26px}
 .insight .eyebrow{color:var(--gold-tint)}
 .insight h3{color:#fff;font-size:1.3rem;margin-top:6px}
 .insight p{line-height:1.7;font-size:.95rem;margin:14px 0 0;max-width:68ch;color:#e9e4d8}
@@ -136,7 +136,7 @@ svg.chart{display:block;min-width:380px}
 .leader-table thead th{background:var(--forest);color:#fff;text-align:left;padding:6px 10px;font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
 .leader-table tbody td{padding:5px 10px;border-bottom:1px solid var(--line);white-space:nowrap;color:var(--ink)}
 .leader-table tbody tr:nth-child(even){background:rgba(163,123,44,.045)}
-.leader-note{font-size:.78rem;font-style:italic;color:#8a8275;margin-bottom:36px}
+.leader-note{font-size:.78rem;font-style:italic;color:#8a8275;margin-bottom:22px}
 /* Two tables side by side where real data supports a natural split (e.g.
    top-selling vs top-rented leaderboards) — each half keeps its own
    .leader-table styling. */
@@ -145,7 +145,7 @@ svg.chart{display:block;min-width:380px}
 .table-pair h4{font-family:"Montserrat",sans-serif;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);margin:0 0 10px}
 .g-section.tone-forest .table-pair h4{color:var(--gold-tint)}
 .full-note{font-size:.86rem;color:#4a443a;line-height:1.65;margin:0 0 18px;max-width:none}
-.bed-pills{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:36px}
+.bed-pills{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:22px}
 @media (max-width:620px){.bed-pills{grid-template-columns:1fr}}
 .bed-pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:11px 18px;font-size:.8rem;color:#4a443a;text-align:center}
 .bed-pill b{color:var(--forest)}
@@ -336,7 +336,7 @@ footer.fine a{color:#8a8275;text-decoration:underline}
 }
 
 /* ---- Full-width alternating section rhythm ---- */
-.g-section{padding-block:clamp(48px,6vw,84px)}
+.g-section{padding-block:clamp(36px,4.6vw,60px)}
 .g-section.tone-ivory{background:var(--ivory)}
 .g-section.tone-white{background:var(--card)}
 .g-section.tone-forest{background:var(--forest);color:#f1ede3}
@@ -345,7 +345,7 @@ footer.fine a{color:#8a8275;text-decoration:underline}
 .g-section.tone-forest .sec-intro p{color:#d9d3c2}
 .g-section .wrap{max-width:1180px}
 
-.sec-intro{max-width:70ch;margin-bottom:clamp(26px,3.5vw,44px)}
+.sec-intro{max-width:70ch;margin-bottom:clamp(18px,2.6vw,30px)}
 .sec-intro .eyebrow{display:block;margin-bottom:10px}
 .sec-intro h2{font-size:clamp(1.7rem,3.6vw,2.5rem);margin:0 0 .38em}
 .sec-intro p{color:#6b6458;font-size:1rem;margin:0;line-height:1.65}
@@ -387,7 +387,7 @@ footer.fine a{color:#8a8275;text-decoration:underline}
 .card-image .cap p{font-size:.78rem;color:#6b6458;margin:0}
 
 /* ---- Image + text two-column layout ---- */
-.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,48px);align-items:center;margin-bottom:clamp(28px,4vw,44px)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,36px);align-items:center;margin-bottom:clamp(20px,3vw,32px)}
 .split.reverse{direction:rtl}
 .split.reverse>*{direction:ltr}
 @media (max-width:820px){.split{grid-template-columns:1fr}.split.reverse{direction:ltr}}

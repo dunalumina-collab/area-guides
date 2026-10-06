@@ -253,13 +253,55 @@ export function HistoryCharts({ history }: { history: HistoryRow[] }) {
   const pctChange = prior && prior.psf ? ((latest.psf - prior.psf) / prior.psf) * 100 : null;
   const secondaryYears = history.slice(Math.max(0, history.length - 4), history.length - 1).reverse();
 
+  // Headline-stat + chart pairing for the transaction-volume bar chart too
+  // (same Jebel Ali-modeled pattern as the psf pairing below): latest year's
+  // sale volume, its real % change over the prior year, and the preceding
+  // years as secondary stats, beside the bar chart — nothing invented, all
+  // read from this guide's own yearly history.
+  const latestVol = history[history.length - 1];
+  const priorVol = history.length > 1 ? history[history.length - 2] : null;
+  const volChange = priorVol && priorVol.sale_vol ? ((latestVol.sale_vol - priorVol.sale_vol) / priorVol.sale_vol) * 100 : null;
+  const secondaryVolYears = history.slice(Math.max(0, history.length - 4), history.length - 1).reverse();
+
   return (
     <>
       <div className="chart-block">
-        <div className="chart-title">
-          Total sale transactions by year <span className="mini">- all bedrooms</span>
-        </div>
-        <HistoryChart rows={history} dataKey="sale_vol" mode="bar" fmt={(v) => `${v} transactions`} />
+        {latestVol && volChange !== null ? (
+          <div className="hc-row" style={{ marginBottom: 8 }}>
+            <div className="hc-card">
+              <div className="hc-label">Sale transactions, {latestVol.year}</div>
+              <div className="hc-value">
+                {latestVol.sale_vol}
+                <span className="hc-unit"> sales</span>
+              </div>
+              <div className="hc-delta" style={{ color: volChange >= 0 ? "var(--pos)" : "var(--neg)" }}>
+                {volChange >= 0 ? "+" : ""}
+                {volChange.toFixed(1)}% vs {priorVol!.year}
+              </div>
+              <div className="hc-secondary">
+                {secondaryVolYears.map((row) => (
+                  <div key={row.year}>
+                    <div className="hs-k">{row.year}</div>
+                    <div className="hs-v">{row.sale_vol} sales</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="hc-card hc-chart-card">
+              <div className="chart-title">
+                Total sale transactions by year <span className="mini">- all bedrooms</span>
+              </div>
+              <HistoryChart rows={history} dataKey="sale_vol" mode="bar" fmt={(v) => `${v} transactions`} />
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="chart-title">
+              Total sale transactions by year <span className="mini">- all bedrooms</span>
+            </div>
+            <HistoryChart rows={history} dataKey="sale_vol" mode="bar" fmt={(v) => `${v} transactions`} />
+          </>
+        )}
         <YoyLegend />
       </div>
       <div className="chart-block">
@@ -305,10 +347,61 @@ export function HistoryCharts({ history }: { history: HistoryRow[] }) {
   );
 }
 
+// Headline-stat + chart pairing for annual rent (same Jebel Ali-modeled
+// pattern as HistoryCharts' psf/volume pairings): latest year's median
+// new-lease rent, its real % change over the prior year with rent data, and
+// the preceding years as secondary stats, beside the line chart. Call sites
+// no longer render their own chart-title — it lives inside the paired card
+// so the title and its chart travel together.
 export function RentHistoryChart({ history }: { history: HistoryRow[] }) {
+  const rentFmt = (v: number) => `AED ${v.toLocaleString()}/yr`;
+  const rentYears = history.filter((r) => r.rent !== null && r.rent !== undefined);
+  const latest = rentYears[rentYears.length - 1];
+  const prior = rentYears.length > 1 ? rentYears[rentYears.length - 2] : null;
+  const pctChange = prior && prior.rent ? ((latest.rent! - prior.rent!) / prior.rent!) * 100 : null;
+  const secondaryYears = rentYears.slice(Math.max(0, rentYears.length - 4), rentYears.length - 1).reverse();
+
+  if (!latest || pctChange === null) {
+    return (
+      <>
+        <div className="chart-title">
+          Annual rent, year on year <span className="mini">- median new-lease rent, AED/yr</span>
+        </div>
+        <HistoryChart rows={history} dataKey="rent" mode="line" fmt={rentFmt} />
+        <YoyLegend />
+      </>
+    );
+  }
+
   return (
     <>
-      <HistoryChart rows={history} dataKey="rent" mode="line" fmt={(v) => `AED ${v.toLocaleString()}/yr`} />
+      <div className="hc-row" style={{ marginBottom: 8 }}>
+        <div className="hc-card">
+          <div className="hc-label">Annual rent, {latest.year}</div>
+          <div className="hc-value">
+            AED {latest.rent!.toLocaleString()}
+            <span className="hc-unit">/yr</span>
+          </div>
+          <div className="hc-delta" style={{ color: pctChange >= 0 ? "var(--pos)" : "var(--neg)" }}>
+            {pctChange >= 0 ? "+" : ""}
+            {pctChange.toFixed(1)}% vs {prior!.year}
+          </div>
+          <div className="hc-secondary">
+            {secondaryYears.map((row) => (
+              <div key={row.year}>
+                <div className="hs-k">{row.year}</div>
+                <div className="hs-v">AED {row.rent!.toLocaleString()}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="hc-card hc-chart-card">
+          <div className="chart-title">
+            Annual rent, year on year <span className="mini">- median new-lease rent, AED/yr</span>
+          </div>
+          <HistoryChart rows={history} dataKey="rent" mode="line" fmt={rentFmt} />
+        </div>
+      </div>
       <YoyLegend />
     </>
   );

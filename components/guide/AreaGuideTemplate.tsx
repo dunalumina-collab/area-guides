@@ -269,9 +269,6 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
             <Accordion title={c.market.sinceHeading} sub={c.market.sinceSub}>
               <HistoryCharts history={dataset.history} />
               <div className="chart-block">
-                <div className="chart-title">
-                  Annual rent, year on year <span className="mini">- median new-lease rent, AED/yr</span>
-                </div>
                 <RentHistoryChart history={dataset.history} />
                 <p className="leader-note">{c.market.rentChartNote}</p>
               </div>
