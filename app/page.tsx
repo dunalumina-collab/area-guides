@@ -3,7 +3,6 @@
 // href are driven by the central registry (lib/registry.ts); every other
 // card and all non-card content is literal JSX, matching the approved file.
 // Never hand-edit this to "simplify" copy — it is a literal spec.
-import Link from "next/link";
 import { registry } from "@/lib/registry";
 import type { GuideRegistryEntry } from "@/lib/types";
 
@@ -19,9 +18,9 @@ function GuideCard({ entry }: { entry: GuideRegistryEntry }) {
     </>
   );
   return live ? (
-    <Link className="fact-card guide-card" href={`/${entry.slug}`}>
+    <a className="fact-card guide-card" href={`/${entry.slug}`} target="_blank" rel="noopener noreferrer">
       {body}
-    </Link>
+    </a>
   ) : (
     <div className="fact-card guide-card">{body}</div>
   );
