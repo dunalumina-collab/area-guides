@@ -5,6 +5,7 @@
 :root{
   --ivory:#F5F0E8; --ink:#1A1714; --gold:#A37B2C; --gold-tint:#E8D9B5;
   --forest:#2C4A3E; --line:#DDD2BC; --card:#FFFFFF; color-scheme: light;
+  --pos:#2F7A4F; --pos-tint:#E4EEE6; --neg:#B23A3A; --neg-tint:#F5E6E5; --muted:#8a8275;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -92,7 +93,7 @@ svg.chart{display:block;min-width:460px}
 .leader-table{border:1px solid var(--line);border-radius:6px;overflow:auto;background:var(--card);margin-bottom:16px}
 .leader-table table{width:100%;border-collapse:collapse;font-size:.84rem;min-width:420px}
 .leader-table thead th{background:var(--forest);color:#fff;text-align:left;padding:10px 12px;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
-.leader-table tbody td{padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.leader-table tbody td{padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap;color:var(--ink)}
 .leader-table tbody tr:nth-child(even){background:rgba(163,123,44,.045)}
 .leader-note{font-size:.78rem;color:#8a8275;margin-bottom:36px}
 .full-note{font-size:.86rem;color:#4a443a;line-height:1.65;margin:0 0 18px;max-width:none}
@@ -113,7 +114,7 @@ svg.chart{display:block;min-width:460px}
 .table-wrap{border:1px solid var(--line);border-radius:6px;overflow:auto;max-height:440px;background:var(--card)}
 table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:480px}
 thead th{position:sticky;top:0;background:var(--forest);color:#fff;text-align:left;padding:10px 12px;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
-tbody td{padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap;color:var(--ink)}
 tbody tr:nth-child(even){background:rgba(163,123,44,.045)}
 .count-note{font-size:.78rem;color:#8a8275;margin-top:8px}
 
@@ -231,7 +232,7 @@ a.fact-card:hover{border-color:var(--gold);transform:translateY(-2px)}
 .monthly-table-card{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
 .monthly-table-card h4{background:var(--forest);color:#fff;margin:0;padding:10px 14px;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em}
 .monthly-table-card table{width:100%;border-collapse:collapse;font-size:.85rem}
-.monthly-table-card td{padding:8px 14px;border-top:1px solid var(--line)}
+.monthly-table-card td{padding:8px 14px;border-top:1px solid var(--line);color:var(--ink)}
 .monthly-table-card td:last-child{text-align:right;font-weight:700;color:var(--forest)}
 .monthly-table-empty{padding:14px;font-size:.82rem;color:#8a8275}
 
@@ -468,3 +469,13 @@ footer.fine a{color:#8a8275;text-decoration:underline}
 .g-section.tone-forest .kpi:nth-child(3n+2) .n{color:var(--gold-tint)}
 .card-stat:nth-child(3n+2){border-left-color:var(--forest)}
 .card-stat:nth-child(3n+2) .n{color:var(--forest)}
+
+/* ---- Functional positive/negative market-movement color coding (point 4,
+   Oct 2026 correction pass). Green ONLY for a "+" increase, coral/red ONLY
+   for a "-" decrease, muted grey for an unavailable "—"/dash value. Never
+   used decoratively elsewhere in the UI. ---- */
+.delta-pos{color:var(--pos);font-weight:700}
+.delta-neg{color:var(--neg);font-weight:700}
+.delta-flat{color:var(--muted)}
+.val-strong{font-weight:700;color:var(--ink)}
+.g-section.tone-forest .delta-flat{color:#c3bdaf}

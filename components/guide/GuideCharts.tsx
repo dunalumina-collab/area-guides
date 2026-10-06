@@ -10,6 +10,12 @@ import type { GuideDataset, HistoryRow, RentRecord, SaleRecord } from "@/lib/typ
 import EmptyState from "./EmptyState";
 
 const PALETTE = ["#2C4A3E", "#A37B2C", "#7A8C78", "#C9A769", "#50605A"];
+// Functional market-movement colors (point 5 of the Oct 2026 pass): a bar/
+// point colors green when its value rose vs the prior year, coral when it
+// fell, and neutral forest for the first year (no prior point to compare).
+const POS = "#2F7A4F";
+const NEG = "#B2453F";
+const NEUTRAL = PALETTE[0];
 
 function bedLabel(b: number): string {
   return b === 0 ? "Studio" : `${b} Bed${b > 1 ? "s" : ""}`;
@@ -64,6 +70,8 @@ function HistoryChart({
           })}
           {rows.map((r, i) => {
             const val = r[dataKey] as number;
+            const prev = i > 0 ? (rows[i - 1][dataKey] as number) : null;
+            const barColor = prev === null ? NEUTRAL : val >= prev ? POS : NEG;
             const h = innerH * (val / maxVal);
             const x = padL + i * groupW + groupW / 2 - barW / 2;
             const y = padT + innerH - h;
@@ -74,7 +82,8 @@ function HistoryChart({
                   y={y}
                   width={barW}
                   height={Math.max(h, 2)}
-                  fill={tip?.text.startsWith(String(r.year)) ? PALETTE[1] : PALETTE[0]}
+                  fill={barColor}
+                  opacity={tip?.text.startsWith(String(r.year)) ? 1 : 0.88}
                   rx={3}
                   style={{ cursor: "pointer" }}
                   onMouseEnter={() => {
@@ -144,6 +153,9 @@ function HistoryChart({
         {data.map((r, i) => {
           const [x, y] = xy(i);
           const active = tip?.text.startsWith(String(r.year));
+          const prevVal = i > 0 ? (data[i - 1][dataKey] as number) : null;
+          const val = r[dataKey] as number;
+          const dotColor = prevVal === null ? PALETTE[0] : val >= prevVal ? POS : NEG;
           return (
             <g key={r.year}>
               <circle
@@ -158,7 +170,7 @@ function HistoryChart({
                 }}
                 onMouseLeave={() => setTip(null)}
               />
-              <circle cx={x} cy={y} r={active ? 6 : 4} fill={PALETTE[0]} />
+              <circle cx={x} cy={y} r={active ? 6 : 4} fill={dotColor} />
               <text x={x} y={H - 10} fontSize={12} fill="#1A1714" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
                 {r.year}
               </text>
@@ -188,6 +200,19 @@ export function KpiRow({ tiles }: { tiles: [string | number, string][] }) {
   );
 }
 
+function YoyLegend() {
+  return (
+    <div className="legend">
+      <span>
+        <i style={{ background: POS }} /> rose vs prior year
+      </span>
+      <span>
+        <i style={{ background: NEG }} /> fell vs prior year
+      </span>
+    </div>
+  );
+}
+
 export function HistoryCharts({ history }: { history: HistoryRow[] }) {
   return (
     <>
@@ -196,19 +221,26 @@ export function HistoryCharts({ history }: { history: HistoryRow[] }) {
           Total sale transactions by year <span className="mini">- all bedrooms</span>
         </div>
         <HistoryChart rows={history} dataKey="sale_vol" mode="bar" fmt={(v) => `${v} transactions`} />
+        <YoyLegend />
       </div>
       <div className="chart-block">
         <div className="chart-title">
           Sale price per sqft, year on year <span className="mini">- median AED/sqft</span>
         </div>
         <HistoryChart rows={history} dataKey="psf" mode="line" fmt={(v) => `AED ${v.toLocaleString()}/sqft`} />
+        <YoyLegend />
       </div>
     </>
   );
 }
 
 export function RentHistoryChart({ history }: { history: HistoryRow[] }) {
-  return <HistoryChart rows={history} dataKey="rent" mode="line" fmt={(v) => `AED ${v.toLocaleString()}/yr`} />;
+  return (
+    <>
+      <HistoryChart rows={history} dataKey="rent" mode="line" fmt={(v) => `AED ${v.toLocaleString()}/yr`} />
+      <YoyLegend />
+    </>
+  );
 }
 
 // Groups the dataset's own sale/rent records by calendar month, computed

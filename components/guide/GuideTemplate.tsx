@@ -20,6 +20,7 @@ import GuideFooter from "./GuideFooter";
 import Accordion from "./Accordion";
 import PlaceholderImage from "./PlaceholderImage";
 import EmptyState from "./EmptyState";
+import { DeltaCell, StrongCell } from "./DeltaCell";
 
 const PLAY_ICON = (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -211,7 +212,9 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
                   {c.market.topSellingRows.map((row, i) => (
                     <tr key={i}>
                       {row.cells.map((cell, j) => (
-                        <td key={j}>{cell}</td>
+                        <td key={j}>
+                          {j === 2 ? <DeltaCell value={cell} /> : j === 3 ? <StrongCell value={cell} /> : cell}
+                        </td>
                       ))}
                     </tr>
                   ))}

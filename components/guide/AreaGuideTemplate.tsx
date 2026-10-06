@@ -18,6 +18,7 @@ import GuideFooter from "./GuideFooter";
 import Accordion from "./Accordion";
 import PlaceholderImage from "./PlaceholderImage";
 import EmptyState from "./EmptyState";
+import { DeltaCell, StrongCell } from "./DeltaCell";
 
 const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -236,7 +237,9 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
                   {c.market.topSellingRows.map((row, i) => (
                     <tr key={i}>
                       {row.cells.map((cell, j) => (
-                        <td key={j}>{cell}</td>
+                        <td key={j}>
+                          {j === 2 ? <DeltaCell value={cell} /> : j === 3 ? <StrongCell value={cell} /> : cell}
+                        </td>
                       ))}
                     </tr>
                   ))}
