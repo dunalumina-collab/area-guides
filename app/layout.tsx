@@ -5,7 +5,7 @@ import "./guide-template.css";
 export const metadata: Metadata = {
   title: "Duna Area & Project Guides",
   description:
-    "Dubai area and project investment guides by Duna Lumina Real Estate.",
+    "Dubai area and project investment guides by DUNA GROUP.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

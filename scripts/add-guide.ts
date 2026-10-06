@@ -56,7 +56,7 @@ const dataTemplate = `import type { GuideData } from "../lib/types";
 const data: GuideData = {
   content: {
     meta: {
-      title: "${name} — Duna Lumina",
+      title: "${name} — DUNA GROUP",
       buildingName: "${name}",
       areaLabel: "${areaLabel}",
     },

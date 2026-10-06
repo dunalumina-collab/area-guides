@@ -18,8 +18,8 @@ export default function Home() {
           <h1>Duna Area &amp; Project Guides</h1>
           <p>
             In-depth investment guides to Dubai&rsquo;s areas and projects &mdash; pricing,
-            rental yield, sales comparables and market positioning, kept current by Duna
-            Lumina Real Estate.
+            rental yield, sales comparables and market positioning, kept current by DUNA
+            GROUP.
           </p>
         </section>
 
@@ -48,7 +48,7 @@ export default function Home() {
         </section>
       </div>
 
-      <footer>Duna Lumina Real Estate &mdash; Dubai Area &amp; Project Guides</footer>
+      <footer>DUNA GROUP &mdash; Dubai Area &amp; Project Guides</footer>
     </>
   );
 }
