@@ -83,6 +83,11 @@ a{color:inherit}
 .chart-title .mini{font-weight:400;color:#8a8275;font-size:.78rem}
 .chart-wrap{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px 12px 6px;overflow-x:auto}
 svg.chart{display:block;min-width:380px}
+.g-section.tone-forest .chart-wrap,.g-section.tone-forest .hist-wrap{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.14)}
+.g-section.tone-forest .chart-wrap svg.chart line,.g-section.tone-forest .hist-wrap svg.chart line{stroke:rgba(255,255,255,.16)}
+.g-section.tone-forest .chart-wrap svg.chart text,.g-section.tone-forest .hist-wrap svg.chart text{fill:#d9d3c2}
+.g-section.tone-forest .chart-wrap svg.chart path,.g-section.tone-forest .hist-wrap svg.chart path{stroke:var(--gold-tint)}
+.g-section.tone-forest .chart-wrap svg.chart rect.bar-default,.g-section.tone-forest .hist-wrap svg.chart rect.bar-default{fill:var(--gold-tint)}
 .legend{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;font-size:.74rem;color:#6b6458}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:9px;height:9px;border-radius:2px;display:inline-block}

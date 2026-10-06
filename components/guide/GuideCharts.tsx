@@ -9,13 +9,14 @@ import { useMemo, useRef, useState } from "react";
 import type { GuideDataset, HistoryRow, RentRecord, SaleRecord } from "@/lib/types";
 import EmptyState from "./EmptyState";
 
-const PALETTE = ["#2C4A3E", "#A37B2C", "#7A8C78", "#C9A769", "#50605A"];
 // Functional market-movement colors (point 5 of the Oct 2026 pass): a bar/
 // point colors green when its value rose vs the prior year, coral when it
-// fell, and neutral forest for the first year (no prior point to compare).
+// fell, and gold-tan for the first year (no prior point to compare). All
+// chart cards render on the dark forest surface, so this must read against
+// a dark background too — a forest-green neutral would disappear into it.
 const POS = "#2F7A4F";
 const NEG = "#B2453F";
-const NEUTRAL = PALETTE[0];
+const NEUTRAL = "#C9A769";
 
 function bedLabel(b: number): string {
   return b === 0 ? "Studio" : `${b} Bed${b > 1 ? "s" : ""}`;
@@ -152,13 +153,13 @@ function HistoryChart({
             </g>
           );
         })}
-        <path d={pathD} fill="none" stroke={PALETTE[0]} strokeWidth={1.75} />
+        <path d={pathD} fill="none" stroke={NEUTRAL} strokeWidth={1.75} />
         {data.map((r, i) => {
           const [x, y] = xy(i);
           const active = tip?.text.startsWith(String(r.year));
           const prevVal = i > 0 ? (data[i - 1][dataKey] as number) : null;
           const val = r[dataKey] as number;
-          const dotColor = prevVal === null ? PALETTE[0] : val >= prevVal ? POS : NEG;
+          const dotColor = prevVal === null ? NEUTRAL : val >= prevVal ? POS : NEG;
           return (
             <g key={r.year}>
               <circle
