@@ -6,6 +6,7 @@
 // already-approved header (app/page.tsx) — this component is guide pages only.
 
 import { useState } from "react";
+import Link from "next/link";
 
 const WHATSAPP_ICON = (
   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -31,6 +32,9 @@ export default function GuideHeader({
           <img className="logo" src="/duna-logo.png" alt="Duna Group logo" />
         </a>
         <nav className={`g-nav${open ? " open" : ""}`} onClick={() => setOpen(false)}>
+          <Link href="/" className="g-nav-home">
+            Home
+          </Link>
           {sections.map((s) => (
             <a key={s.id} href={`#${s.id}`}>
               {s.label}
