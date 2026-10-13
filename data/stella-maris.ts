@@ -1,4 +1,10 @@
 import type { GuideData } from "@/lib/types";
+import {
+  marinaTopSellingRows,
+  marinaTopSellingNote,
+  marinaTopRentedRows,
+  marinaTopRentedNote,
+} from "./shared/marina-top5";
 
 // Ported verbatim (content only — design lives in GuideTemplate) from the
 // original Stella Maris Owner Report. Stella Maris is the master design
@@ -120,22 +126,10 @@ const guide: GuideData = {
       insightEyebrow: "For Stella Maris owners",
       insightText:
         "Only one Stella Maris unit changed hands in the last 3 months, against 35 rent contracts - a 35:1 lease-to-sale ratio that points to very tight resale supply. <b>1 Bed</b> units fetch the strongest resale value per square foot year-to-date, while <b>1 Bed</b> apartments show the strongest average gross yield this quarter at roughly <b>7.2%</b>. The 3-month rental book splits 20 new leases to 15 renewals - healthy turnover for a landlord re-pricing a unit coming vacant. For an owner, the practical read is: resale demand is there (buyers simply have almost nothing to choose from), and a unit coming to market well-priced should move quickly; for a landlord not ready to sell, renewal tenants are clearly staying, so a fair re-pricing at renewal is unlikely to push them out.",
-      topSellingRows: [
-        { cells: ["Ciel", "48", "-58%", "803,500", "8,035"] },
-        { cells: ["Botanica Tower-1", "15", "+200%", "53,344", "80"] },
-        { cells: ["Princess Tower", "13", "+160%", "1,400,000", "1,354"] },
-        { cells: ["Liv Lux", "12", "+200%", "1,591,330", "2,639"] },
-        { cells: ["Marina Shores", "11", "+57%", "3,750,000", "2,808"] },
-      ],
-      topSellingNote: "Source: Dubai Marina apartment resale transactions, trailing 90 days vs the prior 90 days.",
-      topRentedRows: [
-        { cells: ["1", "The Residences At Marina Gate 2", "247"] },
-        { cells: ["2", "The Residences At Marina Gate 1", "193"] },
-        { cells: ["3", "Bay Central 2", "180"] },
-        { cells: ["4", "Bay Central 1", "169"] },
-        { cells: ["5", "Botanica Tower-1", "149"] },
-      ],
-      topRentedNote: "Source: Dubai Marina apartment rental contracts, current year, ranked by contract count.",
+      topSellingRows: marinaTopSellingRows,
+      topSellingNote: marinaTopSellingNote,
+      topRentedRows: marinaTopRentedRows,
+      topRentedNote: marinaTopRentedNote,
       browseHeading: "Browse every Stella Maris transaction",
     },
     why: {

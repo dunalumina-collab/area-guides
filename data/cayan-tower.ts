@@ -1,4 +1,10 @@
 import type { GuideData } from "@/lib/types";
+import {
+  marinaTopSellingRows,
+  marinaTopSellingNote,
+  marinaTopRentedRows,
+  marinaTopRentedNote,
+} from "./shared/marina-top5";
 
 // Ported verbatim (content only) from the original Cayan Tower Owner
 // Report. Design comes entirely from GuideTemplate (the Stella Maris
@@ -121,23 +127,10 @@ const guide: GuideData = {
       insightEyebrow: "For Cayan Tower owners",
       insightText:
         "Seven Cayan Tower units changed hands in the last 3 months against 77 rent contracts - an 11:1 lease-to-sale ratio that points to a leasing market running far deeper than the resale one. <b>1-bed and 2-bed</b> units account for the bulk of registered activity on both sides (35 of 54 YTD resales shown, 66 of 77 recent leases), making them the most liquid sub-markets to price against. The 3-month rental book splits <b>53 new leases to 24 renewals</b> - strong turnover for a landlord re-pricing a unit coming vacant, and a sign tenants keep rotating through the building rather than sitting static. Resale price per sqft has climbed every year since 2021 (AED 1,392 &rarr; AED 2,083 YTD), a six-year run with no down year - for an owner, that's a tower where a well-priced unit has consistently found a buyer. For a landlord not ready to sell, new-lease rents have held in the AED 139,000-143,000 band since 2023, so a fair re-pricing at renewal is unlikely to be a shock to a sitting tenant.",
-      topSellingRows: [
-        { cells: ["Ciel", "47", "-58%", "802,000", "8,035"] },
-        { cells: ["Botanica Tower-1", "14", "+133%", "46,693", "73"] },
-        { cells: ["Princess Tower", "13", "+225%", "1,400,000", "1,354"] },
-        { cells: ["Liv Lux", "12", "+200%", "1,591,330", "2,639"] },
-        { cells: ["Marina Shores", "11", "+57%", "3,750,000", "2,808"] },
-      ],
-      topSellingNote:
-        "Source: Dubai Marina apartment resale transactions, trailing 90 days vs the prior 90 days. Cayan Tower itself isn't in this top 5 by 90-day volume, but ranks 5th in the Marina by full-year volume — 28 resales YTD, just behind Torch Tower and ahead of Damac Heights and Elite Residence.",
-      topRentedRows: [
-        { cells: ["1", "The Residences At Marina Gate 2", "247"] },
-        { cells: ["2", "The Residences At Marina Gate 1", "193"] },
-        { cells: ["3", "Bay Central 2", "180"] },
-        { cells: ["4", "Bay Central 1", "169"] },
-        { cells: ["5", "Botanica Tower-1", "149"] },
-      ],
-      topRentedNote: "Source: Dubai Marina apartment rental contracts, current year, ranked by contract count. Cayan Tower recorded 190 rent contracts of its own this year (107 new leases, 83 renewals).",
+      topSellingRows: marinaTopSellingRows,
+      topSellingNote: marinaTopSellingNote,
+      topRentedRows: marinaTopRentedRows,
+      topRentedNote: marinaTopRentedNote,
       browseHeading: "Browse Cayan Tower transactions",
     },
     why: {
