@@ -70,7 +70,16 @@ export interface RentRecord {
   rent: number;
   area: number;
   floor: number | null;
-  roi: number;
+  /**
+   * Gross yield %, or null when the source data doesn't establish a
+   * reliable price/denominator basis for this record — rendered as "—"
+   * rather than a potentially misleading figure (Emaar 6 Towers guide,
+   * Oct 2026: none of the 121 verified rental records carry a documented
+   * purchase-price basis, so every one of them is null here). Existing
+   * guides (Silverene, Cayan, Stella Maris) keep real numeric values and
+   * are unaffected.
+   */
+  roi: number | null;
   /** Optional — only set for multi-cluster area guides (e.g. Damac Lagoons). */
   cluster?: string;
   propertyType?: string;
@@ -82,7 +91,8 @@ export interface RentRecord {
 export interface HistoryRow {
   year: number;
   sale_vol: number;
-  psf: number;
+  /** Null when no verified price figure exists for this combined row (e.g. Emaar 6 Towers' combined six-tower row, where only a per-tower psf is verified — see GuideDataset.towerHistory). Never a fabricated 0 or averaged estimate. */
+  psf: number | null;
   rent: number | null;
 }
 
@@ -127,6 +137,31 @@ export interface GuideDataset {
    * Maris, Cayan Tower) are unaffected.
    */
   fullTransactions?: TxnRecord[];
+  /**
+   * Optional per-tower psf/rent history for a multi-tower project guide
+   * where a true POOLED six-tower median is unavailable (Emaar 6 Towers,
+   * Oct 2026) — six individual verified tower lines are shown instead of
+   * one fabricated/estimated combined line. `history` above still carries
+   * the real combined sale-volume figures (summable across towers); only
+   * psf/rent use this per-tower shape. Omit for single-building or
+   * two-tower guides (Stella Maris, Cayan Tower, Silverene) — zero effect
+   * on them; GuideTemplate falls back to HistoryCharts/RentHistoryChart
+   * when this is absent.
+   */
+  towerHistory?: {
+    psf: TowerHistorySeries[];
+    rent: TowerHistorySeries[];
+  };
+}
+
+export interface TowerHistoryRow {
+  year: number;
+  value: number;
+}
+
+export interface TowerHistorySeries {
+  tower: string;
+  rows: TowerHistoryRow[];
 }
 
 /**
@@ -249,6 +284,10 @@ export interface GuideContent {
     topRentedNote: string;
     browseHeading: string;
     countNoteSuffix?: string; // extra clause appended for sampled datasets
+    /** Optional methodology note rendered under the transaction browser — used by guides that must disclose why some Yield % values show "—" (e.g. Emaar 6 Towers). Omit for guides that don't need it. */
+    yieldMethodologyNote?: string;
+    /** Optional note shown above the transaction browser when detailed sale records are unavailable for the whole guide (not just empty for a filter) — e.g. Emaar 6 Towers. Omit for guides with real embedded sale records. */
+    salesUnavailableNote?: string;
     /**
      * Optional headline-stat card (Oct 2026 density pass, modeled on the
      * Jebel Ali reference's headline-number + chart pairing). Every value

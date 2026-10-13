@@ -12,6 +12,8 @@ import {
   KpiRow,
   RentHistoryChart,
   TransactionBrowser,
+  SaleVolumeChart,
+  MultiTowerLineChart,
 } from "./GuideCharts";
 import FloorPlans from "./FloorPlans";
 import GuideHero from "./GuideHero";
@@ -244,11 +246,32 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
           </Accordion>
 
           <Accordion title={c.market.sinceHeading} sub={c.market.sinceSub} defaultOpen>
-            <HistoryCharts history={dataset.history} />
-            <div className="chart-block">
-              <RentHistoryChart history={dataset.history} />
-              <p className="leader-note">{c.market.rentChartNote}</p>
-            </div>
+            {dataset.towerHistory ? (
+              <>
+                <SaleVolumeChart history={dataset.history} title="Total sale transactions by year - combined, all six towers" />
+                <MultiTowerLineChart
+                  series={dataset.towerHistory.psf.map((s) => ({ tower: s.tower, rows: s.rows }))}
+                  title="Sale price per sqft, year on year"
+                  sub="per tower - AED/sqft"
+                  fmt={(v) => `AED ${v.toLocaleString()}/sqft`}
+                />
+                <MultiTowerLineChart
+                  series={dataset.towerHistory.rent.map((s) => ({ tower: s.tower, rows: s.rows }))}
+                  title="Annual rent, year on year"
+                  sub="per tower - median new-lease rent, AED/yr"
+                  fmt={(v) => `AED ${v.toLocaleString()}/yr`}
+                />
+                <p className="leader-note">{c.market.rentChartNote}</p>
+              </>
+            ) : (
+              <>
+                <HistoryCharts history={dataset.history} />
+                <div className="chart-block">
+                  <RentHistoryChart history={dataset.history} />
+                  <p className="leader-note">{c.market.rentChartNote}</p>
+                </div>
+              </>
+            )}
           </Accordion>
 
           <div className="insight">
@@ -330,7 +353,8 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
           </Accordion>
 
           <Accordion title={c.market.browseHeading} sub="Filter and sort every registered transaction behind this report">
-            <TransactionBrowser dataset={dataset} />
+            {c.market.salesUnavailableNote && <p className="leader-note" style={{ marginBottom: 10 }}>{c.market.salesUnavailableNote}</p>}
+            <TransactionBrowser dataset={dataset} yieldMethodologyNote={c.market.yieldMethodologyNote} />
           </Accordion>
         </div>
       </section>

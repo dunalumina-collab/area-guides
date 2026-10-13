@@ -293,10 +293,15 @@ export function HistoryCharts({ history }: { history: HistoryRow[] }) {
   // beside a correspondingly-sized (not full-bleed) line-chart card. Every
   // figure here is read straight out of this guide's own yearly history —
   // nothing is invented.
-  const latest = history[history.length - 1];
-  const prior = history.length > 1 ? history[history.length - 2] : null;
+  // psf can be null for a combined multi-tower row with no verified pooled
+  // figure (e.g. Emaar 6 Towers) — filtered the same way RentHistoryChart
+  // below already filters null rent, so Stella Maris/Cayan Tower/Silverene
+  // (which never have a null psf) are completely unaffected.
+  const psfRows = history.filter((r) => r.psf !== null && r.psf !== undefined) as (HistoryRow & { psf: number })[];
+  const latest = psfRows[psfRows.length - 1];
+  const prior = psfRows.length > 1 ? psfRows[psfRows.length - 2] : null;
   const pctChange = prior && prior.psf ? ((latest.psf - prior.psf) / prior.psf) * 100 : null;
-  const secondaryYears = history.slice(Math.max(0, history.length - 4), history.length - 1).reverse();
+  const secondaryYears = psfRows.slice(Math.max(0, psfRows.length - 4), psfRows.length - 1).reverse();
 
   // Headline-stat + chart pairing for the transaction-volume bar chart too
   // (same Jebel Ali-modeled pattern as the psf pairing below): latest year's
@@ -703,7 +708,7 @@ export function AreaTransactionBrowser({ dataset }: { dataset: GuideDataset }) {
   );
 }
 
-export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
+export function TransactionBrowser({ dataset, yieldMethodologyNote }: { dataset: GuideDataset; yieldMethodologyNote?: string }) {
   const { sale, rent, bedroomTypes, isSample, sampleTotals, towers } = dataset;
   const [txn, setTxn] = useState<"Sale" | "Rent">("Sale");
   const [bed, setBed] = useState("");
@@ -830,7 +835,7 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
                   <td>{(r as RentRecord).type}</td>
                   <td>{(r as RentRecord).rent.toLocaleString()}</td>
                   <td>{Math.round((r as RentRecord).area).toLocaleString()}</td>
-                  <td>{(r as RentRecord).roi}%</td>
+                  <td>{(r as RentRecord).roi === null ? "—" : `${(r as RentRecord).roi}%`}</td>
                   {hasTowers && <td>{r.tower ?? "Tower Not Verified"}</td>}
                 </tr>
               ) : (
@@ -849,6 +854,135 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
       </div>
       )}
       {rows.length > 0 && <div className="count-note">{countNote}</div>}
+      {yieldMethodologyNote && <p className="count-note">{yieldMethodologyNote}</p>}
     </>
+  );
+}
+
+// Additive, opt-in multi-tower support (Emaar 6 Towers, Oct 2026) — used only
+// when a guide has no true pooled combined figure across its towers and must
+// show real per-tower series instead of a fabricated/estimated combined one.
+// Neither component is called by Stella Maris/Cayan Tower/Silverene, so they
+// have zero effect on those guides.
+
+// Real combined sale-volume bar chart only (the one combined figure that IS a
+// genuine sum across towers, unlike psf/rent). Deliberately simpler than
+// HistoryCharts' headline-card pairing to keep this an additive, low-risk
+// component — same chart primitive, title and legend styling.
+export function SaleVolumeChart({ history, title }: { history: HistoryRow[]; title: string }) {
+  return (
+    <div className="chart-block">
+      <div className="chart-title">{title}</div>
+      <HistoryChart rows={history} dataKey="sale_vol" mode="bar" fmt={(v) => `${v} transactions`} />
+      <YoyLegend />
+    </div>
+  );
+}
+
+const TOWER_COLORS = ["#C9A769", "#2F7A4F", "#B2453F", "#5A7AA6", "#8A6D3B", "#6B8E8E"];
+
+export function MultiTowerLineChart({
+  series,
+  title,
+  sub,
+  fmt,
+}: {
+  series: { tower: string; rows: { year: number; value: number }[] }[];
+  title: string;
+  sub?: string;
+  fmt: (v: number) => string;
+}) {
+  const W = 480,
+    H = 190,
+    padT = 12,
+    padB = 26,
+    padL = 48,
+    padR = 10;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+  const [tip, setTip] = useState<{ x: number; y: number; text: string } | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  const allYears = Array.from(new Set(series.flatMap((s) => s.rows.map((r) => r.year)))).sort();
+  const allVals = series.flatMap((s) => s.rows.map((r) => r.value));
+  if (allYears.length === 0 || allVals.length === 0) {
+    return (
+      <div className="hist-wrap">
+        <EmptyState label="no verified year-on-year figures for this metric" />
+      </div>
+    );
+  }
+  const maxVal = Math.max(...allVals);
+  const minVal = Math.min(...allVals);
+  const span = maxVal - minVal || 1;
+  const stepX = allYears.length > 1 ? innerW / (allYears.length - 1) : 0;
+  const xOf = (year: number) => padL + allYears.indexOf(year) * stepX;
+  const yOf = (val: number) => padT + innerH - innerH * ((val - minVal) / span);
+  const gridSteps = Array.from({ length: 5 }, (_, i) => i);
+
+  return (
+    <div className="chart-block">
+      <div className="chart-title">
+        {title} {sub && <span className="mini">- {sub}</span>}
+      </div>
+      <div className="hist-wrap">
+        <svg ref={svgRef} className="chart" viewBox={`0 0 ${W} ${H}`}>
+          {gridSteps.map((i) => {
+            const y = padT + innerH - (innerH * i) / 4;
+            const val = Math.round(minVal + (span * i) / 4);
+            return (
+              <g key={i}>
+                <line x1={padL} y1={y} x2={W - padR} y2={y} stroke="rgba(255,255,255,.14)" strokeWidth={1} />
+                <text x={padL - 8} y={y + 4} fontSize={9} fill="#aab3ac" textAnchor="end" fontFamily="Montserrat,sans-serif">
+                  {val.toLocaleString()}
+                </text>
+              </g>
+            );
+          })}
+          {allYears.map((y) => (
+            <text key={y} x={xOf(y)} y={H - 8} fontSize={9.5} fill="#f1ede3" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
+              {y}
+            </text>
+          ))}
+          {series.map((s, si) => {
+            const color = TOWER_COLORS[si % TOWER_COLORS.length];
+            const pts = s.rows.filter((r) => allYears.includes(r.year)).sort((a, b) => a.year - b.year);
+            const d = pts.map((r, i) => `${i === 0 ? "M" : "L"}${xOf(r.year).toFixed(1)},${yOf(r.value).toFixed(1)}`).join(" ");
+            return (
+              <g key={s.tower}>
+                <path d={d} fill="none" stroke={color} strokeWidth={1.5} />
+                {pts.map((r) => (
+                  <circle
+                    key={r.year}
+                    cx={xOf(r.year)}
+                    cy={yOf(r.value)}
+                    r={3}
+                    fill={color}
+                    style={{ cursor: "pointer" }}
+                    onMouseEnter={() => {
+                      const rect = svgRef.current!.getBoundingClientRect();
+                      setTip({ x: xOf(r.year) * (rect.width / W), y: yOf(r.value) * (rect.height / H), text: `${s.tower}, ${r.year}: ${fmt(r.value)}` });
+                    }}
+                    onMouseLeave={() => setTip(null)}
+                  />
+                ))}
+              </g>
+            );
+          })}
+        </svg>
+        {tip && (
+          <div className="hist-tip" style={{ left: tip.x, top: tip.y, opacity: 1, transform: "translate(-50%,-115%)" }}>
+            {tip.text}
+          </div>
+        )}
+      </div>
+      <div className="legend" style={{ flexWrap: "wrap" }}>
+        {series.map((s, si) => (
+          <span key={s.tower}>
+            <i style={{ background: TOWER_COLORS[si % TOWER_COLORS.length] }} /> {s.tower}
+          </span>
+        ))}
+      </div>
+    </div>
   );
 }
