@@ -110,15 +110,31 @@ correction once the registry catches up.
 
 ## 6. Monthly QA report (every run)
 
-Generate a reconciliation report containing: reporting month; run date;
-guides processed; DXB Interact sales/rental counts; corresponding DLD
-counts/values where available; corresponding Bayut observations where
-comparable; verified matches; differences and explanations; duplicate or
-rejected records; data completeness status; historical corrections
-detected; guides ready for approval; guides requiring investigation.
+Generate a reconciliation report containing:
+
+**A. Executive summary** — reporting month; run date; guides checked;
+guides ready for update; guides requiring investigation; significant
+market changes; source limitations.
+
+**B. Guide-level changes** — per guide: previous published figures, newly
+verified figures, the difference, reason for the change, data source,
+validation status.
+
+**C. Area-level rankings** — per shared area dataset (§9): previous Top 5
+rankings, newly retrieved rankings, position/count changes, reporting
+windows, source retrieval date, outliers and classification issues found.
+
+**D. Quality-control findings** (§10) — duplicate records, anomalous
+values, source discrepancies, missing records, incomplete historical data,
+calculation-method differences.
+
+**E. Proposed publication changes** — grouped as ready to publish, awaiting
+investigation, or unavailable due to source limitations.
 
 Classify every guide as one of: **READY FOR APPROVAL**, **REQUIRES REVIEW**,
-**INCOMPLETE SOURCE DATA**, **SOURCE UNAVAILABLE**.
+**INCOMPLETE SOURCE DATA**, **SOURCE UNAVAILABLE**. Preserve every monthly
+report and reconciliation run for audit — never overwrite a prior month's
+report.
 
 ## 7. Publication rule
 
@@ -139,3 +155,120 @@ Do not change any website design, layout, typography, colours, existing
 content, or unrelated functionality. This automation only touches the
 previously requested monthly filters, future-guide data standards, and the
 approved transaction-update workflow above — nothing else.
+
+## 9. Shared area-level market data
+
+**Status:** Added 2026-10-13, codifying the standard established during the
+Silverene Towers implementation and the Dubai Marina Top 5 correction. See
+`data/shared/marina-top5.ts` for the reference implementation.
+
+For any area where more than one DUNA Group guide exists, maintain **one**
+shared area-level market dataset rather than letting each guide pull its
+own copy — independent pulls drift apart even when every guide claims the
+same methodology (this is exactly what happened to Cayan Tower's and Stella
+Maris's Top 5 tables before the October 2026 correction).
+
+- For Dubai Marina, the shared dataset is `data/shared/marina-top5.ts`.
+  Cayan Tower, Stella Maris, Silverene Towers, and any future Dubai Marina
+  guide must import and display it verbatim — same rows, same notes, same
+  retrieval date — never re-derive their own copy.
+- **Top 5 Selling:** one area-wide pull, trailing 90 days vs. the preceding
+  90 days, ranked by registered resale volume. A guide's own building may
+  legitimately appear in its own area ranking — this is an area statistic,
+  not a building statistic.
+- **Top 5 Rented:** one area-wide pull, current calendar year to the actual
+  retrieval date, ranked by rental-contract count. Distinguish new leases
+  from renewals where the source supports it; a contract is not the same
+  as a unique property.
+- Never let two guides in the same area show different figures for what is
+  supposed to be the same ranking.
+- For a new area with only one guide, don't build a shared dataset
+  prematurely — create one only once a second guide in that area needs the
+  same area-wide ranking.
+- **Historical snapshots:** keep every monthly pull rather than overwriting
+  the live export. The reference implementation holds an array of dated
+  snapshots (`MARINA_TOP5_SNAPSHOTS`) and exports the latest one; each
+  snapshot records its retrieval date, source, methodology, rows and notes.
+  A new monthly run **appends** a new snapshot — it never deletes or
+  rewrites a prior one. This is what makes the dataset auditable.
+- **Retrieval date vs. reporting cut-off — do not conflate these:** DXB
+  Interact's ranking tools are relative to "now," not a historical "as of"
+  date. Label a Top 5 snapshot by its true retrieval date (e.g. "retrieved
+  13 Oct 2026"). Never describe a snapshot pulled on the automation's
+  5th-of-the-month run date as if it represents an earlier exact cutoff
+  (e.g. month-end or the 30th) — if the source can't be pinned to a
+  historical date, say so and use the live window instead.
+
+## 10. Transaction quality control
+
+Before accepting any market figure, screen for: extremely low/high prices;
+implausible AED/sqft values; missing or invalid area fields; duplicated
+transactions; unusual transaction classifications; project-name mismatches
+(a building-tier label vs. a broader project grouping it doesn't actually
+match — the "Botanica Tower-1" vs. "Botanica" mislabeling found on Cayan's
+and Stella's pages is the reference case); building-vs-project grouping
+confusion generally; missing bedroom data; inconsistent sale/rent
+classification; and any count or value that moved unexpectedly month over
+month.
+
+**Do not auto-discard an outlier.** Check the actual underlying records
+(individual transaction detail, not just the aggregate) before deciding
+anything about it.
+
+**The verified Botanica standard (established October 2026), apply to any
+similar case:** if a transaction count is real and verifiable, keep it in
+the ranking/table. If the associated price statistic (median price,
+AED/sqft) is demonstrably not representative of market value — e.g. a
+cluster of records priced far outside every comparable sale in the same
+building/window — show **N/A** for that price figure in the table itself
+(not just in a footnote), with a footnote explaining why. Never assume or
+state that non-representative pricing means a gift, related-party, or
+other non-arm's-length transfer unless the source's own classification
+fields actually support that conclusion — if they don't, say only that the
+price level is not usable as a market comparable, nothing more specific.
+
+## 11. Consistent statistical calculations
+
+Re-verify every dependent statistic before proposing an update: annual and
+monthly transaction volumes, median sale prices, price per sqft, median
+annual rents (overall and per-bedroom), gross yields, year-on-year changes,
+and tower/cluster-level comparisons.
+
+**Median rules:**
+- A volume-weighted average of separate building or bedroom medians is
+  **not** the same statistic as the true median of the combined,
+  individual transaction records — don't label one as the other.
+- Where full individual-record data is available, calculate the real
+  pooled median.
+- Where only pre-aggregated medians are available (as with Silverene's
+  Tower A + Tower B combined rent — DXB Interact doesn't expose
+  contract-level rent data far enough back to pool directly), label the
+  combined figure explicitly as a **volume-weighted estimate** and
+  document the method in the guide's own data-issue notes, not just in
+  this doc.
+
+**Year-on-year rules:** use the same definition across every year shown;
+clearly separate full calendar years from year-to-date; never present a
+partial-year count or figure as equivalent to a full year's; disclose any
+methodological difference between years rather than silently reconciling
+it; never fabricate a missing historical year.
+
+**Yield rules:** label gross vs. net explicitly; use verified or clearly
+documented rent/price inputs; never present a projected yield as an actual
+achieved return.
+
+## 12. Project and tower/cluster identification
+
+Use verified project/building identifiers; never guess which
+tower/sub-community a record belongs to.
+
+- **Multi-tower projects** (e.g. Silverene Towers): keep Tower A/Tower B
+  tagged separately wherever the source supports it. Records the source
+  can't attribute to a specific tower go under an explicit "All Towers" /
+  "Tower Not Verified" label and are excluded from tower-filtered results —
+  never guessed into a tower. Don't double-count a project-wide figure
+  against each tower's own figures.
+- **Villa/cluster communities** (e.g. DAMAC Lagoons): keep
+  cluster/sub-community identification, following the methodology already
+  established for DAMAC Lagoons.
+- Apply the same discipline to any future multi-part guide.
