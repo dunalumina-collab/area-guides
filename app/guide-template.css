@@ -212,7 +212,7 @@ footer{text-align:center;padding:28px 24px 40px;font-size:.76rem;color:#8a8275;b
    mockup. Several class names (.fact-card, .why-grid, .leader-table,
    .market-platform, footer) are shared with GuideTemplate.tsx — every
    override below that differs from the shared guide-page rule is scoped to
-   a homepage-only ancestor (#guides/.guides, #list/#invest, #platform) so
+   a homepage-only ancestor (#guides/.guides, #listing-packages/#cost-comparison, #platform) so
    no guide page's styling changes. See the class-name grep in the commit
    history before touching any selector here. --- */
 .topnav{display:flex;gap:20px;font-size:.82rem;font-weight:600}
@@ -298,12 +298,11 @@ a.fact-card:hover{border-color:var(--gold);transform:translateY(-2px)}
 .monthly-table-card td:last-child{text-align:right;font-weight:700;color:var(--forest)}
 .monthly-table-empty{padding:14px;font-size:.82rem;color:#8a8275}
 
-#list .why-grid,#invest .why-grid{margin-bottom:36px}
-#list .leader-table,#invest .leader-table{margin-bottom:12px}
-#list .leader-table table,#invest .leader-table table{min-width:560px}
+#listing-packages .leader-table,#cost-comparison .leader-table{margin-bottom:12px}
+#listing-packages .leader-table table,#cost-comparison .leader-table table{min-width:560px}
 .leader-table thead th.mid,.leader-table tbody td.mid{text-align:center}
-#list .leader-table tbody tr:last-child td,#invest .leader-table tbody tr:last-child td{font-weight:700;color:var(--forest)}
-#list .leader-note,#invest .leader-note{max-width:70ch;line-height:1.55}
+#listing-packages .leader-table tbody tr:last-child td,#cost-comparison .leader-table tbody tr:last-child td{font-weight:700;color:var(--forest)}
+#listing-packages .leader-note,#cost-comparison .leader-note{max-width:70ch;line-height:1.55}
 
 #platform.market-platform{padding-block:16px 48px}
 
@@ -377,6 +376,11 @@ footer.fine a{color:#8a8275;text-decoration:underline}
 .g-section.tone-forest .stat-strip .cell .k{color:var(--gold-tint)}
 .stat-strip .cell .v{font-family:"Playfair Display",serif;font-size:clamp(1.05rem,1.8vw,1.3rem);margin-top:4px;line-height:1.1}
 @media (max-width:760px){.stat-strip{grid-template-columns:repeat(2,1fr)}.stat-strip .cell:nth-child(2n){border-right:0}.stat-strip .cell:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+
+/* ---- Why Work With Us (universal, shared across homepage + all guides) ---- */
+.why-duna-intro p + p{margin-top:12px}
+.why-duna-closing{max-width:60ch;margin:28px auto 0;text-align:center;font-size:1rem;line-height:1.7;color:#6b6458}
+.why-duna-closing b{font-family:"Playfair Display",serif;font-size:1.2rem;color:var(--forest);font-weight:700}
 
 /* ---- Premium card variants (vary treatment by purpose, not one identical box) ---- */
 .card-row{display:grid;gap:16px}
@@ -519,10 +523,6 @@ footer.fine a{color:#8a8275;text-decoration:underline}
 .card-stat.home-stat .l{font-size:.9rem;text-transform:none;letter-spacing:normal;color:#4a443a;line-height:1.65;margin-top:3px}
 @media (max-width:560px){.card-stat.home-stat{flex-direction:column;gap:6px}}
 
-#list .leader-table table,#invest .leader-table table{min-width:560px}
-.leader-table thead th.mid,.leader-table tbody td.mid{text-align:center}
-#list .leader-table tbody tr:last-child td,#invest .leader-table tbody tr:last-child td{font-weight:700;color:var(--forest)}
-#list .leader-note,#invest .leader-note{max-width:70ch;line-height:1.55}
 #platform .mp-block{margin-block:0}
 
 /* ---- Empty-state message (genuine data gaps only, never a masked bug) ---- */

@@ -19,6 +19,7 @@ import Accordion from "./Accordion";
 import PlaceholderImage from "./PlaceholderImage";
 import EmptyState from "./EmptyState";
 import { DeltaCell, StrongCell } from "./DeltaCell";
+import WhyDuna from "./WhyDuna";
 
 const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -28,7 +29,7 @@ const SECTIONS = [
   { id: "overview", label: "Overview" },
   { id: "transactions", label: "Transactions" },
   { id: "market", label: "Market" },
-  { id: "why", label: "Why Us" },
+  { id: "why-duna", label: "Why Work With Us" },
   { id: "specialist", label: "Specialist" },
 ];
 
@@ -361,24 +362,8 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
         </div>
       </section>
 
-      {/* WHY US */}
-      <section className="g-section tone-ivory" id="why">
-        <div className="wrap">
-          <div className="sec-intro">
-            <span className="eyebrow">Investment Case</span>
-            <h2>Why buy, rent or list here with us</h2>
-            <p>{c.why.intro}</p>
-          </div>
-          <div className="card-row cols-2">
-            {c.why.cards.map((card, i) => (
-              <div className="card-plain" key={i}>
-                <h3 style={{ fontSize: "1.05rem", marginBottom: 8 }}>{card.heading}</h3>
-                <p style={{ fontSize: ".88rem", color: "#4a443a", lineHeight: 1.6, margin: 0 }} dangerouslySetInnerHTML={{ __html: card.body }} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* WHY US (universal, shared with homepage + all guides) */}
+      <WhyDuna />
 
       {/* NEXT STEP / CTA */}
       <section className="g-section tone-white">

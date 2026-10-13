@@ -21,6 +21,7 @@ import Accordion from "./Accordion";
 import PlaceholderImage from "./PlaceholderImage";
 import EmptyState from "./EmptyState";
 import { DeltaCell, StrongCell } from "./DeltaCell";
+import WhyDuna from "./WhyDuna";
 
 const PLAY_ICON = (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -31,7 +32,7 @@ const PLAY_ICON = (
 const SECTIONS = [
   { id: "overview", label: "Overview" },
   { id: "market", label: "Market" },
-  { id: "why", label: "For Owners" },
+  { id: "why-duna", label: "Why Work With Us" },
   { id: "floorplans", label: "Floor Plans" },
   { id: "specialist", label: "Specialist" },
 ];
@@ -284,23 +285,7 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
       </section>
 
       {/* FOR OWNERS */}
-      <section className="g-section tone-ivory" id="why">
-        <div className="wrap">
-          <div className="sec-intro">
-            <span className="eyebrow">For Owners</span>
-            <h2>Why list your property with us</h2>
-            <p>{c.why.intro}</p>
-          </div>
-          <div className="card-row cols-2">
-            {c.why.cards.map((card, i) => (
-              <div className="card-plain" key={i}>
-                <h3 style={{ fontSize: "1.05rem", marginBottom: 8 }}>{card.heading}</h3>
-                <p style={{ fontSize: ".88rem", color: "#4a443a", lineHeight: 1.6, margin: 0 }} dangerouslySetInnerHTML={{ __html: card.body }} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <WhyDuna />
 
       {/* NEXT STEP / CTA */}
       <section className="g-section tone-white">

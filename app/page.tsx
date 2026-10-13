@@ -13,11 +13,11 @@ import { registry } from "@/lib/registry";
 import type { GuideRegistryEntry } from "@/lib/types";
 import GuideHeader from "@/components/guide/GuideHeader";
 import HomeFooter from "@/components/HomeFooter";
+import WhyDuna from "@/components/guide/WhyDuna";
 
 const SECTIONS = [
   { id: "guides", label: "Guides" },
-  { id: "list", label: "Why List With Us" },
-  { id: "invest", label: "Why Invest" },
+  { id: "why-duna", label: "Why Work With Us" },
 ];
 
 function GuideCard({ entry }: { entry: GuideRegistryEntry }) {
@@ -103,49 +103,17 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="g-section tone-white" id="list">
+      <WhyDuna />
+
+      <section className="g-section tone-white" id="listing-packages">
         <div className="wrap">
           <div className="sec-intro">
             <span className="eyebrow">For Owners</span>
-            <h2>Why List With Us</h2>
+            <h2>Listing Packages</h2>
             <p>
-              Positioning built on verified data and market intelligence, then marketed through a network most
-              agents can&rsquo;t reach.
+              Every listing is priced against real DLD transactions and live comparables, then marketed at one of
+              three levels depending on how far you want your reach to go.
             </p>
-          </div>
-          <div className="card-row cols-2">
-            <div className="card-stat home-stat">
-              <div className="n">01</div>
-              <div className="l">
-                <b style={{ color: "var(--ink)" }}>Data-driven pricing, not a wish list.</b> Every listing is
-                priced against actual DLD transactions and live comparables in the building, not portal asking
-                prices.
-              </div>
-            </div>
-            <div className="card-stat home-stat">
-              <div className="n">02</div>
-              <div className="l">
-                <b style={{ color: "var(--ink)" }}>Market intelligence behind every call.</b> Positioning and
-                timing are backed by Duna&rsquo;s own market data &mdash; supply, absorption and demand for your
-                specific building.
-              </div>
-            </div>
-            <div className="card-stat home-stat">
-              <div className="n">03</div>
-              <div className="l">
-                <b style={{ color: "var(--ink)" }}>Value-first owner relationship.</b> We tell you what a property
-                will realistically achieve before you list &mdash; including when the honest answer is &ldquo;wait&rdquo;
-                or &ldquo;reprice.&rdquo;
-              </div>
-            </div>
-            <div className="card-stat home-stat">
-              <div className="n">04</div>
-              <div className="l">
-                <b style={{ color: "var(--ink)" }}>Reach beyond one agent&rsquo;s contact list.</b> Every listing
-                draws on Duna&rsquo;s shared databases &mdash; area tenants, area specialists, active brokerages and
-                our own investor base.
-              </div>
-            </div>
           </div>
           <div className="leader-table">
             <table>
@@ -216,48 +184,15 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="g-section tone-ivory" id="invest">
+      <section className="g-section tone-ivory" id="cost-comparison">
         <div className="wrap">
           <div className="sec-intro">
             <span className="eyebrow">For Buyers &amp; Investors</span>
-            <h2>Why Invest Through Us</h2>
+            <h2>Owning Abroad &mdash; Cost Comparison</h2>
             <p>
-              A property decision tested against transaction data and the tax math of the alternative, not just
-              how the unit photographs.
+              What the same capital costs to hold in Dubai versus other markets &mdash; tax structure, not just
+              headline yield.
             </p>
-          </div>
-          <div className="card-row cols-2">
-            <div className="card-stat home-stat">
-              <div className="n">01</div>
-              <div className="l">
-                <b style={{ color: "var(--ink)" }}>DLD-verified numbers, every time.</b> Yield, resale comparables
-                and price trend come from registered transactions, kept separate from asking prices and
-                projections.
-              </div>
-            </div>
-            <div className="card-stat home-stat">
-              <div className="n">02</div>
-              <div className="l">
-                <b style={{ color: "var(--ink)" }}>Supply and liquidity checked before you buy.</b> We screen a
-                building&rsquo;s handover pipeline and resale liquidity before recommending it, so you know your
-                exit, not just your entry.
-              </div>
-            </div>
-            <div className="card-stat home-stat">
-              <div className="n">03</div>
-              <div className="l">
-                <b style={{ color: "var(--ink)" }}>A real cost comparison, not a sales pitch.</b> We show what the
-                same capital costs to hold in Dubai versus other markets &mdash; tax structure, not just headline
-                yield.
-              </div>
-            </div>
-            <div className="card-stat home-stat">
-              <div className="n">04</div>
-              <div className="l">
-                <b style={{ color: "var(--ink)" }}>Global Market Comparator.</b> Side-by-side yield, price growth
-                and entry cost against other international cities &mdash; see the platform block below.
-              </div>
-            </div>
           </div>
           <div className="leader-table">
             <table>
