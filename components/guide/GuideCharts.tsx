@@ -136,6 +136,16 @@ function HistoryChart({
   }
 
   const data = rows.filter((r) => r[dataKey] !== null && r[dataKey] !== undefined);
+  if (data.length === 0) {
+    // Guard against Math.max/min over an empty array (-Infinity/Infinity,
+    // which rendered as "NaN" axis labels) — a genuine data gap gets a
+    // compact explanation instead of a broken chart.
+    return (
+      <div className="hist-wrap">
+        <EmptyState label="no verified year-on-year figures for this metric" />
+      </div>
+    );
+  }
   const vals = data.map((r) => r[dataKey] as number);
   const maxVal = Math.max(...vals);
   const minVal = Math.min(...vals);

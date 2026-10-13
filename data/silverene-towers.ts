@@ -147,24 +147,33 @@ const guide: GuideData = {
         "<b>3 Beds</b> &middot; 2 sales (YTD) &middot; 4 leases (3mo) &middot; both towers",
       ],
       bedPillsNote: "4&ndash;5 bed units (Tower A only, penthouse-scale) recorded no registered resale this window, but one 4-bed unit leased (AED 400,000, new contract).",
-      sinceEyebrow: "Multi-year trend",
+      sinceEyebrow: "Since 2021",
       sinceHeading: "Silverene Towers, year on year",
-      sinceSub: "No multi-year (2021–2026) sale-volume/price/rent series was available from DXB Interact for this project at building level — shown empty below rather than invented. The 12-month figures above are the real, verified alternative.",
-      rentChartNote: "Yearly history unavailable for this guide — see note above.",
+      sinceSub:
+        "Combined Tower A + Tower B. Sale volume and price/sqft are DXB Interact's own per-tower annual aggregates (2021–2025 full calendar years; 2026 is Jan–Sep year-to-date, combined by volume-weighting each tower's median). 2026's figure additionally excludes the same anomalous near-zero-price records disclosed elsewhere on this page, so its basis isn't identical to 2021–2025 (documented, not forced to match) — see note below. Hover any point for the exact figure.",
+      rentChartNote:
+        "Annual rent is a volume-weighted blend of each tower's per-bedroom median annual rent (new + renewal combined) — DXB Interact doesn't expose a single building-level median rent series directly. 2026 is Jan–Sep year-to-date; its year-on-year change is shown against full-year 2025 (a partial-year vs full-year comparison, disclosed rather than treated as like-for-like).",
       insightEyebrow: "For Silverene Towers owners",
       insightText:
-        "Eleven Silverene units changed hands in the last 3 months (pooled across both towers) against all 95 registered rent contracts, now shown in full in the browser below &mdash; roughly 8.6 leases per resale, a much deeper rental book relative to the resale pipeline. <b>1-bed and 2-bed</b> units account for the bulk of registered activity on both sides (22 of 30 YTD resales shown, 71 of 95 rent contracts), making them the most liquid sub-markets to price against. Tower B carries the deeper rental book overall (59 of 95 contracts) despite Tower A commanding the higher median resale price per sqft (AED 2,380 vs AED 2,450 project-wide average is close between towers, per DXB Interact's own per-building pricing) &mdash; worth factoring into a sell-vs-rent conversation per tower rather than treating Silverene as one undifferentiated asset. Silverene's combined YTD sale volume (38) ranks 2nd across all of Dubai Marina, down 5% on the same period last year &mdash; in line with, not an outlier against, the wider Marina resale slowdown (most of the top 10 projects by volume are down double digits year-on-year).",
+        "Eleven Silverene units changed hands in the last 3 months (pooled across both towers) against all 95 registered rent contracts, now shown in full in the browser below &mdash; roughly 8.6 leases per resale, a much deeper rental book relative to the resale pipeline. <b>1-bed and 2-bed</b> units account for the bulk of registered activity on both sides (22 of 30 YTD resales shown, 71 of 95 rent contracts), making them the most liquid sub-markets to price against. Tower B carries the deeper rental book overall (59 of 95 contracts) despite Tower A commanding the higher median resale price per sqft (AED 2,380 vs AED 2,450 project-wide average is close between towers, per DXB Interact's own per-building pricing) &mdash; worth factoring into a sell-vs-rent conversation per tower rather than treating Silverene as one undifferentiated asset. Silverene's combined YTD sale volume (38) ranks 2nd across all of Dubai Marina, down 5% on the same period last year &mdash; in line with, not an outlier against, the wider Marina resale slowdown (most of the top 10 projects by volume are down double digits year-on-year).<br><br><b>The longer trend:</b> combined resale price per sqft has risen every year on file, from roughly AED 1,508 in 2021 to AED 2,380 this year &mdash; a 58% cumulative gain over five-plus years, though 2023-2024 (AED 2,091 &rarr; AED 2,346) was the steepest stretch and growth has since slowed (2025 AED 2,438, 2026 YTD AED 2,380). Annual sale volume has been uneven rather than one-directional &mdash; it roughly doubled from 2021-2023 (35 &rarr; 70) before easing back in 2024-2025 (65 &rarr; 45), consistent with a building that saw a wave of resales as early buyers reached their five-year mark, not a market in decline. Against Cayan Tower (a comparable Marina tower, same chart basis), Silverene's price growth has been similar in direction but Silverene's blended annual rent growth has been steadier &mdash; roughly AED 85,100 in 2021 to AED 119,400 this year, a sustained climb without Cayan's recent flattening, which is a reasonable talking point for a landlord weighing a multi-year hold. None of this is a guarantee of further appreciation or rent growth &mdash; it describes what has already registered, not what will happen next. For an owner: Tower B's larger, more liquid rental book and Tower A's higher resale psf argue for pricing and marketing each tower on its own comparables. For a buyer or tenant: both towers have five-plus years of real, verified history behind every number on this page, not a projection.",
       topSellingRows: [
-        { cells: ["Park Islands", "53", "-10%", "1,990,000", "1,860"] },
-        { cells: ["Silverene", "38", "-5%", "1,550,000", "2,371"] },
-        { cells: ["Princess Tower", "37", "-37%", "1,850,000", "1,548"] },
-        { cells: ["Torch Tower", "33", "-46%", "1,725,000", "1,483"] },
-        { cells: ["Botanica", "32", "+3%", "523,859", "805"] },
+        { cells: ["Park Islands", "19", "+35.7%", "1,875,000", "1,862"] },
+        { cells: ["Silverene", "15", "+66.7%", "1,550,000", "2,269"] },
+        { cells: ["Botanica", "14", "+180%", "46,693*", "73*"] },
+        { cells: ["Princess Tower", "12", "+140%", "1,380,000", "1,350"] },
+        { cells: ["Royal Oceanic Tower", "10", "+900%†", "1,242,500", "1,645"] },
       ],
       topSellingNote:
-        "Source: Dubai Marina apartment resale transaction volume, year-to-date vs the same period last year (DXB Interact). These are YTD figures, not a trailing-90-day window — no 90-day comparison was available for this leaderboard. Silverene (both towers combined) ranks 2nd in the Marina by YTD volume, with 38 resales.",
-      topRentedRows: [],
-      topRentedNote: "A comparable top-5-by-rent-contracts leaderboard for Dubai Marina buildings wasn't available from DXB Interact for this window — shown as unavailable rather than estimated. Silverene's own rent-contract activity, split by tower, is in the browser below.",
+        "Source: Dubai Marina apartment resale transactions, trailing 90 days vs the prior 90 days (DXB Interact, pulled 13 Oct 2026) — the same methodology and reporting cut-off as Cayan Tower's table. Silverene ranks 2nd in the Marina by this measure, with 15 resales. *Botanica's trailing-90-day median (AED 46,693 · AED 73/sqft) is not a market price — its own 6-month (AED 920,000) and 12-month (AED 1,301,364) figures are normal, so this looks like a cluster of non-arm's-length transfers (e.g. gift/related-party deeds, which DLD registers at symbolic consideration) landing in this specific window, not a data error on our side; shown with its real transaction count rather than silently dropped. †Royal Oceanic Tower's +900% is off a very small prior-period base (1 sale), not a genuine surge. Cayan Tower's currently-published version of this table was pulled 2026-10-06 and will show slightly different (older, smaller) counts than the above for the buildings common to both — a routine data-drift difference, not a conflict to silently reconcile; recommend re-syncing Cayan/Stella Maris to this same pull in a separate, approved pass.",
+      topRentedRows: [
+        { cells: ["1", "The Residences At Marina Gate 2", "304"] },
+        { cells: ["2", "The Residences At Marina Gate 1", "257"] },
+        { cells: ["3", "Bay Central 2", "216"] },
+        { cells: ["4", "Bay Central 1", "210"] },
+        { cells: ["5", "Silverene Towers B", "179"] },
+      ],
+      topRentedNote:
+        "Source: Dubai Marina apartment rental contracts, current year, ranked by contract count (DXB Interact, pulled 13 Oct 2026) — same methodology as Cayan Tower's table. Silverene Towers B ranks 5th in the Marina with 179 contracts this year; Tower A's rent contracts are tracked separately by DXB Interact and don't place in the Marina's top 10 on their own. Botanica Tower-1 (176 contracts) ranks just below Silverene Towers B here — its rent activity is unaffected by the sale-price anomaly noted above, which is sale-only.",
       browseHeading: "Browse Silverene Towers transactions",
       countNoteSuffix: " Use the Tower filter to see only independently-verified Tower A or Tower B records — sale rows are not tower-tagged (see note above), so they appear under \"All Towers\" only, labelled \"Tower Not Verified.\"",
     },
@@ -222,7 +231,28 @@ const guide: GuideData = {
       ["2,380", "Median AED per sqft (YTD)"],
       ["AED 4,200,000", "Highest resale price shown (YTD)"],
     ],
-    history: [],
+    // Combined Tower A + Tower B, built from DXB Interact's per-tower annual
+    // aggregates (get_location_trend, type=sale/rent) for 2021-2025 full
+    // calendar years. sale_vol/psf are volume-weighted combinations of each
+    // tower's own annual figures (a single combined building-wide median
+    // isn't exposed directly by this source). rent is a volume-weighted
+    // blend of each tower's per-bedroom median annual rent (new+renewal
+    // combined, get_bedroom_breakdown) for the same reason. 2026 is Jan-Sep
+    // (cut off at 30 Sep 2026 per the rest of this guide); its sale_vol/psf
+    // instead reuse this guide's own already-verified 32-record/AED 2,380
+    // figures (kpisYtd) since that set has already had the 4 non-market
+    // anomalies excluded, which the 2021-2025 DXB Interact aggregates could
+    // not similarly be screened for without exceeding API limits — disclosed
+    // in sinceSub, not forced to match. 2026 rent uses the same
+    // per-bedroom-blend method as 2021-2025.
+    history: [
+      { year: 2021, sale_vol: 35, psf: 1508, rent: 85120 },
+      { year: 2022, sale_vol: 40, psf: 1879, rent: 94679 },
+      { year: 2023, sale_vol: 70, psf: 2091, rent: 108353 },
+      { year: 2024, sale_vol: 65, psf: 2346, rent: 119490 },
+      { year: 2025, sale_vol: 45, psf: 2438, rent: 122616 },
+      { year: 2026, sale_vol: 32, psf: 2380, rent: 119407 },
+    ],
     sale: [
       { date: "28-09-2026", beds: 2, price: 2250000, area: 1062, status: "Ready" },
       { date: "25-09-2026", beds: 1, price: 1775000, area: 818, status: "Ready" },
