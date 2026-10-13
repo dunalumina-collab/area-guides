@@ -9,10 +9,9 @@
 // needs two shapes. All real DAMAC Lagoons content/data is preserved
 // unchanged — this is a presentation rebuild only.
 
-import { Fragment } from "react";
 import type { GuideData, SaleRecord, RentRecord } from "@/lib/types";
-import { AreaTransactionBrowser, HBarList, HistoryCharts, KpiRow, MonthlyActivity, RentHistoryChart } from "./GuideCharts";
-import FloorPlans from "./FloorPlans";
+import { HBarList, HistoryCharts, KpiRow, MonthlyActivity, RentHistoryChart } from "./GuideCharts";
+import { DamacClusterCards, DamacInsightPanel, DamacMarketSummary, DamacTransactionExplorer } from "./DamacLagoonsExtras";
 import GuideHero from "./GuideHero";
 import GuideHeader from "./GuideHeader";
 import GuideFooter from "./GuideFooter";
@@ -23,11 +22,13 @@ import { DeltaCell, StrongCell } from "./DeltaCell";
 
 const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+// Floor Plans nav/anchor removed (Oct 2026 fix) — Damac Lagoons has no floor
+// plan images; the "Your Property" valuation link already covers that CTA.
 const SECTIONS = [
   { id: "overview", label: "Overview" },
+  { id: "transactions", label: "Transactions" },
   { id: "market", label: "Market" },
   { id: "why", label: "Why Us" },
-  { id: "floorplans", label: "Floor Plans" },
   { id: "specialist", label: "Specialist" },
 ];
 
@@ -98,10 +99,10 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
           visible since it's the section's core content, not auxiliary). */}
       <section className="g-section tone-ivory" id="overview">
         <div className="wrap">
-          <div className="sec-intro wide">
+          <div className="sec-intro" style={{ maxWidth: "none" }}>
             <span className="eyebrow">Area Overview</span>
             <h2>{c.about.heading}</h2>
-            <p>{c.about.intro}</p>
+            <p style={{ maxWidth: "none" }}>{c.about.intro}</p>
           </div>
 
           <div className="split">
@@ -156,59 +157,43 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
             sub={c.about.pricingSub}
             defaultOpen
           >
-            <div className="cluster-grid">
-              {c.about.pricingRows.map((row, i) => (
-                <div className="cluster-card" key={i}>
-                  <span className="cl-num">{String(i + 1).padStart(2, "0")}</span>
-                  <h4 dangerouslySetInnerHTML={{ __html: row.cells[0] }} />
-                  <dl>
-                    {c.about.pricingHeaders.slice(1).map((h, j) => (
-                      <Fragment key={j}>
-                        <dt>{h}</dt>
-                        <dd dangerouslySetInnerHTML={{ __html: row.cells[j + 1] ?? "" }} />
-                      </Fragment>
-                    ))}
-                  </dl>
-                </div>
-              ))}
-            </div>
+            <DamacClusterCards headers={c.about.pricingHeaders} rows={c.about.pricingRows} />
             {c.about.fullNotes.map((note, i) => (
               <p className="full-note" key={i} dangerouslySetInnerHTML={{ __html: note }} style={{ marginTop: 14 }} />
             ))}
           </Accordion>
 
-          {/* Darko Landing Page Fix: transaction browser placed right after
-              the Damac Lagoons section, with its own Sale/Rent toggle and
-              property-type/cluster/deal-type/month dropdowns. */}
-          <div id="transactions" style={{ marginTop: 32 }}>
-            <div className="sec-intro" style={{ marginBottom: 14 }}>
-              <h3 style={{ fontFamily: "Playfair Display,serif", fontSize: "1.3rem", margin: 0 }}>
-                Browse every Damac Lagoons transaction
-              </h3>
-              <p style={{ marginTop: 6 }}>
-                Every registered sale and rent record behind this report &mdash; filter by sale or rent, property type, cluster, deal type and month.
-              </p>
-            </div>
-            <AreaTransactionBrowser dataset={dataset} />
-          </div>
-
-          <div style={{ marginTop: 28 }} id="floorplans">
-            {c.about.mediaHref.startsWith("http") || c.about.mediaHref.startsWith("/") ? (
-              <a className="long-btn" href={c.about.mediaHref} target="_blank" rel="noopener noreferrer">
-                {c.about.mediaLabel}
-              </a>
-            ) : (
-              <FloorPlans
-                label={c.about.mediaLabel}
-                unitFacts={c.about.unitFacts}
-                note="Floor plan images are not yet in this repo for this guide — this section shows the real unit-type breakdown on file; ask your specialist directly for floor plan PDFs/images."
-              />
-            )}
+          <div style={{ marginTop: 28 }}>
+            <a className="long-btn" href={c.about.mediaHref} target="_blank" rel="noopener noreferrer">
+              {c.about.mediaLabel}
+            </a>
           </div>
 
           <p className="about-footnote">{c.about.footnote}</p>
         </div>
       </section>
+
+      {/* TRANSACTIONS — every registered sale/rent record behind this guide,
+          filterable by property type, cluster, deal type and month, shown
+          as its own section right after the area overview (Oct 2026 fix
+          request) rather than buried in an accordion at the bottom of the
+          Market section. */}
+      {dataset.fullTransactions && dataset.fullTransactions.length > 0 && (
+        <section className="g-section tone-white" id="transactions">
+          <div className="wrap">
+            <div className="sec-intro" style={{ maxWidth: "none" }}>
+              <span className="eyebrow">Registered Transactions</span>
+              <h2>{c.market.browseHeading}</h2>
+              <p>
+                Every registered sale and rent transaction behind this report, Jul–Sep 2026 — filter by sale or
+                rent, property type, cluster and deal type
+                {c.market.countNoteSuffix ? c.market.countNoteSuffix : ""}.
+              </p>
+            </div>
+            <DamacTransactionExplorer records={dataset.fullTransactions} />
+          </div>
+        </section>
+      )}
 
       {/* MARKET — forest tone per the reference's dark market section;
           headline KPI/stat strips stay visible, detailed tables/trends in
@@ -227,6 +212,15 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
 
           <span className="range-tag">{c.market.rangeTagYtd}</span>
           <KpiRow tiles={dataset.kpisYtd} />
+
+          {dataset.fullTransactions && dataset.fullTransactions.length > 0 && (
+            <div className="chart-block">
+              <div className="chart-title" style={{ marginBottom: 10 }}>
+                Damac Lagoons market summary
+              </div>
+              <DamacMarketSummary records={dataset.fullTransactions} />
+            </div>
+          )}
 
           {c.market.headline && avgPriceRows.length > 0 && (
             <div className="hc-row">
@@ -287,8 +281,11 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
 
           <div className="insight">
             <span className="eyebrow">{c.market.insightEyebrow}</span>
-            <h3>What the data means for the investment case</h3>
+            <h3>What the last quarter means if you hold a unit here</h3>
             <p dangerouslySetInnerHTML={{ __html: c.market.insightText }} />
+            {dataset.fullTransactions && dataset.fullTransactions.length > 0 && (
+              <DamacInsightPanel records={dataset.fullTransactions} />
+            )}
           </div>
 
           {/* Top-selling / top-rented leaderboards shown side by side (item 5,

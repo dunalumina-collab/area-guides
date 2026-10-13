@@ -86,6 +86,35 @@ export interface GuideDataset {
   isSample?: boolean;
   /** Total registered records behind the sample, shown in the count note when isSample is true. */
   sampleTotals?: { sale: number; rent: number };
+  /**
+   * Full per-record registered transaction set for a multi-cluster/sub-
+   * community guide (currently Damac Lagoons only) — richer than sale/rent
+   * above (which stay a small sample for guides that don't need this). Every
+   * record here is real, taken verbatim from the source's own embedded
+   * dataset; nothing is invented. Optional so guides without it (Stella
+   * Maris, Cayan Tower) are unaffected.
+   */
+  fullTransactions?: TxnRecord[];
+}
+
+/**
+ * One registered sale or rent record for a multi-cluster community guide
+ * (Damac Lagoons). Distinct from SaleRecord/RentRecord above because this
+ * shape carries cluster/clusterGroup/deal-subtype/month fields those don't.
+ */
+export interface TxnRecord {
+  type: "Apartment" | "Villa/Townhouse";
+  txn: "Sale" | "Rent";
+  /** Sale deal subtype (e.g. "Off-Plan Primary") or rent lease-term subtype (e.g. "12 monthsNew"). */
+  subtype: string;
+  month: string; // "July" | "August" | "September"
+  date: string; // e.g. "30 Sept 2026"
+  cluster: string; // specific sub-cluster, e.g. "Lagoon Views 13"
+  clusterGroup: string; // parent cluster, e.g. "Lagoon Views"
+  price: number;
+  beds: string; // "Studio" | "1".."7"
+  area: number;
+  builtupArea?: number;
 }
 
 export interface SourceConfig {

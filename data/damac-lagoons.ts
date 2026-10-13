@@ -1,5 +1,6 @@
 import type { GuideData } from "@/lib/types";
 import { damacLagoonsSale, damacLagoonsRent } from "./damac-lagoons-transactions";
+import damacLagoonsTransactions from "./damac-lagoons-full-transactions";
 
 // Ported from the approved "Darko - Damac Lagoons" guide HTML. Damac Lagoons
 // is a multi-cluster, 1,286-registered-transaction community guide, not a
@@ -48,6 +49,8 @@ const guide: GuideData = {
         "Outside of real estate, Darko trains in MMA, keeps a disciplined fitness routine, and spends his downtime travelling, gaming, and seeking out new places - interests that keep him sharp, patient, and genuinely curious about people.",
       ],
       languagesLine: "Native Serbian · Fluent: English (C1 / Advanced)",
+      // Oct 2026 fix: keep WhatsApp + LinkedIn, drop Facebook/TikTok, point
+      // Instagram at the specialist's current handle.
       socials: [
         { label: "WhatsApp", href: "https://wa.me/971527082424" },
         { label: "LinkedIn", href: "https://www.linkedin.com/in/darko-nestorovic-7a836a117" },
@@ -197,6 +200,11 @@ const guide: GuideData = {
     // Full registered dataset (not a sample) — all 868 sale + 418 rent
     // records from the source file's own embedded data, Jul–Sep 2026.
     isSample: false,
+    // The same 1,286 records restructured per-transaction (type/txn/cluster/
+    // clusterGroup/month) — powers the Transactions browser, the market
+    // summary cards, and the computed insight panel. See
+    // data/damac-lagoons-full-transactions.ts.
+    fullTransactions: damacLagoonsTransactions,
     kpis3m: [
       [868, "Sale transactions · Jul–Sep"],
       [418, "New rent contracts · Jul–Sep"],
