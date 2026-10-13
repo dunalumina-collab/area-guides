@@ -28,6 +28,20 @@ function parseDMY(s: string): number {
   return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime();
 }
 
+// "Mon YYYY" label + a sortable "YYYY-MM" key for a DD-MM-YYYY date string —
+// used by TransactionBrowser's month filter. Carries the year (unlike
+// AreaTransactionBrowser's single-year monthLabelOf below) so this keeps
+// working correctly once a guide's record history spans more than one year.
+const MONTH_NAMES_SHORT = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function monthYearKeyOf(dateStr: string): string {
+  const [, m, y] = dateStr.split("-");
+  return `${y}-${m}`;
+}
+function monthYearLabelOf(dateStr: string): string {
+  const [, m, y] = dateStr.split("-").map(Number);
+  return `${MONTH_NAMES_SHORT[m] ?? ""} ${y}`;
+}
+
 function HistoryChart({
   rows,
   dataKey,
@@ -683,10 +697,28 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
   const { sale, rent, bedroomTypes, isSample, sampleTotals } = dataset;
   const [txn, setTxn] = useState<"Sale" | "Rent">("Sale");
   const [bed, setBed] = useState("");
+  const [month, setMonth] = useState("");
+
+  const months = useMemo(() => {
+    const source: (SaleRecord | RentRecord)[] = txn === "Rent" ? rent : sale;
+    const dates = source.map((r) => (txn === "Rent" ? (r as RentRecord).start : (r as SaleRecord).date));
+    const byKey = new Map<string, string>();
+    for (const d of dates) byKey.set(monthYearKeyOf(d), monthYearLabelOf(d));
+    return Array.from(byKey.entries())
+      .sort(([a], [b]) => (a < b ? 1 : a > b ? -1 : 0))
+      .map(([key, label]) => ({ key, label }));
+  }, [sale, rent, txn]);
 
   const rows = useMemo(() => {
     const source: (SaleRecord | RentRecord)[] = txn === "Rent" ? rent : sale;
-    const filtered = source.filter((r) => !bed || String(r.beds) === bed);
+    const filtered = source.filter((r) => {
+      if (bed && String(r.beds) !== bed) return false;
+      if (month) {
+        const dateStr = txn === "Rent" ? (r as RentRecord).start : (r as SaleRecord).date;
+        if (monthYearKeyOf(dateStr) !== month) return false;
+      }
+      return true;
+    });
     return filtered
       .slice()
       .sort((a, b) => {
@@ -694,7 +726,7 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
         const db = txn === "Rent" ? (b as RentRecord).start : (b as SaleRecord).date;
         return parseDMY(db) - parseDMY(da);
       });
-  }, [sale, rent, txn, bed]);
+  }, [sale, rent, txn, bed, month]);
 
   const head =
     txn === "Rent"
@@ -713,10 +745,10 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
     <>
       <div className="filters">
         <div className="seg-group">
-          <button className={txn === "Sale" ? "active" : ""} onClick={() => setTxn("Sale")}>
+          <button className={txn === "Sale" ? "active" : ""} onClick={() => { setTxn("Sale"); setMonth(""); }}>
             Sale (YTD)
           </button>
-          <button className={txn === "Rent" ? "active" : ""} onClick={() => setTxn("Rent")}>
+          <button className={txn === "Rent" ? "active" : ""} onClick={() => { setTxn("Rent"); setMonth(""); }}>
             Rent (3mo)
           </button>
         </div>
@@ -725,6 +757,14 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
           {bedroomTypes.map((b) => (
             <option key={b} value={b}>
               {bedLabel(b)}
+            </option>
+          ))}
+        </select>
+        <select value={month} onChange={(e) => setMonth(e.target.value)}>
+          <option value="">All months</option>
+          {months.map((m) => (
+            <option key={m.key} value={m.key}>
+              {m.label}
             </option>
           ))}
         </select>
