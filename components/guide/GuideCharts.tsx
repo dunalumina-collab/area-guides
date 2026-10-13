@@ -501,6 +501,184 @@ export function MonthlyActivity({
   );
 }
 
+// Multi-cluster area guide transaction browser (Damac Lagoons and any future
+// area guide with cluster/property-type data on its records) — ported from
+// the source report's Sale/Rent toggle + Property type/Cluster/Deal
+// type/Month dropdown filters. Only renders when records carry `cluster`;
+// falls back silently otherwise, so this never affects single-building
+// guides (Stella Maris, Cayan Tower) which keep using TransactionBrowser.
+const SALE_DEAL_LABELS: Record<string, string> = {
+  "Off-Plan - Primary": "Off-Plan · Primary",
+  "Off-Plan - Resale": "Off-Plan · Resale",
+  "Ready - Resale": "Ready · Resale",
+  "Ready - Resale (Tenanted)": "Ready · Resale (tenanted)",
+};
+
+function monthLabelOf(dateStr: string): string {
+  const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const [, m] = dateStr.split("-").map(Number);
+  return MONTH_NAMES[m] ?? "";
+}
+
+export function AreaTransactionBrowser({ dataset }: { dataset: GuideDataset }) {
+  const { sale, rent } = dataset;
+  const [txn, setTxn] = useState<"Sale" | "Rent">("Sale");
+  const [propertyType, setPropertyType] = useState("");
+  const [cluster, setCluster] = useState("");
+  const [deal, setDeal] = useState("");
+  const [month, setMonth] = useState("");
+
+  const pool = useMemo(() => {
+    const source: (SaleRecord | RentRecord)[] = txn === "Rent" ? rent : sale;
+    return source.filter((r) => !propertyType || r.propertyType === propertyType);
+  }, [sale, rent, txn, propertyType]);
+
+  const propertyTypes = useMemo(() => {
+    const source: (SaleRecord | RentRecord)[] = txn === "Rent" ? rent : sale;
+    return Array.from(new Set(source.map((r) => r.propertyType).filter(Boolean))) as string[];
+  }, [sale, rent, txn]);
+
+  const clusters = useMemo(() => Array.from(new Set(pool.map((r) => r.cluster).filter(Boolean))).sort() as string[], [pool]);
+
+  const dealTypes = useMemo(() => {
+    if (txn !== "Sale") return [];
+    return Array.from(new Set(pool.map((r) => (r as SaleRecord).status).filter(Boolean)));
+  }, [pool, txn]);
+
+  const months = useMemo(() => {
+    const dates = pool.map((r) => (txn === "Rent" ? (r as RentRecord).start : (r as SaleRecord).date));
+    return Array.from(new Set(dates.map(monthLabelOf)));
+  }, [pool, txn]);
+
+  const rows = useMemo(() => {
+    const filtered = pool.filter((r) => {
+      if (cluster && r.cluster !== cluster) return false;
+      const dateStr = txn === "Rent" ? (r as RentRecord).start : (r as SaleRecord).date;
+      if (month && monthLabelOf(dateStr) !== month) return false;
+      if (txn === "Sale" && deal && (r as SaleRecord).status !== deal) return false;
+      return true;
+    });
+    return filtered
+      .slice()
+      .sort((a, b) => {
+        const da = txn === "Rent" ? (a as RentRecord).start : (a as SaleRecord).date;
+        const db = txn === "Rent" ? (b as RentRecord).start : (b as SaleRecord).date;
+        return parseDMY(db) - parseDMY(da);
+      })
+      .slice(0, 300);
+  }, [pool, txn, cluster, deal, month]);
+
+  const totalMatching = useMemo(() => {
+    return pool.filter((r) => {
+      if (cluster && r.cluster !== cluster) return false;
+      const dateStr = txn === "Rent" ? (r as RentRecord).start : (r as SaleRecord).date;
+      if (month && monthLabelOf(dateStr) !== month) return false;
+      if (txn === "Sale" && deal && (r as SaleRecord).status !== deal) return false;
+      return true;
+    }).length;
+  }, [pool, txn, cluster, deal, month]);
+
+  function plotOf(r: SaleRecord | RentRecord): string {
+    return r.propertyType === "Apartment" ? "–" : r.area.toLocaleString();
+  }
+  function builtOf(r: SaleRecord | RentRecord): string {
+    return r.propertyType === "Apartment" ? r.area.toLocaleString() : r.builtupArea ? r.builtupArea.toLocaleString() : "–";
+  }
+
+  const head =
+    txn === "Rent"
+      ? ["Date", "Type", "Cluster", "Beds", "Lease", "Rent (AED)", "Plot (sqft)", "Built-up (sqft)"]
+      : ["Date", "Type", "Cluster", "Status", "Beds", "Price (AED)", "Plot (sqft)", "Built-up (sqft)"];
+
+  return (
+    <>
+      <div className="filters">
+        <div className="seg-group">
+          <button className={txn === "Sale" ? "active" : ""} onClick={() => { setTxn("Sale"); setCluster(""); setDeal(""); setMonth(""); }}>
+            Sale
+          </button>
+          <button className={txn === "Rent" ? "active" : ""} onClick={() => { setTxn("Rent"); setCluster(""); setDeal(""); setMonth(""); }}>
+            Rent
+          </button>
+        </div>
+        <select value={propertyType} onChange={(e) => { setPropertyType(e.target.value); setCluster(""); }}>
+          <option value="">All property types</option>
+          {propertyTypes.map((t) => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+        <select value={cluster} onChange={(e) => setCluster(e.target.value)}>
+          <option value="">All clusters</option>
+          {clusters.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+        {txn === "Sale" && (
+          <select value={deal} onChange={(e) => setDeal(e.target.value)}>
+            <option value="">All deal types</option>
+            {dealTypes.map((d) => (
+              <option key={d} value={d}>{SALE_DEAL_LABELS[d] ?? d}</option>
+            ))}
+          </select>
+        )}
+        <select value={month} onChange={(e) => setMonth(e.target.value)}>
+          <option value="">All months</option>
+          {months.map((m) => (
+            <option key={m} value={m}>{m}</option>
+          ))}
+        </select>
+      </div>
+      {rows.length === 0 ? (
+        <EmptyState label={`no registered ${txn.toLowerCase()} records match this filter`} />
+      ) : (
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                {head.map((h) => (
+                  <th key={h}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, i) =>
+                txn === "Rent" ? (
+                  <tr key={i}>
+                    <td>{(r as RentRecord).start}</td>
+                    <td>{r.propertyType}</td>
+                    <td>{r.cluster}</td>
+                    <td>{bedLabel(r.beds)}</td>
+                    <td>New</td>
+                    <td>{(r as RentRecord).rent.toLocaleString()}</td>
+                    <td>{plotOf(r)}</td>
+                    <td>{builtOf(r)}</td>
+                  </tr>
+                ) : (
+                  <tr key={i}>
+                    <td>{(r as SaleRecord).date}</td>
+                    <td>{r.propertyType}</td>
+                    <td>{r.cluster}</td>
+                    <td>{SALE_DEAL_LABELS[(r as SaleRecord).status] ?? (r as SaleRecord).status}</td>
+                    <td>{bedLabel(r.beds)}</td>
+                    <td>{(r as SaleRecord).price.toLocaleString()}</td>
+                    <td>{plotOf(r)}</td>
+                    <td>{builtOf(r)}</td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {rows.length > 0 && (
+        <div className="count-note">
+          {totalMatching} transaction{totalMatching === 1 ? "" : "s"} match this filter{totalMatching > 300 ? " – showing most recent 300." : "."}
+        </div>
+      )}
+    </>
+  );
+}
+
 export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
   const { sale, rent, bedroomTypes, isSample, sampleTotals } = dataset;
   const [txn, setTxn] = useState<"Sale" | "Rent">("Sale");

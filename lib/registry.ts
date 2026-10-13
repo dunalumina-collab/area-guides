@@ -68,7 +68,7 @@ export const registry: GuideRegistryEntry[] = [
     specialist: "Darko Nestorović",
     status: "published",
     dataFile: "damac-lagoons",
-    lastUpdated: "2026-10-06",
+    lastUpdated: "2026-10-13",
     sourceConfig: {
       dldSales: true,
       dldRentals: true,
@@ -82,7 +82,7 @@ export const registry: GuideRegistryEntry[] = [
       "No multi-year (2021–2026) history exists or is invented — most clusters only completed handover in 2025–2026, so dataset.history is empty and the yearly trend charts render blank rather than show fabricated years.",
       "No distinct YTD window is available (source data only covers Jul–Sep 2026) — kpisYtd/rangeTagYtd repurpose the same window to show the apartment-vs-villa deal-type breakdown instead of a separate year-to-date figure; labelled accordingly in the data file.",
       "Top-selling/top-rented leaderboard tables reuse GuideTemplate's hardcoded headers (\"vs prior 90d\", \"this year\") which don't cleanly fit this dataset: no prior-quarter comparison data exists (shown as “—”, never fabricated), and \"this year\" really means the same Jul–Sep 2026 window.",
-      "dataset.sale/dataset.rent are a 24-record SAMPLE of the real registered activity (868 sales / 418 rents) extracted from the source file's own embedded data — isSample/sampleTotals are set accordingly, same pattern as Cayan Tower.",
+      "dataset.sale/dataset.rent now carry the FULL registered dataset (868 sales / 418 rents, all fields incl. cluster/propertyType/builtupArea) extracted directly from the source file's own embedded EMBEDDED_DATA array — isSample is false. Previously this held only a 24-record hand-picked sample; restored 2026-10-13.",
       "Per-record rent yield (roi) is an estimated gross yield (rent ÷ matching bed/type median sale price), not a same-unit sale-to-rent match — the source data has no per-unit comparison. All rent records show lease type \"New\"; the source data contains zero \"Renewal\" records for Damac Lagoons in this window.",
       "about.intro merges the source HTML's two intro paragraphs into one (GuideTemplate renders about.intro as plain text, not HTML, so a paragraph break can't be preserved there) — no text was dropped.",
       "about.amenities is empty — the source HTML's About section lists cluster facts (launch/units/delivery/bed types), not a resort amenities list, so none exists to port.",

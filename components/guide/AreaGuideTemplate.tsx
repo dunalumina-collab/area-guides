@@ -9,8 +9,9 @@
 // needs two shapes. All real DAMAC Lagoons content/data is preserved
 // unchanged — this is a presentation rebuild only.
 
+import { Fragment } from "react";
 import type { GuideData, SaleRecord, RentRecord } from "@/lib/types";
-import { HBarList, HistoryCharts, KpiRow, MonthlyActivity, RentHistoryChart, TransactionBrowser } from "./GuideCharts";
+import { AreaTransactionBrowser, HBarList, HistoryCharts, KpiRow, MonthlyActivity, RentHistoryChart } from "./GuideCharts";
 import FloorPlans from "./FloorPlans";
 import GuideHero from "./GuideHero";
 import GuideHeader from "./GuideHeader";
@@ -97,7 +98,7 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
           visible since it's the section's core content, not auxiliary). */}
       <section className="g-section tone-ivory" id="overview">
         <div className="wrap">
-          <div className="sec-intro">
+          <div className="sec-intro wide">
             <span className="eyebrow">Area Overview</span>
             <h2>{c.about.heading}</h2>
             <p>{c.about.intro}</p>
@@ -155,39 +156,41 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
             sub={c.about.pricingSub}
             defaultOpen
           >
-            <div className="leader-table" style={{ marginBottom: 0 }}>
-              <table>
-                <thead>
-                  <tr>
-                    {c.about.pricingHeaders.map((h) => (
-                      <th key={h}>{h}</th>
+            <div className="cluster-grid">
+              {c.about.pricingRows.map((row, i) => (
+                <div className="cluster-card" key={i}>
+                  <span className="cl-num">{String(i + 1).padStart(2, "0")}</span>
+                  <h4 dangerouslySetInnerHTML={{ __html: row.cells[0] }} />
+                  <dl>
+                    {c.about.pricingHeaders.slice(1).map((h, j) => (
+                      <Fragment key={j}>
+                        <dt>{h}</dt>
+                        <dd dangerouslySetInnerHTML={{ __html: row.cells[j + 1] ?? "" }} />
+                      </Fragment>
                     ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {c.about.pricingRows.map((row, i) => (
-                    <tr key={i}>
-                      {row.note ? (
-                        <>
-                          {row.cells.map((cell, j) => (
-                            <td key={j} dangerouslySetInnerHTML={{ __html: cell }} />
-                          ))}
-                          <td colSpan={row.note.colspan} style={{ color: "#8a8275" }}>
-                            {row.note.text}
-                          </td>
-                        </>
-                      ) : (
-                        row.cells.map((cell, j) => <td key={j} dangerouslySetInnerHTML={{ __html: cell }} />)
-                      )}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </dl>
+                </div>
+              ))}
             </div>
             {c.about.fullNotes.map((note, i) => (
               <p className="full-note" key={i} dangerouslySetInnerHTML={{ __html: note }} style={{ marginTop: 14 }} />
             ))}
           </Accordion>
+
+          {/* Darko Landing Page Fix: transaction browser placed right after
+              the Damac Lagoons section, with its own Sale/Rent toggle and
+              property-type/cluster/deal-type/month dropdowns. */}
+          <div id="transactions" style={{ marginTop: 32 }}>
+            <div className="sec-intro" style={{ marginBottom: 14 }}>
+              <h3 style={{ fontFamily: "Playfair Display,serif", fontSize: "1.3rem", margin: 0 }}>
+                Browse every Damac Lagoons transaction
+              </h3>
+              <p style={{ marginTop: 6 }}>
+                Every registered sale and rent record behind this report &mdash; filter by sale or rent, property type, cluster, deal type and month.
+              </p>
+            </div>
+            <AreaTransactionBrowser dataset={dataset} />
+          </div>
 
           <div style={{ marginTop: 28 }} id="floorplans">
             {c.about.mediaHref.startsWith("http") || c.about.mediaHref.startsWith("/") ? (
@@ -358,9 +361,6 @@ export default function AreaGuideTemplate({ data }: { data: GuideData }) {
             </div>
           </Accordion>
 
-          <Accordion title={c.market.browseHeading} sub="Filter and sort every registered transaction behind this report">
-            <TransactionBrowser dataset={dataset} />
-          </Accordion>
         </div>
       </section>
 

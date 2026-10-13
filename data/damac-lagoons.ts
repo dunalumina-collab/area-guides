@@ -1,4 +1,5 @@
 import type { GuideData } from "@/lib/types";
+import { damacLagoonsSale, damacLagoonsRent } from "./damac-lagoons-transactions";
 
 // Ported from the approved "Darko - Damac Lagoons" guide HTML. Damac Lagoons
 // is a multi-cluster, 1,286-registered-transaction community guide, not a
@@ -50,9 +51,7 @@ const guide: GuideData = {
       socials: [
         { label: "WhatsApp", href: "https://wa.me/971527082424" },
         { label: "LinkedIn", href: "https://www.linkedin.com/in/darko-nestorovic-7a836a117" },
-        { label: "Instagram", href: "https://www.instagram.com/darre9o" },
-        { label: "Facebook", href: "https://www.facebook.com/share/1KaRrFpYxH/" },
-        { label: "TikTok", href: "https://www.tiktok.com/@darre9o" },
+        { label: "Instagram", href: "https://www.instagram.com/dubai_real_estate_2026?stkn=MXJ6aXlsYWFrdjdhbA%3D%3D&utm_source=qr" },
       ],
     },
     about: {
@@ -195,8 +194,9 @@ const guide: GuideData = {
   },
   dataset: {
     bedroomTypes: [0, 1, 2, 3, 4, 5, 6, 7],
-    isSample: true,
-    sampleTotals: { sale: 868, rent: 418 },
+    // Full registered dataset (not a sample) — all 868 sale + 418 rent
+    // records from the source file's own embedded data, Jul–Sep 2026.
+    isSample: false,
     kpis3m: [
       [868, "Sale transactions · Jul–Sep"],
       [418, "New rent contracts · Jul–Sep"],
@@ -214,58 +214,8 @@ const guide: GuideData = {
     // chart would compare years before the community had registered
     // activity. Left empty rather than inventing years — see dataIssues.
     history: [],
-    sale: [
-      { date: "31-08-2026", beds: 0, price: 657660, area: 367, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 1, price: 1294000, area: 787, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 1, price: 1224520, area: 797, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 0, price: 759510, area: 403, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 1, price: 1208480, area: 788, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 1, price: 1219000, area: 741, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 1, price: 1289280, area: 797, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 0, price: 667360, area: 368, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 2, price: 1745150, area: 1173, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 0, price: 761450, area: 412, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 0, price: 744960, area: 407, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 0, price: 808000, area: 431, status: "Off-Plan - Primary" },
-      { date: "31-08-2026", beds: 5, price: 3350000, area: 1976, status: "Ready - Resale" },
-      { date: "31-08-2026", beds: 4, price: 2600000, area: 1550, status: "Ready - Resale" },
-      { date: "31-07-2026", beds: 1, price: 1278000, area: 756, status: "Off-Plan - Primary" },
-      { date: "31-07-2026", beds: 1, price: 1183120, area: 788, status: "Off-Plan - Primary" },
-      { date: "31-07-2026", beds: 0, price: 720710, area: 381, status: "Off-Plan - Primary" },
-      { date: "31-07-2026", beds: 1, price: 1202440, area: 789, status: "Off-Plan - Primary" },
-      { date: "31-07-2026", beds: 0, price: 750000, area: 335, status: "Off-Plan - Primary" },
-      { date: "31-07-2026", beds: 1, price: 1171760, area: 741, status: "Off-Plan - Primary" },
-      { date: "31-07-2026", beds: 7, price: 13000000, area: 8522, status: "Off-Plan - Resale" },
-      { date: "31-07-2026", beds: 6, price: 5650000, area: 4650, status: "Ready - Resale" },
-      { date: "31-07-2026", beds: 4, price: 3050000, area: 1552, status: "Ready - Resale" },
-      { date: "31-07-2026", beds: 4, price: 1959000, area: 1550, status: "Ready - Resale" },
-    ],
-    rent: [
-      { start: "31-08-2026", beds: 4, type: "New", rent: 100000, area: 1550, floor: null, roi: 3.88 },
-      { start: "31-08-2026", beds: 4, type: "New", rent: 140000, area: 1559, floor: null, roi: 5.43 },
-      { start: "31-08-2026", beds: 5, type: "New", rent: 165000, area: 1550, floor: null, roi: 4.71 },
-      { start: "31-07-2026", beds: 4, type: "New", rent: 170000, area: 1550, floor: null, roi: 6.59 },
-      { start: "31-07-2026", beds: 4, type: "New", rent: 160000, area: 1550, floor: null, roi: 6.2 },
-      { start: "30-09-2026", beds: 3, type: "New", rent: 135000, area: 1550, floor: null, roi: 5.62 },
-      { start: "30-09-2026", beds: 4, type: "New", rent: 147000, area: 1641, floor: null, roi: 5.7 },
-      { start: "30-09-2026", beds: 5, type: "New", rent: 220000, area: 2315, floor: null, roi: 6.29 },
-      { start: "30-09-2026", beds: 4, type: "New", rent: 140000, area: 1550, floor: null, roi: 5.43 },
-      { start: "30-09-2026", beds: 4, type: "New", rent: 142000, area: 1550, floor: null, roi: 5.5 },
-      { start: "30-08-2026", beds: 5, type: "New", rent: 200000, area: 2364, floor: null, roi: 5.71 },
-      { start: "30-07-2026", beds: 4, type: "New", rent: 145000, area: 1551, floor: null, roi: 5.62 },
-      { start: "29-09-2026", beds: 5, type: "New", rent: 180000, area: 2364, floor: null, roi: 5.14 },
-      { start: "29-09-2026", beds: 5, type: "New", rent: 300000, area: 2777, floor: null, roi: 8.57 },
-      { start: "29-08-2026", beds: 4, type: "New", rent: 145000, area: 1550, floor: null, roi: 5.62 },
-      { start: "29-08-2026", beds: 5, type: "New", rent: 195000, area: 2620, floor: null, roi: 5.57 },
-      { start: "28-09-2026", beds: 4, type: "New", rent: 135000, area: 1550, floor: null, roi: 5.23 },
-      { start: "28-09-2026", beds: 4, type: "New", rent: 145000, area: 1551, floor: null, roi: 5.62 },
-      { start: "28-09-2026", beds: 4, type: "New", rent: 75000, area: 1555, floor: null, roi: 2.91 },
-      { start: "28-09-2026", beds: 5, type: "New", rent: 200000, area: 2001, floor: null, roi: 5.71 },
-      { start: "28-09-2026", beds: 3, type: "New", rent: 135000, area: 1550, floor: null, roi: 5.62 },
-      { start: "28-08-2026", beds: 5, type: "New", rent: 180000, area: 2158, floor: null, roi: 5.14 },
-      { start: "28-08-2026", beds: 4, type: "New", rent: 140000, area: 1549, floor: null, roi: 5.43 },
-      { start: "28-08-2026", beds: 4, type: "New", rent: 147500, area: 1843, floor: null, roi: 5.72 },
-    ],
+    sale: damacLagoonsSale,
+    rent: damacLagoonsRent,
   },
 };
 

@@ -36,6 +36,10 @@ export interface SaleRecord {
   price: number;
   area: number;
   status: string;
+  /** Optional — only set for multi-cluster area guides (e.g. Damac Lagoons). */
+  cluster?: string;
+  propertyType?: string; // e.g. "Apartment" | "Villa/Townhouse"
+  builtupArea?: number;
 }
 
 export interface RentRecord {
@@ -46,6 +50,10 @@ export interface RentRecord {
   area: number;
   floor: number | null;
   roi: number;
+  /** Optional — only set for multi-cluster area guides (e.g. Damac Lagoons). */
+  cluster?: string;
+  propertyType?: string;
+  builtupArea?: number;
 }
 
 export interface HistoryRow {
