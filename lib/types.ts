@@ -288,6 +288,8 @@ export interface GuideContent {
     yieldMethodologyNote?: string;
     /** Optional note shown above the transaction browser when detailed sale records are unavailable for the whole guide (not just empty for a filter) — e.g. Emaar 6 Towers. Omit for guides with real embedded sale records. */
     salesUnavailableNote?: string;
+    /** Optional replacement for the Sale tab's empty-state message, shown only when dataset.sale is genuinely empty (not when a filter narrows real rows to zero) — plain, buyer/seller-facing wording, distinct from the generic "no records match this filter" text used elsewhere. Omit for guides with real embedded sale records. */
+    noSaleDataMessage?: string;
     /**
      * Optional headline-stat card (Oct 2026 density pass, modeled on the
      * Jebel Ali reference's headline-number + chart pairing). Every value

@@ -112,7 +112,7 @@ const guide: GuideData = {
         "Combined registered sale VOLUME, by contrast, is a genuine sum across towers (a transaction count, not a price) and IS shown combined: 62, 56, 83, 65, 61 and 27 resales for 2021 through 2026 respectively (2026 is Jan–Sep year-to-date).",
         "No usable detailed sale-transaction rows exist in the source package for any of the six towers — only annual/aggregate counts. The transaction browser below shows an honest unavailable state for Sale rather than fabricated rows.",
         "Detailed Jul–Sep 2026 rental records: 121 verified rows out of 148 reported Q3 contracts (55 new, 93 renewed). One duplicate fingerprint exists in the 121; this is disclosed, not silently deduplicated into a false \"120 unique contracts\" claim.",
-        "<b>Yield:</b> none of the 121 verified rental records carry a documented purchase-price basis, so Yield % shows \"—\" for every record rather than a percentage that can't be traced to a verified price — see the methodology note under the transaction browser.",
+        "<b>Yield methodology:</b> none of the 121 verified rental records carry a documented purchase-price basis in the source package, so no gross or net yield can be traced to a verified denominator for any record — Yield % shows \"—\" throughout. This is a stricter standard than flagging only the handful of implausible source values (seven exceeded 15%, including two over 100%): without a verified price input at all, publishing any percentage risks being misleading.",
         "<b>Service charges and cooling:</b> no official tower- or villa-specific rate is verified for any of the six towers. Bayut shows 15.48 AED/sqft attributed to DLD, but its components only sum to that figure if one adjustment line is double-counted (removing the duplicate gives 14.69) — this discrepancy is noted rather than published as an official bill, and Gemini's 15–17.50 range is rejected as unverified. Universal chiller-free billing and equal per-tower rates are not established.",
         "Anbar is DXB Interact's \"Al Anber\" (building tier, ID 33864) — distinct from the similarly-named Al Anbara (ID 33977) at Palm Jumeirah, which this guide explicitly excludes. Anbar's DLD registry ID is unavailable, as are DLD crosswalks for all six towers — DXB Interact identifiers are the verified reference throughout.",
         "64 podium villas exist at the development level (ECM/Multiplex agree on this count); the source data does not support assigning any number of them to one specific tower, so none is shown.",
@@ -180,7 +180,7 @@ const guide: GuideData = {
       sinceEyebrow: "Since 2021",
       sinceHeading: "Dubai Marina Towers, year on year",
       sinceSub:
-        "Combined sale volume is a real sum across all six towers. Sale price/sqft and annual rent are NOT combined into one six-tower figure — a true pooled median isn't available from the source data, so each tower's own verified figure is shown as its own line instead. Hover any point for the exact figure.",
+        "Combined sale volume is a real sum across all six towers. Sale price/sqft and annual rent are NOT combined into one six-tower figure — a true pooled median isn't available from the source data, so use the tower selector to see each tower's own verified figure. Hover any point for the exact figure.",
       rentChartNote:
         "Each tower's annual rent line is its own median NEW-lease rent (renewals tracked separately, not blended in) — the same new-lease-only definition used elsewhere on this site. No six-tower combined rent median is shown because the underlying individual contracts needed to compute a true pooled median aren't available; averaging the six towers' own medians would be a different, less rigorous statistic and is not used.",
       insightEyebrow: "For Dubai Marina Towers owners",
@@ -193,9 +193,11 @@ const guide: GuideData = {
       browseHeading: "Browse Dubai Marina Towers transactions",
       countNoteSuffix: " Use the Tower filter to see records for one specific tower.",
       salesUnavailableNote:
-        "Detailed sale-transaction rows are not available in the source research for any of the six towers — only annual aggregate counts exist (shown in the chart above). This is a genuine data gap, not zero sales activity; an empty Sale view below reflects that gap rather than a quiet month.",
+        "Sales did happen across all six towers — 27 resales Jan–Sep 2026 alone, shown in the chart above. We just don't yet have individual sale records (price, size, exact date) to list below; only the yearly totals are verified at row level. Detailed rental records are available and listed below.",
+      noSaleDataMessage:
+        "Detailed registered sale records are currently unavailable from the verified source dataset. Annual registered sales activity is shown above.",
       yieldMethodologyNote:
-        "Yield % shows \"—\" throughout: none of the 121 verified Jul–Sep 2026 rental records carry a documented purchase-price basis in the source package, so no gross or net yield can be traced to a verified denominator for any record. This is a stricter standard than flagging only the handful of implausible source values (seven exceeded 15%, including two over 100%) — without a verified price input at all, publishing any percentage risks being misleading. The rental sample itself is 121 of 148 reported Q3 2026 contracts (55 new / 93 renewed reported; 121 returned in detail, including one duplicate fingerprint) — not a complete quarterly export.",
+        "Yield isn't shown because none of these rental records have a verified purchase price to calculate it against. Full methodology is in the data notes above.",
     },
     why: {
       intro:

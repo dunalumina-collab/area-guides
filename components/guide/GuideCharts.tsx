@@ -708,7 +708,20 @@ export function AreaTransactionBrowser({ dataset }: { dataset: GuideDataset }) {
   );
 }
 
-export function TransactionBrowser({ dataset, yieldMethodologyNote }: { dataset: GuideDataset; yieldMethodologyNote?: string }) {
+export function TransactionBrowser({
+  dataset,
+  yieldMethodologyNote,
+  noSaleDataMessage,
+}: {
+  dataset: GuideDataset;
+  yieldMethodologyNote?: string;
+  // Shown in place of the generic "no records match this filter" empty
+  // state, but ONLY when txn === "Sale" and the dataset's sale array is
+  // genuinely empty (no detailed rows exist at all) — never when a filter
+  // simply narrows an otherwise-populated array to zero rows, which keeps
+  // the normal message for Stella Maris/Cayan Tower/Silverene/Damac Lagoons.
+  noSaleDataMessage?: string;
+}) {
   const { sale, rent, bedroomTypes, isSample, sampleTotals, towers } = dataset;
   const [txn, setTxn] = useState<"Sale" | "Rent">("Sale");
   const [bed, setBed] = useState("");
@@ -815,7 +828,18 @@ export function TransactionBrowser({ dataset, yieldMethodologyNote }: { dataset:
         </p>
       )}
       {rows.length === 0 ? (
-        <EmptyState label={`no registered ${txn.toLowerCase()} records match this filter`} />
+        txn === "Sale" && sale.length === 0 && noSaleDataMessage ? (
+          // Deliberately NOT routed through EmptyState: that component always
+          // prefixes "No data available for this section —", which reads as
+          // "zero sales happened" when the real issue is missing source
+          // coverage, not zero activity (Oct 2026 correction). This message
+          // stands on its own instead.
+          <div className="g-empty" role="status">
+            <span>{noSaleDataMessage}</span>
+          </div>
+        ) : (
+          <EmptyState label={`no registered ${txn.toLowerCase()} records match this filter`} />
+        )
       ) : (
       <div className="table-wrap">
         <table>
@@ -864,22 +888,63 @@ export function TransactionBrowser({ dataset, yieldMethodologyNote }: { dataset:
 // show real per-tower series instead of a fabricated/estimated combined one.
 // Neither component is called by Stella Maris/Cayan Tower/Silverene, so they
 // have zero effect on those guides.
+//
+// Oct 2026 visual-correction pass: both components now reuse the exact
+// hc-row/hc-card headline-stat-plus-chart pairing that HistoryCharts/
+// RentHistoryChart already use for Cayan Tower/Stella Maris/Silverene —
+// same CSS classes, same compact two-column card layout, same chart sizing
+// — rather than a large full-width chart panel. MultiTowerLineChart now
+// shows one tower at a time via a selector instead of six overlaid lines,
+// since a visitor comparing towers reads one clean line chart more easily
+// than six interleaved colors in a compact card.
 
 // Real combined sale-volume bar chart only (the one combined figure that IS a
-// genuine sum across towers, unlike psf/rent). Deliberately simpler than
-// HistoryCharts' headline-card pairing to keep this an additive, low-risk
-// component — same chart primitive, title and legend styling.
+// genuine sum across towers, unlike psf/rent) — same headline-card pairing as
+// HistoryCharts' own volume block.
 export function SaleVolumeChart({ history, title }: { history: HistoryRow[]; title: string }) {
+  const latestVol = history[history.length - 1];
+  const priorVol = history.length > 1 ? history[history.length - 2] : null;
+  const volChange = priorVol && priorVol.sale_vol ? ((latestVol.sale_vol - priorVol.sale_vol) / priorVol.sale_vol) * 100 : null;
+  const secondaryVolYears = history.slice(Math.max(0, history.length - 4), history.length - 1).reverse();
+
   return (
     <div className="chart-block">
-      <div className="chart-title">{title}</div>
-      <HistoryChart rows={history} dataKey="sale_vol" mode="bar" fmt={(v) => `${v} transactions`} />
+      {latestVol && volChange !== null ? (
+        <div className="hc-row" style={{ marginBottom: 8 }}>
+          <div className="hc-card">
+            <div className="hc-label">Sale transactions, {latestVol.year}</div>
+            <div className="hc-value">
+              {latestVol.sale_vol}
+              <span className="hc-unit"> sales</span>
+            </div>
+            <div className="hc-delta" style={{ color: volChange >= 0 ? "var(--pos)" : "var(--neg)" }}>
+              {volChange >= 0 ? "+" : ""}
+              {volChange.toFixed(1)}% vs {priorVol!.year}
+            </div>
+            <div className="hc-secondary">
+              {secondaryVolYears.map((row) => (
+                <div key={row.year}>
+                  <div className="hs-k">{row.year}</div>
+                  <div className="hs-v">{row.sale_vol} sales</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="hc-card hc-chart-card">
+            <div className="chart-title">{title}</div>
+            <HistoryChart rows={history} dataKey="sale_vol" mode="bar" fmt={(v) => `${v} transactions`} />
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="chart-title">{title}</div>
+          <HistoryChart rows={history} dataKey="sale_vol" mode="bar" fmt={(v) => `${v} transactions`} />
+        </>
+      )}
       <YoyLegend />
     </div>
   );
 }
-
-const TOWER_COLORS = ["#C9A769", "#2F7A4F", "#B2453F", "#5A7AA6", "#8A6D3B", "#6B8E8E"];
 
 // `metric` (not a function prop) decides formatting internally — GuideTemplate
 // is a Server Component, so it cannot pass a closure like `fmt` across to this
@@ -897,97 +962,96 @@ export function MultiTowerLineChart({
   metric: "psf" | "rent";
 }) {
   const fmt = metric === "psf" ? (v: number) => `AED ${v.toLocaleString()}/sqft` : (v: number) => `AED ${v.toLocaleString()}/yr`;
-  const W = 480,
-    H = 190,
-    padT = 12,
-    padB = 26,
-    padL = 48,
-    padR = 10;
-  const innerW = W - padL - padR;
-  const innerH = H - padT - padB;
-  const [tip, setTip] = useState<{ x: number; y: number; text: string } | null>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
+  const unit = metric === "psf" ? "/sqft" : "/yr";
+  const label = metric === "psf" ? "Sale price" : "Annual rent";
+  const towerNames = series.map((s) => s.tower);
+  const [selected, setSelected] = useState(towerNames[0] ?? "");
+  const active = series.find((s) => s.tower === selected) ?? series[0];
 
-  const allYears = Array.from(new Set(series.flatMap((s) => s.rows.map((r) => r.year)))).sort();
-  const allVals = series.flatMap((s) => s.rows.map((r) => r.value));
-  if (allYears.length === 0 || allVals.length === 0) {
+  if (!active || active.rows.length === 0) {
     return (
-      <div className="hist-wrap">
-        <EmptyState label="no verified year-on-year figures for this metric" />
+      <div className="chart-block">
+        <div className="chart-title">
+          {title} {sub && <span className="mini">- {sub}</span>}
+        </div>
+        <div className="hist-wrap">
+          <EmptyState label="no verified year-on-year figures for this metric" />
+        </div>
       </div>
     );
   }
-  const maxVal = Math.max(...allVals);
-  const minVal = Math.min(...allVals);
-  const span = maxVal - minVal || 1;
-  const stepX = allYears.length > 1 ? innerW / (allYears.length - 1) : 0;
-  const xOf = (year: number) => padL + allYears.indexOf(year) * stepX;
-  const yOf = (val: number) => padT + innerH - innerH * ((val - minVal) / span);
-  const gridSteps = Array.from({ length: 5 }, (_, i) => i);
+
+  // Map the selected tower's rows into the same HistoryRow shape HistoryChart
+  // and the headline-card math already use for Cayan/Stella/Silverene — reuses
+  // that exact chart primitive and card pairing rather than a bespoke one.
+  const rows: HistoryRow[] = active.rows
+    .slice()
+    .sort((a, b) => a.year - b.year)
+    .map((r) => ({
+      year: r.year,
+      sale_vol: 0,
+      psf: metric === "psf" ? r.value : null,
+      rent: metric === "rent" ? r.value : null,
+    }));
+
+  const latest = rows[rows.length - 1];
+  const prior = rows.length > 1 ? rows[rows.length - 2] : null;
+  const latestVal = metric === "psf" ? latest.psf : latest.rent;
+  const priorVal = prior ? (metric === "psf" ? prior.psf : prior.rent) : null;
+  const pctChange = prior && priorVal ? (((latestVal as number) - priorVal) / priorVal) * 100 : null;
+  const secondaryYears = rows.slice(Math.max(0, rows.length - 4), rows.length - 1).reverse();
 
   return (
     <div className="chart-block">
       <div className="chart-title">
         {title} {sub && <span className="mini">- {sub}</span>}
       </div>
-      <div className="hist-wrap">
-        <svg ref={svgRef} className="chart" viewBox={`0 0 ${W} ${H}`}>
-          {gridSteps.map((i) => {
-            const y = padT + innerH - (innerH * i) / 4;
-            const val = Math.round(minVal + (span * i) / 4);
-            return (
-              <g key={i}>
-                <line x1={padL} y1={y} x2={W - padR} y2={y} stroke="rgba(255,255,255,.14)" strokeWidth={1} />
-                <text x={padL - 8} y={y + 4} fontSize={9} fill="#aab3ac" textAnchor="end" fontFamily="Montserrat,sans-serif">
-                  {val.toLocaleString()}
-                </text>
-              </g>
-            );
-          })}
-          {allYears.map((y) => (
-            <text key={y} x={xOf(y)} y={H - 8} fontSize={9.5} fill="#f1ede3" textAnchor="middle" fontFamily="Montserrat,sans-serif" fontWeight={600}>
-              {y}
-            </text>
-          ))}
-          {series.map((s, si) => {
-            const color = TOWER_COLORS[si % TOWER_COLORS.length];
-            const pts = s.rows.filter((r) => allYears.includes(r.year)).sort((a, b) => a.year - b.year);
-            const d = pts.map((r, i) => `${i === 0 ? "M" : "L"}${xOf(r.year).toFixed(1)},${yOf(r.value).toFixed(1)}`).join(" ");
-            return (
-              <g key={s.tower}>
-                <path d={d} fill="none" stroke={color} strokeWidth={1.5} />
-                {pts.map((r) => (
-                  <circle
-                    key={r.year}
-                    cx={xOf(r.year)}
-                    cy={yOf(r.value)}
-                    r={3}
-                    fill={color}
-                    style={{ cursor: "pointer" }}
-                    onMouseEnter={() => {
-                      const rect = svgRef.current!.getBoundingClientRect();
-                      setTip({ x: xOf(r.year) * (rect.width / W), y: yOf(r.value) * (rect.height / H), text: `${s.tower}, ${r.year}: ${fmt(r.value)}` });
-                    }}
-                    onMouseLeave={() => setTip(null)}
-                  />
-                ))}
-              </g>
-            );
-          })}
-        </svg>
-        {tip && (
-          <div className="hist-tip" style={{ left: tip.x, top: tip.y, opacity: 1, transform: "translate(-50%,-115%)" }}>
-            {tip.text}
+      {towerNames.length > 1 && (
+        <div className="filters" style={{ marginBottom: 10 }}>
+          <select
+            value={selected || towerNames[0]}
+            onChange={(e) => setSelected(e.target.value)}
+            aria-label={`Select tower for ${title.toLowerCase()}`}
+          >
+            {towerNames.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+      {latest && pctChange !== null ? (
+        <div className="hc-row" style={{ marginBottom: 8 }}>
+          <div className="hc-card">
+            <div className="hc-label">
+              {label}, {latest.year} — {active.tower}
+            </div>
+            <div className="hc-value">
+              AED {(latestVal as number).toLocaleString()}
+              <span className="hc-unit">{unit}</span>
+            </div>
+            <div className="hc-delta" style={{ color: pctChange >= 0 ? "var(--pos)" : "var(--neg)" }}>
+              {pctChange >= 0 ? "+" : ""}
+              {pctChange.toFixed(1)}% vs {prior!.year}
+            </div>
+            <div className="hc-secondary">
+              {secondaryYears.map((row) => (
+                <div key={row.year}>
+                  <div className="hs-k">{row.year}</div>
+                  <div className="hs-v">AED {((metric === "psf" ? row.psf : row.rent) as number).toLocaleString()}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        )}
-      </div>
-      <div className="legend" style={{ flexWrap: "wrap" }}>
-        {series.map((s, si) => (
-          <span key={s.tower}>
-            <i style={{ background: TOWER_COLORS[si % TOWER_COLORS.length] }} /> {s.tower}
-          </span>
-        ))}
-      </div>
+          <div className="hc-card hc-chart-card">
+            <HistoryChart rows={rows} dataKey={metric} mode="line" fmt={fmt} />
+          </div>
+        </div>
+      ) : (
+        <HistoryChart rows={rows} dataKey={metric} mode="line" fmt={fmt} />
+      )}
+      <YoyLegend />
     </div>
   );
 }

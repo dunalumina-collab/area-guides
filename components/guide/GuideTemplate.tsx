@@ -252,13 +252,13 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
                 <MultiTowerLineChart
                   series={dataset.towerHistory.psf.map((s) => ({ tower: s.tower, rows: s.rows }))}
                   title="Sale price per sqft, year on year"
-                  sub="per tower - AED/sqft"
+                  sub="select a tower - median AED/sqft"
                   metric="psf"
                 />
                 <MultiTowerLineChart
                   series={dataset.towerHistory.rent.map((s) => ({ tower: s.tower, rows: s.rows }))}
                   title="Annual rent, year on year"
-                  sub="per tower - median new-lease rent, AED/yr"
+                  sub="select a tower - median new-lease rent, AED/yr"
                   metric="rent"
                 />
                 <p className="leader-note">{c.market.rentChartNote}</p>
@@ -354,7 +354,7 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
 
           <Accordion title={c.market.browseHeading} sub="Filter and sort every registered transaction behind this report">
             {c.market.salesUnavailableNote && <p className="leader-note" style={{ marginBottom: 10 }}>{c.market.salesUnavailableNote}</p>}
-            <TransactionBrowser dataset={dataset} yieldMethodologyNote={c.market.yieldMethodologyNote} />
+            <TransactionBrowser dataset={dataset} yieldMethodologyNote={c.market.yieldMethodologyNote} noSaleDataMessage={c.market.noSaleDataMessage} />
           </Accordion>
         </div>
       </section>
