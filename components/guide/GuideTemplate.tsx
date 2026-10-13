@@ -157,10 +157,61 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
               <FloorPlans
                 label={c.about.mediaLabel}
                 unitFacts={c.about.unitFacts}
-                note="Floor plan images are not yet in this repo for this guide — this section shows the real unit-type breakdown on file; ask your specialist directly for floor plan PDFs/images."
+                note={
+                  c.about.floorPlanInventory && c.about.floorPlanInventory.length > 0
+                    ? "This section shows the real unit-type breakdown on file — see “Floor plans by tower” below for verified per-layout sources."
+                    : "Floor plan images are not yet in this repo for this guide — this section shows the real unit-type breakdown on file; ask your specialist directly for floor plan PDFs/images."
+                }
               />
             )}
           </div>
+
+          {c.about.floorPlanInventory && c.about.floorPlanInventory.length > 0 && (
+            <Accordion
+              title="Floor plans by tower"
+              sub="Verified layouts researched per tower and bedroom type — each links to the real source rather than an embedded copy"
+            >
+              <div className="leader-table" style={{ marginBottom: 0 }}>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tower</th>
+                      <th>Bed type</th>
+                      <th>Verified layouts</th>
+                      <th>Source</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {c.about.floorPlanInventory.map((row, i) => (
+                      <tr key={i}>
+                        <td>{row.tower}</td>
+                        <td>{row.bedType}</td>
+                        <td>
+                          {row.status === "unavailable" ? (
+                            <span style={{ color: "#8a8275" }}>{row.note ?? "Not available from the sources checked"}</span>
+                          ) : (
+                            <>
+                              {row.layoutCount} layout{row.layoutCount === 1 ? "" : "s"} &mdash; {row.layoutIds}
+                              {row.note && <div style={{ color: "#8a8275", fontSize: ".82rem", marginTop: 4 }}>{row.note}</div>}
+                            </>
+                          )}
+                        </td>
+                        <td>
+                          {row.status === "available" && row.sourceUrl ? (
+                            <a href={row.sourceUrl} target="_blank" rel="noopener noreferrer">
+                              {row.sourceName} &rarr;
+                            </a>
+                          ) : (
+                            row.sourceName
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Accordion>
+          )}
 
           <p className="about-footnote">{c.about.footnote}</p>
         </div>

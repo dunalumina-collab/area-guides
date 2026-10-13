@@ -721,13 +721,14 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
         const dateStr = txn === "Rent" ? (r as RentRecord).start : (r as SaleRecord).date;
         if (monthYearKeyOf(dateStr) !== month) return false;
       }
-      // A record with NO tower tag (unassigned — can't be reliably attributed,
-      // e.g. every Silverene Towers sale record) stays visible under every
-      // Tower selection, not just "All Towers" — it is only ever excluded by
-      // this filter when it carries the OTHER tower's own tag. This is what
-      // keeps "never silently exclude unassigned records" true regardless of
-      // which Tower option is picked, not only the default one.
-      if (tower && r.tower && r.tower !== tower) return false;
+      // "" = All Towers: no tower filtering at all, so a record with no
+      // verified tower tag (shown in the table as "Tower Not Verified")
+      // stays visible there rather than being silently dropped. Picking a
+      // SPECIFIC tower is a stricter, independently-verified view: it
+      // excludes both the other tower's records AND any unverified one —
+      // an unverified record must never count as a confirmed Tower A or
+      // Tower B result.
+      if (tower && r.tower !== tower) return false;
       return true;
     });
     return filtered
@@ -739,10 +740,13 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
       });
   }, [sale, rent, txn, bed, month, tower]);
 
-  const head =
-    txn === "Rent"
+  const hasTowers = !!(towers && towers.length > 0);
+  const head = [
+    ...(txn === "Rent"
       ? ["Start Date", "Beds", "Type", "Rent (AED)", "Area (sqft)", "Yield %"]
-      : ["Date", "Beds", "Status", "Price (AED)", "Area (sqft)"];
+      : ["Date", "Beds", "Status", "Price (AED)", "Area (sqft)"]),
+    ...(hasTowers ? ["Tower"] : []),
+  ];
 
   const countNote = useMemo(() => {
     if (isSample && sampleTotals) {
@@ -790,6 +794,11 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
           </select>
         )}
       </div>
+      {hasTowers && (
+        <p className="count-note">
+          Some registered transactions cannot be attributed to an individual tower from the available source data. These are included under All Towers.
+        </p>
+      )}
       {rows.length === 0 ? (
         <EmptyState label={`no registered ${txn.toLowerCase()} records match this filter`} />
       ) : (
@@ -812,6 +821,7 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
                   <td>{(r as RentRecord).rent.toLocaleString()}</td>
                   <td>{Math.round((r as RentRecord).area).toLocaleString()}</td>
                   <td>{(r as RentRecord).roi}%</td>
+                  {hasTowers && <td>{r.tower ?? "Tower Not Verified"}</td>}
                 </tr>
               ) : (
                 <tr key={i}>
@@ -820,6 +830,7 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
                   <td>{(r as SaleRecord).status}</td>
                   <td>{(r as SaleRecord).price.toLocaleString()}</td>
                   <td>{(r as SaleRecord).area.toLocaleString()}</td>
+                  {hasTowers && <td>{r.tower ?? "Tower Not Verified"}</td>}
                 </tr>
               )
             )}

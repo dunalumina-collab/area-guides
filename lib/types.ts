@@ -18,6 +18,25 @@ export interface WhyCard {
   body: string;
 }
 
+/**
+ * One verified floor-plan-availability row for a tower/bed-type combination
+ * — optional, additive, used only by multi-tower project guides that have
+ * done real floor-plan research (currently Silverene Towers). Never
+ * fabricated: `status: "unavailable"` plus `note` is used instead of a
+ * guessed layout whenever a configuration couldn't be verified.
+ */
+export interface FloorPlanInventoryRow {
+  tower: string; // e.g. "Tower A" | "Tower B" | "Not tower-specific (pooled source)"
+  bedType: string; // "Studio" | "1 Bed" | "2 Beds" | ...
+  layoutCount: number;
+  /** Layout/unit-type identifiers as given by the source, e.g. "A/2, A/5, B/3, B/4 (floors 5–16,18–30)". */
+  layoutIds: string;
+  sourceName: string;
+  sourceUrl?: string;
+  status: "available" | "unavailable";
+  note?: string;
+}
+
 export interface CtaCard {
   eyebrow: string;
   heading: string;
@@ -207,6 +226,8 @@ export interface GuideContent {
     mediaHref: string;
     mediaLabel: string;
     footnote: string;
+    /** Optional verified floor-plan inventory (see FloorPlanInventoryRow). Omit/empty for guides without real per-layout floor-plan research — zero effect on them. */
+    floorPlanInventory?: FloorPlanInventoryRow[];
   };
   market: {
     heading: string;

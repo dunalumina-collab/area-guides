@@ -48,15 +48,18 @@ const guide: GuideData = {
       phoneDisplay: "+971 50 128 3263",
       whatsappHref:
         "https://wa.me/971501283263?text=" +
-        encodeURIComponent("Hi Leylla, I'm interested in Silverene Towers (Dubai Marina) — could you share current availability and pricing?"),
+        encodeURIComponent("Hello Leylla, I found your profile on the DUNA GROUP Silverene Towers guide and would like to discuss a property in Silverene Towers."),
       emailHref: "mailto:leylla@dunagroup.ae",
       emailDisplay: "leylla@dunagroup.ae",
       bioParagraphs: [
-        "Leylla is Duna Group's dedicated Area Specialist for <span class=\"accent-script\">Silverene Towers</span> in Dubai Marina, covering both Tower A and Tower B for owners, buyers and tenants.",
-        "She works this waterfront address closely, tracking registered sales and rental activity across both towers as it happens, so pricing conversations are grounded in this month's real comparables rather than list prices.",
-        "This page is Leylla's working hub for Silverene Towers: a live report for owners weighing whether to sell or rent out their unit, and the first stop for buyers and tenants looking to move into either tower.",
+        "With over 6 years of experience in client relations, <span class=\"accent-script\">Leylla</span> is a dedicated and results-driven real estate professional known for her strong communication skills, market awareness and personalized approach to every client.",
+        "She understands that real estate is more than simply buying or selling a property. It is about understanding people, recognizing opportunities and making confident decisions.",
+        "With a sharp eye for detail and a strong understanding of client needs, Leylla works closely with her clients to ensure a smooth, transparent and stress-free experience.",
+        "Her strengths lie in building long-term relationships, negotiating effectively, identifying valuable opportunities and maintaining a high level of professionalism throughout every stage of the transaction.",
+        "Whether you're looking for your next home, an investment opportunity or the right property to add to your portfolio, Leylla brings a personal, strategic and results-oriented approach to every transaction.",
+        "<b>Driven by trust. Focused on results. Committed to your success.</b>",
       ],
-      languagesLine: "English · Turkish",
+      languagesLine: "Native: Macedonian · Fluent: Turkish, English, Serbo-Croatian",
       socials: [
         { label: "WhatsApp", href: "https://wa.me/971501283263" },
         { label: "Email", href: "mailto:leylla@dunagroup.ae" },
@@ -108,12 +111,25 @@ const guide: GuideData = {
         { cells: ["4&ndash;5 Beds", "2,920 &ndash; 9,600 sqft", "&mdash;"], note: { colspan: 2, text: "No registered resale or lease on file this window" } },
       ],
       fullNotes: [
-        "Sale-transaction records returned by DXB Interact for Silverene are pooled under the parent project (\"Silverene\"), not split by tower — unlike rent contracts, which DXB Interact does return per-tower. This means every sale figure above and in the transaction browser below is a combined Tower A + Tower B figure; it cannot be reliably broken out by tower without guessing, so it isn't. The Tower filter in the browser below only narrows rent contracts by tower; switching it while viewing Sale rows has no effect, since no sale row carries a tower tag.",
+        "Sale-transaction records returned by DXB Interact for Silverene are pooled under the parent project (\"Silverene\"), not split by tower — unlike rent contracts, which DXB Interact does return per-tower. This means every sale figure above and in the transaction browser below is a combined Tower A + Tower B figure; it cannot be reliably broken out by tower without guessing, so it isn't. In the browser below, every sale row is labelled \"Tower Not Verified\" and appears only under \"All Towers\" — selecting Tower A or Tower B shows independently-verified records for that tower only, so no sale row appears under either specific-tower view.",
         "Four sale records in the raw DXB Interact feed (AED 22,016&ndash;58,093 for 595&ndash;601 sqft units, i.e. AED 37&ndash;98/sqft) were excluded from every figure on this page as non-market data &mdash; almost certainly gift/related-party transfers or data artifacts, not arm's-length sales. Nothing else was excluded or invented.",
         "<b>Service charge:</b> Tower A is confirmed at AED 16.39/sqft/yr (total) plus AED 6.58/sqft/yr in additional services (~AED 22.97/sqft all-in), per DLD-cited figures shown on Bayut's Tower A building page. No independently confirmed Tower B service-charge figure was found this round &mdash; flagged as a gap rather than assumed equal to Tower A.",
       ],
       mediaHref: "no-floor-plan-assets-available",
       mediaLabel: "Unit types & floor plan notes",
+      floorPlanInventory: [
+        { tower: "Tower A", bedType: "Studio", layoutCount: 0, layoutIds: "—", sourceName: "Bayut", status: "unavailable", note: "No Studio units exist in Tower A (confirmed by unit mix)." },
+        { tower: "Tower A", bedType: "1 Bed", layoutCount: 4, layoutIds: "4 verified layouts", sourceName: "Bayut", sourceUrl: "https://www.bayut.com/floorplans/dubai/dubai-marina/silverene/silverene-tower-a/", status: "available" },
+        { tower: "Tower A", bedType: "2 Beds", layoutCount: 9, layoutIds: "9 verified layouts", sourceName: "Bayut", sourceUrl: "https://www.bayut.com/floorplans/dubai/dubai-marina/silverene/silverene-tower-a/", status: "available" },
+        { tower: "Tower A", bedType: "3 Beds", layoutCount: 4, layoutIds: "4 verified layouts", sourceName: "Bayut", sourceUrl: "https://www.bayut.com/floorplans/dubai/dubai-marina/silverene/silverene-tower-a/", status: "available" },
+        { tower: "Tower A", bedType: "4 Beds", layoutCount: 1, layoutIds: "1 verified layout", sourceName: "Bayut", sourceUrl: "https://www.bayut.com/floorplans/dubai/dubai-marina/silverene/silverene-tower-a/", status: "available" },
+        { tower: "Tower A", bedType: "5 Beds", layoutCount: 0, layoutIds: "—", sourceName: "Bayut", status: "unavailable", note: "DXB Interact's unit mix references a 5-bed penthouse-scale unit, but no 5-bed layout was found published by any source checked. Not substituted." },
+        { tower: "Tower B", bedType: "Studio", layoutCount: 4, layoutIds: "4 verified layouts", sourceName: "Bayut", sourceUrl: "https://www.bayut.com/floorplans/dubai/dubai-marina/silverene/silverene-tower-b/", status: "available" },
+        { tower: "Tower B", bedType: "1 Bed", layoutCount: 9, layoutIds: "9 verified layouts", sourceName: "Bayut", sourceUrl: "https://www.bayut.com/floorplans/dubai/dubai-marina/silverene/silverene-tower-b/", status: "available" },
+        { tower: "Tower B", bedType: "2 Beds", layoutCount: 6, layoutIds: "6 verified layouts", sourceName: "Bayut", sourceUrl: "https://www.bayut.com/floorplans/dubai/dubai-marina/silverene/silverene-tower-b/", status: "available" },
+        { tower: "Tower B", bedType: "3 Beds", layoutCount: 3, layoutIds: "3 verified layouts", sourceName: "Bayut", sourceUrl: "https://www.bayut.com/floorplans/dubai/dubai-marina/silverene/silverene-tower-b/", status: "available" },
+        { tower: "Tower B", bedType: "4–5 Beds", layoutCount: 0, layoutIds: "—", sourceName: "Bayut", status: "unavailable", note: "No 4-bed or 5-bed layout found for Tower B despite Bayut's own library being otherwise thorough for this tower — documented as a gap, not filled with a Tower A plan or an invented one." },
+      ],
       footnote: "Sale and rent figures on this page are registered DXB Interact (DLD-sourced) transaction and rental-contract data for Silverene Towers and Dubai Marina, through 30 September 2026, plus building facts cross-checked against Bayut and luxhabitat; where a figure conflicts with another source, registered transaction data takes precedence and the conflict is noted rather than silently resolved.",
     },
     market: {
@@ -121,7 +137,7 @@ const guide: GuideData = {
       intro: "Registered sale and rental activity for Silverene Towers A and B apartments, through 30 September 2026.",
       rangeTag3m: "Last 3 months · 1 Jul – 30 Sep 2026",
       secondaryNote:
-        "<b>11 resales</b> registered in the last 3 months (pooled across both towers) against <b>28 rent contracts</b> (19 new leases, 9 renewals, split 11 in Tower A / 17 in Tower B) &mdash; a 2.5:1 lease-to-sale ratio. Silverene ranks <b>2nd in Dubai Marina</b> by year-to-date sale volume (38 resales, just behind Park Islands).",
+        "<b>11 resales</b> registered in the last 3 months (pooled across both towers) against <b>95 registered rent contracts</b> (60 new leases, 35 renewals) &mdash; roughly an 8.6:1 lease-to-sale ratio; the browser below shows the 28 most recently registered of those 95 (19 new / 9 renewal shown, split 11 in Tower A / 17 in Tower B), not the full set. Silverene ranks <b>2nd in Dubai Marina</b> by year-to-date sale volume (38 resales, just behind Park Islands).",
       rangeTagYtd: "Year-to-date · Jan - Sep 2026 (for context)",
       bedPills: [
         "<b>Studio</b> &middot; 6 sales (YTD) &middot; 3 leases (3mo) &middot; Tower B only",
@@ -136,7 +152,7 @@ const guide: GuideData = {
       rentChartNote: "Yearly history unavailable for this guide — see note above.",
       insightEyebrow: "For Silverene Towers owners",
       insightText:
-        "Eleven Silverene units changed hands in the last 3 months (pooled across both towers) against 28 rent contracts &mdash; roughly 2.5 leases per resale, a healthier resale pipeline relative to leasing than a pure rental play would suggest. <b>1-bed and 2-bed</b> units account for the bulk of registered activity on both sides (22 of 30 YTD resales shown, 23 of 28 recent rent contracts), making them the most liquid sub-markets to price against. Tower B carries the deeper rental book in this window (17 of 28 contracts) despite Tower A commanding the higher median resale price per sqft (AED 2,380 vs AED 2,450 project-wide average is close between towers, per DXB Interact's own per-building pricing) &mdash; worth factoring into a sell-vs-rent conversation per tower rather than treating Silverene as one undifferentiated asset. Silverene's combined YTD sale volume (38) ranks 2nd across all of Dubai Marina, down 5% on the same period last year &mdash; in line with, not an outlier against, the wider Marina resale slowdown (most of the top 10 projects by volume are down double digits year-on-year).",
+        "Eleven Silverene units changed hands in the last 3 months (pooled across both towers) against 95 registered rent contracts (only the 28 most recent of which are shown in the browser below) &mdash; roughly 8.6 leases per resale, a much deeper rental book relative to the resale pipeline than the embedded sample alone suggests. <b>1-bed and 2-bed</b> units account for the bulk of registered activity on both sides (22 of 30 YTD resales shown, 23 of 28 shown recent rent contracts), making them the most liquid sub-markets to price against. Tower B carries the deeper rental book among the shown contracts (17 of 28) despite Tower A commanding the higher median resale price per sqft (AED 2,380 vs AED 2,450 project-wide average is close between towers, per DXB Interact's own per-building pricing) &mdash; worth factoring into a sell-vs-rent conversation per tower rather than treating Silverene as one undifferentiated asset. Silverene's combined YTD sale volume (38) ranks 2nd across all of Dubai Marina, down 5% on the same period last year &mdash; in line with, not an outlier against, the wider Marina resale slowdown (most of the top 10 projects by volume are down double digits year-on-year).",
       topSellingRows: [
         { cells: ["Park Islands", "53", "-10%", "1,990,000", "1,860"] },
         { cells: ["Silverene", "38", "-5%", "1,550,000", "2,371"] },
@@ -149,7 +165,7 @@ const guide: GuideData = {
       topRentedRows: [],
       topRentedNote: "A comparable top-5-by-rent-contracts leaderboard for Dubai Marina buildings wasn't available from DXB Interact for this window — shown as unavailable rather than estimated. Silverene's own rent-contract activity, split by tower, is in the browser below.",
       browseHeading: "Browse Silverene Towers transactions",
-      countNoteSuffix: " Use the Tower filter to narrow rent contracts to Tower A or Tower B — sale rows are not tower-tagged (see note above) and always show under every Tower selection.",
+      countNoteSuffix: " Use the Tower filter to see only independently-verified Tower A or Tower B records — sale rows are not tower-tagged (see note above), so they appear under \"All Towers\" only, labelled \"Tower Not Verified.\"",
     },
     why: {
       intro:
@@ -183,10 +199,20 @@ const guide: GuideData = {
     bedroomTypes: [0, 1, 2, 3],
     towers: ["Tower A", "Tower B"],
     isSample: true,
-    sampleTotals: { sale: 32, rent: 28 },
+    // Sale total (32) is the COMPLETE set of valid Jan-Sep 2026 resales: DXB
+    // Interact returned 36 raw records for the window, of which 4 were
+    // excluded as non-market anomalies (documented in fullNotes/registry) —
+    // 32 is not a truncated sample. Rent total (95) is a genuine sample gap,
+    // re-verified 13 Oct 2026: DXB Interact's own aggregated market summary
+    // puts total registered Jul-Sep 2026 rent volume at 95 (60 new + 35
+    // renewal) across both towers, while only the 28 most-recently-registered
+    // contracts are embedded below — DLD access returns the latest records,
+    // not a full export, so the real coverage is disclosed rather than
+    // presented as complete.
+    sampleTotals: { sale: 32, rent: 95 },
     kpis3m: [
       [11, "Resale transactions (3mo, pooled across towers)"],
-      [28, "Rent contracts (3mo) - 19 new / 9 renewal - 11 Tower A / 17 Tower B"],
+      [28, "Rent contracts shown (3mo) - of 95 registered - 19 new / 9 renewal shown - 11 Tower A / 17 Tower B"],
       ["AED 119,000", "Median annual rent, sampled (3mo)"],
       ["8.13%", "Avg gross yield, sampled (3mo)"],
     ],

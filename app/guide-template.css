@@ -450,6 +450,7 @@ footer.fine a{color:#8a8275;text-decoration:underline}
 .g-section.tone-forest .specialist-grid .bio{color:#d9d3c2}
 .g-section.tone-forest .specialist-grid .lang-block{color:#d9d3c2}
 .g-section.tone-forest .specialist-grid .lang-block .lh{color:#fff}
+.g-section.tone-forest .accent-script{color:var(--gold-tint)}
 .g-section.tone-forest .specialist-grid .spec-contact a{color:var(--gold-tint)}
 .g-section.tone-forest .specialist-grid .social-pill{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.2);color:#f1ede3}
 .g-section.tone-forest .specialist-grid .social-pill:hover{border-color:var(--gold);color:var(--gold-tint);background:rgba(255,255,255,.1)}
