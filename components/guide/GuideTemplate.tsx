@@ -253,13 +253,13 @@ export default function GuideTemplate({ data }: { data: GuideData }) {
                   series={dataset.towerHistory.psf.map((s) => ({ tower: s.tower, rows: s.rows }))}
                   title="Sale price per sqft, year on year"
                   sub="per tower - AED/sqft"
-                  fmt={(v) => `AED ${v.toLocaleString()}/sqft`}
+                  metric="psf"
                 />
                 <MultiTowerLineChart
                   series={dataset.towerHistory.rent.map((s) => ({ tower: s.tower, rows: s.rows }))}
                   title="Annual rent, year on year"
                   sub="per tower - median new-lease rent, AED/yr"
-                  fmt={(v) => `AED ${v.toLocaleString()}/yr`}
+                  metric="rent"
                 />
                 <p className="leader-note">{c.market.rentChartNote}</p>
               </>

@@ -881,17 +881,22 @@ export function SaleVolumeChart({ history, title }: { history: HistoryRow[]; tit
 
 const TOWER_COLORS = ["#C9A769", "#2F7A4F", "#B2453F", "#5A7AA6", "#8A6D3B", "#6B8E8E"];
 
+// `metric` (not a function prop) decides formatting internally — GuideTemplate
+// is a Server Component, so it cannot pass a closure like `fmt` across to this
+// Client Component (that's a Next.js server/client boundary violation, not
+// just a style choice).
 export function MultiTowerLineChart({
   series,
   title,
   sub,
-  fmt,
+  metric,
 }: {
   series: { tower: string; rows: { year: number; value: number }[] }[];
   title: string;
   sub?: string;
-  fmt: (v: number) => string;
+  metric: "psf" | "rent";
 }) {
+  const fmt = metric === "psf" ? (v: number) => `AED ${v.toLocaleString()}/sqft` : (v: number) => `AED ${v.toLocaleString()}/yr`;
   const W = 480,
     H = 190,
     padT = 12,
