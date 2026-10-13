@@ -197,7 +197,7 @@ export const registry: GuideRegistryEntry[] = [
     type: "project",
     areaLabel: "Dubai Marina",
     specialist: "Marija Gjeleva",
-    status: "draft",
+    status: "published",
     dataFile: "emaar-6-towers",
     lastUpdated: "2026-10-13",
     sourceConfig: {
