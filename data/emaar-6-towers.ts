@@ -31,6 +31,7 @@ const guide: GuideData = {
         "Murjan, Al Mass, Fairooz, Mesk, Al Yass and Anbar — Emaar's original six Dubai Marina towers. Real registered sale and rental data, per-tower pricing and floor plans, from Duna Group.",
       buildingName: "Emaar 6 Towers",
       areaLabel: "Dubai Marina",
+      heroImageSrc: "/emaar-6-towers-exterior.jpg",
       heroImageAlt: "Dubai Marina Towers — Murjan, Al Mass, Fairooz, Mesk, Al Yass and Anbar waterfront towers",
     },
     hero: {
