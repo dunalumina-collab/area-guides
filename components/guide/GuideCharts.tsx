@@ -694,10 +694,14 @@ export function AreaTransactionBrowser({ dataset }: { dataset: GuideDataset }) {
 }
 
 export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
-  const { sale, rent, bedroomTypes, isSample, sampleTotals } = dataset;
+  const { sale, rent, bedroomTypes, isSample, sampleTotals, towers } = dataset;
   const [txn, setTxn] = useState<"Sale" | "Rent">("Sale");
   const [bed, setBed] = useState("");
   const [month, setMonth] = useState("");
+  // Only set for multi-tower project guides (dataset.towers present + non-
+  // empty) — defaults to "" (All Towers), so this filter never renders and
+  // never affects single-building guides like Stella Maris/Cayan Tower.
+  const [tower, setTower] = useState("");
 
   const months = useMemo(() => {
     const source: (SaleRecord | RentRecord)[] = txn === "Rent" ? rent : sale;
@@ -717,6 +721,13 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
         const dateStr = txn === "Rent" ? (r as RentRecord).start : (r as SaleRecord).date;
         if (monthYearKeyOf(dateStr) !== month) return false;
       }
+      // A record with NO tower tag (unassigned — can't be reliably attributed,
+      // e.g. every Silverene Towers sale record) stays visible under every
+      // Tower selection, not just "All Towers" — it is only ever excluded by
+      // this filter when it carries the OTHER tower's own tag. This is what
+      // keeps "never silently exclude unassigned records" true regardless of
+      // which Tower option is picked, not only the default one.
+      if (tower && r.tower && r.tower !== tower) return false;
       return true;
     });
     return filtered
@@ -726,7 +737,7 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
         const db = txn === "Rent" ? (b as RentRecord).start : (b as SaleRecord).date;
         return parseDMY(db) - parseDMY(da);
       });
-  }, [sale, rent, txn, bed, month]);
+  }, [sale, rent, txn, bed, month, tower]);
 
   const head =
     txn === "Rent"
@@ -768,6 +779,16 @@ export function TransactionBrowser({ dataset }: { dataset: GuideDataset }) {
             </option>
           ))}
         </select>
+        {towers && towers.length > 0 && (
+          <select value={tower} onChange={(e) => setTower(e.target.value)}>
+            <option value="">All Towers</option>
+            {towers.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
       {rows.length === 0 ? (
         <EmptyState label={`no registered ${txn.toLowerCase()} records match this filter`} />

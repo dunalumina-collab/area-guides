@@ -40,6 +40,8 @@ export interface SaleRecord {
   cluster?: string;
   propertyType?: string; // e.g. "Apartment" | "Villa/Townhouse"
   builtupArea?: number;
+  /** Optional — only set for multi-tower project guides (e.g. Silverene Towers). Must match a value in GuideDataset.towers. Omit when a record can't be reliably attributed to one tower — it still counts in "All Towers" but is excluded once a specific tower is selected. */
+  tower?: string;
 }
 
 export interface RentRecord {
@@ -54,6 +56,8 @@ export interface RentRecord {
   cluster?: string;
   propertyType?: string;
   builtupArea?: number;
+  /** Optional — only set for multi-tower project guides (e.g. Silverene Towers). Must match a value in GuideDataset.towers. Omit when a record can't be reliably attributed to one tower — it still counts in "All Towers" but is excluded once a specific tower is selected. */
+  tower?: string;
 }
 
 export interface HistoryRow {
@@ -82,6 +86,15 @@ export interface GuideDataset {
   kpisYtd: KpiTile[];
   /** Bedroom values present in this building, in display order (0 = Studio). */
   bedroomTypes: number[];
+  /**
+   * Tower names for a multi-tower project guide (e.g. ["Tower A", "Tower B"]
+   * for Silverene Towers), in display order. TransactionBrowser only renders
+   * the Tower filter when this is present and non-empty, so single-building
+   * guides (Stella Maris, Cayan Tower) are completely unaffected. Reusable
+   * for any future multi-tower project by simply setting this field and
+   * tagging sale/rent records with a matching `tower` value.
+   */
+  towers?: string[];
   /** True when sale/rent are a sample of a larger registered total (controls the table's count-note wording). */
   isSample?: boolean;
   /** Total registered records behind the sample, shown in the count note when isSample is true. */
@@ -155,6 +168,8 @@ export interface GuideContent {
     /** Real exterior/community photo for the overview media slot. Omit to show PlaceholderImage. */
     heroImageSrc?: string;
     heroImageAlt?: string;
+    /** SEO meta description. Optional — falls back to Next's default when omitted. */
+    description?: string;
   };
   hero: {
     kicker: string;

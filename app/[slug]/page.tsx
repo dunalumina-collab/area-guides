@@ -17,7 +17,10 @@ export async function generateMetadata({
   const entry = getRegistryEntry(slug);
   if (!entry) return {};
   const data = await loadGuideData(entry);
-  return { title: data.content.meta.title };
+  return {
+    title: data.content.meta.title,
+    ...(data.content.meta.description ? { description: data.content.meta.description } : {}),
+  };
 }
 
 export default async function GuidePage({
