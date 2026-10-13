@@ -46,12 +46,12 @@ export const MARINA_TOP5_SNAPSHOTS: MarinaTop5Snapshot[] = [
     topSellingRows: [
       { cells: ["Park Islands", "19", "+36%", "1,875,000", "1,862"] },
       { cells: ["Silverene", "15", "+67%", "1,550,000", "2,269"] },
-      { cells: ["Botanica", "14", "+180%", "46,693", "73"] },
+      { cells: ["Botanica*", "14", "+180%", "N/A*", "N/A*"] },
       { cells: ["Princess Tower", "12", "+140%", "1,380,000", "1,350"] },
       { cells: ["Royal Oceanic Tower", "10", "+900%", "1,242,500", "1,645"] },
     ],
     topSellingNote:
-      "Source: Dubai Marina apartment resale transactions, trailing 90 days vs the prior 90 days (retrieved 13 Oct 2026 — a live snapshot, not a 30 Sep cut-off; shared across Cayan Tower, Stella Maris and Silverene Towers). Botanica's figure (AED 46,693 / AED 73 per sqft) reflects a cluster of anomalously low-priced transactions investigated separately — the price level is flagged as potentially non-representative; it is not confirmed as related-party or gift transfers.",
+      "Source: Dubai Marina apartment resale transactions, trailing 90 days vs the prior 90 days (retrieved 13 Oct 2026 — a live snapshot, not a 30 Sep cut-off; shared across Cayan Tower, Stella Maris and Silverene Towers). *Botanica's 14-sale count is a real, verified registered-transaction count and is kept in the ranking; its median price (AED 46,693) and AED/sqft (73) are NOT shown as market benchmarks and are marked N/A here, because a cluster of anomalously low-priced transactions in the underlying records makes that figure unrepresentative of the building's actual market value — not confirmed as related-party or gift transfers, just confirmed as not a usable price comparable.",
     topRentedRows: [
       { cells: ["1", "The Residences At Marina Gate 2", "304"] },
       { cells: ["2", "The Residences At Marina Gate 1", "257"] },
