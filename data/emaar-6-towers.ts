@@ -5,6 +5,7 @@ import {
   marinaTopRentedRows,
   marinaTopRentedNote,
 } from "./shared/marina-top5";
+import { emaar6Sales2026, emaar6RentalsQ32026 } from "./emaar-6-towers-transactions";
 
 // DUNA GROUP — Emaar 6 Towers (Dubai Marina Towers / "The Original Six").
 // Built strictly from the Phase 2 Final Handover research package (ChatGPT
@@ -111,9 +112,9 @@ const guide: GuideData = {
       fullNotes: [
         "Combined six-tower sale-price-per-sqft and rent medians are not available. A volume-weighted average of six separate tower medians is not the same statistic as the true median of every individual transaction pooled together, and the source data doesn't expose the individual records needed to compute a real pooled figure. Each tower's own verified median is shown instead (above, and as six separate lines in the year-on-year charts below) — nothing combined is estimated or forced.",
         "Combined registered sale VOLUME, by contrast, is a genuine sum across towers (a transaction count, not a price) and IS shown combined: 62, 56, 83, 65, 61 and 27 resales for 2021 through 2026 respectively (2026 is Jan–Sep year-to-date).",
-        "No usable detailed sale-transaction rows exist in the source package for any of the six towers — only annual/aggregate counts. The transaction browser below shows an honest unavailable state for Sale rather than fabricated rows.",
-        "Detailed Jul–Sep 2026 rental records: 121 verified rows out of 148 reported Q3 contracts (55 new, 93 renewed). One duplicate fingerprint exists in the 121; this is disclosed, not silently deduplicated into a false \"120 unique contracts\" claim.",
-        "<b>Yield methodology:</b> none of the 121 verified rental records carry a documented purchase-price basis in the source package, so no gross or net yield can be traced to a verified denominator for any record — Yield % shows \"—\" throughout. This is a stricter standard than flagging only the handful of implausible source values (seven exceeded 15%, including two over 100%): without a verified price input at all, publishing any percentage risks being misleading.",
+        "27 individual registered sale records (Jan–Sep 2026) are now verified and shown in the transaction browser below, matching the previously-published annual tower counts exactly (Murjan 8, Al Mass 6, Fairooz 7, Mesk 4, Al Yass 1, Anbar 1). These are DXB Interact provider-confirmed records — a source-count reconciliation against the tower-level annual figures, not an independent DLD registry certification. Official DLD transaction numbers and building/project identifiers were not returned by any source checked.",
+        "148 source-reported rental records for July–September 2026 (55 new, 93 renewal) are shown in the transaction browser below. One pair of records (Mesk, 4 Beds, started 20-08-2026) has identical visible details and could not be independently distinguished — both are kept, not forced down to a false \"147 unique contracts\" claim.",
+        "<b>Yield methodology:</b> none of the 148 rental records carry a documented purchase-price basis in the source package, so no gross or net yield can be traced to a verified denominator for any record — Yield % shows \"—\" throughout. This is a stricter standard than flagging only the handful of implausible source values (seven exceeded 15%, including two over 100%): without a verified price input at all, publishing any percentage risks being misleading.",
         "<b>Service charges and cooling:</b> no official tower- or villa-specific rate is verified for any of the six towers. Bayut shows 15.48 AED/sqft attributed to DLD, but its components only sum to that figure if one adjustment line is double-counted (removing the duplicate gives 14.69) — this discrepancy is noted rather than published as an official bill, and Gemini's 15–17.50 range is rejected as unverified. Universal chiller-free billing and equal per-tower rates are not established.",
         "Anbar is DXB Interact's \"Al Anber\" (building tier, ID 33864) — distinct from the similarly-named Al Anbara (ID 33977) at Palm Jumeirah, which this guide explicitly excludes. Anbar's DLD registry ID is unavailable, as are DLD crosswalks for all six towers — DXB Interact identifiers are the verified reference throughout.",
         "64 podium villas exist at the development level (ECM/Multiplex agree on this count); the source data does not support assigning any number of them to one specific tower, so none is shown.",
@@ -172,12 +173,12 @@ const guide: GuideData = {
       intro: "Registered sale and rental activity for Murjan, Al Mass, Fairooz, Mesk, Al Yass and Anbar, combined and by tower, through 30 September 2026.",
       rangeTag3m: "Last 3 months · 1 Jul – 30 Sep 2026",
       secondaryNote:
-        "<b>148 rent contracts</b> registered Jul–Sep 2026 across all six towers (55 new leases, 93 renewals) — detailed records are verified for 121 of these. No reliable 3-month resale count exists separately from the annual YTD figures below.",
+        "<b>148 rent contracts</b> registered Jul–Sep 2026 across all six towers (55 new leases, 93 renewals) — all 148 are detailed below (one Mesk pair shares identical visible details and couldn't be independently distinguished). No reliable 3-month resale count exists separately from the annual YTD figures below.",
       rangeTagYtd: "Year-to-date · Jan – Sep 2026 (for context)",
       bedPills: [
         "<b>1–5 Beds</b> &middot; apartment bedroom range seen across all six towers' Q3 2026 rental activity",
       ],
-      bedPillsNote: "No verified per-bedroom sale-price breakdown exists across all six towers combined — detailed sale records are unavailable (see transaction browser below).",
+      bedPillsNote: "No verified per-bedroom sale-price breakdown is computed across all six towers combined — see individual sale records in the transaction browser below.",
       sinceEyebrow: "Since 2021",
       sinceHeading: "Dubai Marina Towers, year on year",
       sinceSub:
@@ -193,10 +194,6 @@ const guide: GuideData = {
       topRentedNote: marinaTopRentedNote,
       browseHeading: "Browse Dubai Marina Towers transactions",
       countNoteSuffix: " Use the Tower filter to see records for one specific tower.",
-      salesUnavailableNote:
-        "Sales did happen across all six towers — 27 resales Jan–Sep 2026 alone, shown in the chart above. We just don't yet have individual sale records (price, size, exact date) to list below; only the yearly totals are verified at row level. Detailed rental records are available and listed below.",
-      noSaleDataMessage:
-        "Detailed registered sale records are currently unavailable from the verified source dataset. Annual registered sales activity is shown above.",
       yieldMethodologyNote:
         "Yield isn't shown because none of these rental records have a verified purchase price to calculate it against. Full methodology is in the data notes above.",
     },
@@ -231,23 +228,23 @@ const guide: GuideData = {
   dataset: {
     bedroomTypes: [1, 2, 3, 4, 5],
     towers: ["Murjan", "Al Mass", "Fairooz", "Mesk", "Al Yass", "Anbar"],
-    // Sale: no usable detailed rows exist in the source package — left
-    // genuinely empty rather than populated with fabricated or pooled-
-    // passed-off-as-individual records (brief §6). Rent: 121 of 148
-    // reported Q3 2026 contracts, all roi: null (no verified price basis
-    // for any record — brief §2/Q2 answer).
+    // Sale: 27 individual DXB Interact-confirmed records (Phase 3, 14 Oct
+    // 2026), matching the previously-published annual tower counts exactly.
+    // Rent: all 148 reported Q3 2026 contracts (Phase 3 adds 27 to the prior
+    // 121 — 13 Murjan, 2 Al Mass, 12 Mesk), all roi: null (no verified price
+    // basis for any record — brief §2/Q2 answer, unchanged by Phase 3).
     isSample: true,
-    sampleTotals: { sale: 0, rent: 148 },
+    sampleTotals: { sale: 27, rent: 148 },
     kpis3m: [
       [148, "Rent contracts, Jul–Sep 2026 (combined, all six towers) — 55 new / 93 renewed"],
-      [121, "Detail verified for Jul–Sep 2026 rentals (121 of 148 reported contracts)"],
+      [148, "Detail verified for Jul–Sep 2026 rentals — all 148 reported contracts (one Mesk pair indistinguishable)"],
       ["—", "Avg gross yield (3mo) — unavailable, no verified price basis for any record"],
     ],
     kpisYtd: [
-      [27, "Resale transactions, Jan–Sep 2026 YTD (combined, all six towers; full-year 2025: 61)"],
+      [27, "Resale transactions, Jan–Sep 2026 YTD (combined, all six towers; full-year 2025: 61) — all 27 individually verified"],
       ["Unavailable", "Combined sale price/sqft median — true six-tower pooled median unavailable (see per-tower chart)"],
       [363, "Rental contracts, Jan–Sep 2026 (134 new / 229 renewed, combined)"],
-      ["121 of 148", "Verified detailed Q3 2026 rental records (Jul–Sep)"],
+      ["148 of 148", "Verified detailed Q3 2026 rental records (Jul–Sep) — one Mesk pair indistinguishable"],
     ],
     // Combined sale_vol is a real sum across all six towers (Parent-Six-
     // Tower-Reconciliation.csv, six_tower_sum). psf/rent are intentionally
@@ -279,137 +276,16 @@ const guide: GuideData = {
         { tower: "Anbar", rows: [{ year: 2021, value: 170000 }, { year: 2022, value: 205000 }, { year: 2023, value: 235000 }, { year: 2024, value: 237500 }, { year: 2025, value: 240000 }, { year: 2026, value: 250000 }] },
       ],
     },
-    // No usable detailed sale rows exist in the source package (brief §6) —
-    // genuinely empty, not a sample and not fabricated.
-    sale: [],
-    // 121 of 148 reported Jul-Sep 2026 Q3 contracts (data/B4-Rental-Records-
-    // Jul-Sep-2026.csv from the Phase 2 handover). roi is null throughout —
-    // no record in the source carries a documented purchase-price basis
-    // (brief Q2 answer: suppress ALL unsupported yields, not just the 7
-    // flagged anomalies, since no record has a verified denominator).
-    rent: [
-      { start: "28-09-2026", beds: 2, type: "New", rent: 215000, area: 1699, floor: 10, roi: null, tower: "Murjan" },
-      { start: "27-09-2026", beds: 3, type: "New", rent: 270000, area: 2761, floor: 19, roi: null, tower: "Murjan" },
-      { start: "25-09-2026", beds: 2, type: "New", rent: 175000, area: 1699, floor: 3, roi: null, tower: "Murjan" },
-      { start: "25-09-2026", beds: 2, type: "New", rent: 170000, area: 1699, floor: 8, roi: null, tower: "Murjan" },
-      { start: "24-09-2026", beds: 2, type: "Renewal", rent: 185000, area: 1514, floor: 31, roi: null, tower: "Murjan" },
-      { start: "23-09-2026", beds: 3, type: "Renewal", rent: 240000, area: 2081, floor: 34, roi: null, tower: "Murjan" },
-      { start: "19-09-2026", beds: 1, type: "New", rent: 109695, area: 1188, floor: 19, roi: null, tower: "Murjan" },
-      { start: "17-09-2026", beds: 1, type: "New", rent: 115000, area: 1173, floor: 22, roi: null, tower: "Murjan" },
-      { start: "15-09-2026", beds: 2, type: "Renewal", rent: 180000, area: 1699, floor: 21, roi: null, tower: "Murjan" },
-      { start: "15-09-2026", beds: 1, type: "New", rent: 100000, area: 1027, floor: 35, roi: null, tower: "Murjan" },
-      { start: "09-09-2026", beds: 1, type: "New", rent: 135000, area: 1528, floor: 2, roi: null, tower: "Murjan" },
-      { start: "07-09-2026", beds: 2, type: "Renewal", rent: 178500, area: 1699, floor: 6, roi: null, tower: "Murjan" },
-      { start: "01-09-2026", beds: 2, type: "Renewal", rent: 230000, area: 1699, floor: 23, roi: null, tower: "Murjan" },
-      { start: "01-09-2026", beds: 1, type: "Renewal", rent: 168000, area: 1173, floor: 18, roi: null, tower: "Murjan" },
-      { start: "01-09-2026", beds: 2, type: "Renewal", rent: 195000, area: 1574, floor: 23, roi: null, tower: "Murjan" },
-      { start: "01-09-2026", beds: 1, type: "New", rent: 102000, area: 1188, floor: 12, roi: null, tower: "Murjan" },
-      { start: "31-08-2026", beds: 1, type: "New", rent: 100000, area: 1188, floor: 14, roi: null, tower: "Murjan" },
-      { start: "28-08-2026", beds: 3, type: "Renewal", rent: 300000, area: 2350, floor: 30, roi: null, tower: "Murjan" },
-      { start: "18-08-2026", beds: 3, type: "Renewal", rent: 240000, area: 2396, floor: 27, roi: null, tower: "Murjan" },
-      { start: "17-08-2026", beds: 1, type: "Renewal", rent: 107000, area: 1173, floor: 13, roi: null, tower: "Murjan" },
-      { start: "15-08-2026", beds: 3, type: "Renewal", rent: 280000, area: 2764, floor: 32, roi: null, tower: "Murjan" },
-      { start: "10-08-2026", beds: 2, type: "Renewal", rent: 190000, area: 1574, floor: 5, roi: null, tower: "Murjan" },
-      { start: "08-08-2026", beds: 3, type: "Renewal", rent: 225000, area: 2081, floor: 35, roi: null, tower: "Murjan" },
-      { start: "04-08-2026", beds: 3, type: "New", rent: 260000, area: 2350, floor: 25, roi: null, tower: "Murjan" },
-      { start: "02-08-2026", beds: 2, type: "Renewal", rent: 163350, area: 1574, floor: 6, roi: null, tower: "Murjan" },
-      { start: "30-09-2026", beds: 2, type: "New", rent: 180000, area: 1731, floor: 2, roi: null, tower: "Al Mass" },
-      { start: "26-09-2026", beds: 3, type: "Renewal", rent: 200000, area: 2402, floor: 11, roi: null, tower: "Al Mass" },
-      { start: "25-09-2026", beds: 2, type: "Renewal", rent: 240000, area: 1551, floor: 2, roi: null, tower: "Al Mass" },
-      { start: "25-09-2026", beds: 3, type: "New", rent: 215000, area: 2828, floor: 23, roi: null, tower: "Al Mass" },
-      { start: "18-09-2026", beds: 2, type: "New", rent: 150000, area: 1545, floor: 4, roi: null, tower: "Al Mass" },
-      { start: "18-09-2026", beds: 3, type: "Renewal", rent: 190000, area: 2096, floor: 1, roi: null, tower: "Al Mass" },
-      { start: "10-09-2026", beds: 3, type: "New", rent: 231000, area: 2402, floor: 9, roi: null, tower: "Al Mass" },
-      { start: "09-09-2026", beds: 3, type: "Renewal", rent: 265000, area: 2498, floor: 12, roi: null, tower: "Al Mass" },
-      { start: "07-09-2026", beds: 2, type: "Renewal", rent: 130000, area: 1545, floor: 6, roi: null, tower: "Al Mass" },
-      { start: "01-09-2026", beds: 2, type: "Renewal", rent: 195000, area: 1545, floor: 10, roi: null, tower: "Al Mass" },
-      { start: "01-09-2026", beds: 3, type: "New", rent: 245000, area: 2498, floor: 10, roi: null, tower: "Al Mass" },
-      { start: "28-08-2026", beds: 3, type: "New", rent: 245000, area: 2349, floor: 21, roi: null, tower: "Al Mass" },
-      { start: "17-08-2026", beds: 3, type: "New", rent: 230000, area: 2071, floor: 25, roi: null, tower: "Al Mass" },
-      { start: "16-08-2026", beds: 3, type: "Renewal", rent: 370000, area: 2498, floor: 6, roi: null, tower: "Al Mass" },
-      { start: "16-08-2026", beds: 3, type: "New", rent: 285000, area: 2237, floor: 21, roi: null, tower: "Al Mass" },
-      { start: "08-08-2026", beds: 3, type: "New", rent: 280000, area: 2402, floor: 8, roi: null, tower: "Al Mass" },
-      { start: "05-08-2026", beds: 2, type: "Renewal", rent: 165000, area: 1545, floor: 11, roi: null, tower: "Al Mass" },
-      { start: "01-08-2026", beds: 2, type: "New", rent: 140000, area: 1526, floor: 19, roi: null, tower: "Al Mass" },
-      { start: "01-08-2026", beds: 2, type: "Renewal", rent: 180000, area: 1545, floor: 4, roi: null, tower: "Al Mass" },
-      { start: "01-08-2026", beds: 3, type: "Renewal", rent: 210000, area: 2349, floor: 17, roi: null, tower: "Al Mass" },
-      { start: "20-07-2026", beds: 3, type: "Renewal", rent: 230000, area: 2402, floor: 4, roi: null, tower: "Al Mass" },
-      { start: "17-07-2026", beds: 1, type: "New", rent: 128000, area: 944, floor: 26, roi: null, tower: "Al Mass" },
-      { start: "15-07-2026", beds: 3, type: "Renewal", rent: 230000, area: 2498, floor: 13, roi: null, tower: "Al Mass" },
-      { start: "13-07-2026", beds: 3, type: "Renewal", rent: 220500, area: 2295, floor: 26, roi: null, tower: "Al Mass" },
-      { start: "05-07-2026", beds: 3, type: "Renewal", rent: 184000, area: 2349, floor: 17, roi: null, tower: "Al Mass" },
-      { start: "28-09-2026", beds: 3, type: "New", rent: 250000, area: 3882, floor: 19, roi: null, tower: "Fairooz" },
-      { start: "25-09-2026", beds: 3, type: "New", rent: 220000, area: 2439, floor: 11, roi: null, tower: "Fairooz" },
-      { start: "16-09-2026", beds: 2, type: "New", rent: 150000, area: 1570, floor: 7, roi: null, tower: "Fairooz" },
-      { start: "10-08-2026", beds: 3, type: "New", rent: 220000, area: 2429, floor: 5, roi: null, tower: "Fairooz" },
-      { start: "05-08-2026", beds: 2, type: "New", rent: 164000, area: 1570, floor: 7, roi: null, tower: "Fairooz" },
-      { start: "02-08-2026", beds: 3, type: "Renewal", rent: 206000, area: 2558, floor: 2, roi: null, tower: "Fairooz" },
-      { start: "28-07-2026", beds: 3, type: "Renewal", rent: 226000, area: 3072, floor: null, roi: null, tower: "Fairooz" },
-      { start: "10-07-2026", beds: 3, type: "New", rent: 225000, area: 2439, floor: 13, roi: null, tower: "Fairooz" },
-      { start: "10-07-2026", beds: 2, type: "New", rent: 165000, area: 1522, floor: 15, roi: null, tower: "Fairooz" },
-      { start: "05-07-2026", beds: 3, type: "Renewal", rent: 246750, area: 2399, floor: 9, roi: null, tower: "Fairooz" },
-      { start: "01-07-2026", beds: 3, type: "New", rent: 220000, area: 2351, floor: 12, roi: null, tower: "Fairooz" },
-      { start: "29-09-2026", beds: 1, type: "Renewal", rent: 170000, area: 1190, floor: 7, roi: null, tower: "Mesk" },
-      { start: "29-09-2026", beds: 1, type: "New", rent: 155000, area: 1190, floor: 5, roi: null, tower: "Mesk" },
-      { start: "27-09-2026", beds: 2, type: "Renewal", rent: 190000, area: 1509, floor: 29, roi: null, tower: "Mesk" },
-      { start: "26-09-2026", beds: 2, type: "Renewal", rent: 223000, area: 1715, floor: 7, roi: null, tower: "Mesk" },
-      { start: "26-09-2026", beds: 3, type: "New", rent: 250000, area: 2516, floor: 27, roi: null, tower: "Mesk" },
-      { start: "20-09-2026", beds: 2, type: "Renewal", rent: 204033, area: 1698, floor: 21, roi: null, tower: "Mesk" },
-      { start: "15-09-2026", beds: 1, type: "Renewal", rent: 155000, area: 1535, floor: 8, roi: null, tower: "Mesk" },
-      { start: "15-09-2026", beds: 2, type: "Renewal", rent: 220000, area: 1715, floor: 23, roi: null, tower: "Mesk" },
-      { start: "15-09-2026", beds: 4, type: "Renewal", rent: 242000, area: 2901, floor: 15, roi: null, tower: "Mesk" },
-      { start: "05-09-2026", beds: 2, type: "Renewal", rent: 200000, area: 1715, floor: 20, roi: null, tower: "Mesk" },
-      { start: "04-09-2026", beds: 1, type: "New", rent: 115000, area: 1190, floor: 7, roi: null, tower: "Mesk" },
-      { start: "01-09-2026", beds: 2, type: "New", rent: 170000, area: 1698, floor: 20, roi: null, tower: "Mesk" },
-      { start: "31-08-2026", beds: 2, type: "Renewal", rent: 170000, area: 1715, floor: 17, roi: null, tower: "Mesk" },
-      { start: "31-08-2026", beds: 2, type: "Renewal", rent: 161700, area: 1715, floor: 2, roi: null, tower: "Mesk" },
-      { start: "29-08-2026", beds: 2, type: "New", rent: 250000, area: 1698, floor: 22, roi: null, tower: "Mesk" },
-      { start: "20-08-2026", beds: 1, type: "Renewal", rent: 136500, area: 1535, floor: 14, roi: null, tower: "Mesk" },
-      { start: "20-08-2026", beds: 4, type: "Renewal", rent: 340000, area: 3277, floor: 35, roi: null, tower: "Mesk" },
-      { start: "20-08-2026", beds: 4, type: "Renewal", rent: 340000, area: 3277, floor: 35, roi: null, tower: "Mesk" },
-      { start: "18-08-2026", beds: 2, type: "New", rent: 150000, area: 1698, floor: 9, roi: null, tower: "Mesk" },
-      { start: "15-08-2026", beds: 2, type: "New", rent: 160000, area: 1715, floor: 14, roi: null, tower: "Mesk" },
-      { start: "15-08-2026", beds: 3, type: "Renewal", rent: 280000, area: 2356, floor: 31, roi: null, tower: "Mesk" },
-      { start: "09-08-2026", beds: 3, type: "New", rent: 235000, area: 2516, floor: 28, roi: null, tower: "Mesk" },
-      { start: "09-08-2026", beds: 2, type: "Renewal", rent: 140000, area: 1715, floor: 9, roi: null, tower: "Mesk" },
-      { start: "05-08-2026", beds: 1, type: "Renewal", rent: 113000, area: 1190, floor: 17, roi: null, tower: "Mesk" },
-      { start: "01-08-2026", beds: 1, type: "Renewal", rent: 126000, area: 1190, floor: 11, roi: null, tower: "Mesk" },
-      { start: "25-09-2026", beds: 2, type: "Renewal", rent: 161920, area: 1688, floor: 4, roi: null, tower: "Al Yass" },
-      { start: "25-09-2026", beds: 2, type: "New", rent: 175000, area: 1576, floor: 7, roi: null, tower: "Al Yass" },
-      { start: "20-09-2026", beds: 1, type: "Renewal", rent: 153000, area: 1510, floor: 5, roi: null, tower: "Al Yass" },
-      { start: "19-09-2026", beds: 2, type: "Renewal", rent: 175000, area: 1688, floor: 8, roi: null, tower: "Al Yass" },
-      { start: "07-09-2026", beds: 4, type: "Renewal", rent: 375000, area: 3280, floor: 22, roi: null, tower: "Al Yass" },
-      { start: "07-09-2026", beds: 5, type: "New", rent: 400000, area: 6519, floor: 24, roi: null, tower: "Al Yass" },
-      { start: "28-08-2026", beds: 2, type: "Renewal", rent: 240000, area: 1511, floor: 15, roi: null, tower: "Al Yass" },
-      { start: "22-08-2026", beds: 2, type: "Renewal", rent: 200000, area: 1705, floor: 4, roi: null, tower: "Al Yass" },
-      { start: "20-08-2026", beds: 2, type: "New", rent: 200000, area: 1511, floor: 17, roi: null, tower: "Al Yass" },
-      { start: "20-08-2026", beds: 2, type: "Renewal", rent: 168000, area: 1511, floor: 14, roi: null, tower: "Al Yass" },
-      { start: "17-08-2026", beds: 2, type: "Renewal", rent: 235000, area: 1718, floor: 2, roi: null, tower: "Al Yass" },
-      { start: "16-08-2026", beds: 1, type: "New", rent: 165000, area: 1510, floor: 11, roi: null, tower: "Al Yass" },
-      { start: "15-08-2026", beds: 3, type: "New", rent: 230000, area: 2518, floor: 17, roi: null, tower: "Al Yass" },
-      { start: "15-08-2026", beds: 3, type: "Renewal", rent: 250000, area: 2514, floor: 9, roi: null, tower: "Al Yass" },
-      { start: "10-08-2026", beds: 2, type: "Renewal", rent: 185000, area: 1576, floor: 9, roi: null, tower: "Al Yass" },
-      { start: "05-08-2026", beds: 2, type: "Renewal", rent: 221149, area: 1705, floor: 8, roi: null, tower: "Al Yass" },
-      { start: "01-08-2026", beds: 2, type: "Renewal", rent: 240000, area: 1705, floor: 6, roi: null, tower: "Al Yass" },
-      { start: "01-08-2026", beds: 2, type: "Renewal", rent: 200000, area: 1511, floor: 16, roi: null, tower: "Al Yass" },
-      { start: "20-07-2026", beds: 2, type: "Renewal", rent: 165000, area: 1576, floor: 8, roi: null, tower: "Al Yass" },
-      { start: "16-07-2026", beds: 1, type: "New", rent: 125000, area: 1510, floor: 7, roi: null, tower: "Al Yass" },
-      { start: "16-07-2026", beds: 2, type: "Renewal", rent: 200000, area: 1511, floor: 18, roi: null, tower: "Al Yass" },
-      { start: "04-07-2026", beds: 3, type: "Renewal", rent: 217800, area: 2514, floor: 5, roi: null, tower: "Al Yass" },
-      { start: "01-07-2026", beds: 3, type: "Renewal", rent: 225000, area: 2518, floor: 15, roi: null, tower: "Al Yass" },
-      { start: "24-09-2026", beds: 3, type: "New", rent: 220000, area: 2326, floor: 1, roi: null, tower: "Anbar" },
-      { start: "05-09-2026", beds: 2, type: "Renewal", rent: 250000, area: 1554, floor: 6, roi: null, tower: "Anbar" },
-      { start: "26-08-2026", beds: 3, type: "New", rent: 190000, area: 2437, floor: 5, roi: null, tower: "Anbar" },
-      { start: "20-08-2026", beds: 3, type: "Renewal", rent: 255000, area: 2437, floor: 3, roi: null, tower: "Anbar" },
-      { start: "17-08-2026", beds: 3, type: "New", rent: 320000, area: 2373, floor: 6, roi: null, tower: "Anbar" },
-      { start: "16-08-2026", beds: 3, type: "Renewal", rent: 270000, area: 2373, floor: 7, roi: null, tower: "Anbar" },
-      { start: "08-08-2026", beds: 4, type: "Renewal", rent: 300000, area: 3302, floor: 13, roi: null, tower: "Anbar" },
-      { start: "05-08-2026", beds: 2, type: "Renewal", rent: 200000, area: 1501, floor: 10, roi: null, tower: "Anbar" },
-      { start: "25-07-2026", beds: 2, type: "Renewal", rent: 200000, area: 1554, floor: 7, roi: null, tower: "Anbar" },
-      { start: "20-07-2026", beds: 2, type: "New", rent: 170000, area: 1554, floor: 5, roi: null, tower: "Anbar" },
-      { start: "18-07-2026", beds: 3, type: "New", rent: 280000, area: 2322, floor: 8, roi: null, tower: "Anbar" },
-      { start: "01-07-2026", beds: 3, type: "Renewal", rent: 265000, area: 2437, floor: 4, roi: null, tower: "Anbar" },
-    ],
+    // 27 individual DXB Interact-confirmed sale records, Jan-Sep 2026
+    // (Phase 3 package, 14 Oct 2026) — see data/emaar-6-towers-transactions.ts.
+    sale: emaar6Sales2026,
+    // All 148 reported Jul-Sep 2026 Q3 contracts (Phase 3 package, 14 Oct
+    // 2026 — supersedes the prior 121-row embedded array). roi is null
+    // throughout — no record in the source carries a documented
+    // purchase-price basis (brief Q2 answer: suppress ALL unsupported
+    // yields, not just the 7 flagged anomalies, since no record has a
+    // verified denominator).
+    rent: emaar6RentalsQ32026,
   },
 };
 
