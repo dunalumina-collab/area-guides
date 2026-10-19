@@ -6,9 +6,9 @@
 // info, socials, nav) is removed — this only restyles it.
 
 const SECTIONS = [
-  { id: "guides", label: "Guides" },
-  { id: "list", label: "Why List With Us" },
-  { id: "invest", label: "Why Invest" },
+  { id: "about", label: "About" },
+  { id: "team", label: "Meet the Team" },
+  { id: "why-duna", label: "Why Work With Us" },
 ];
 
 export default function HomeFooter() {

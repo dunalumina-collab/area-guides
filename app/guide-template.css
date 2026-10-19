@@ -614,3 +614,12 @@ footer.fine a{color:#8a8275;text-decoration:underline}
 .g-section:not(.tone-forest) .ins-table td{color:var(--ink);border-bottom-color:var(--line)}
 .ins-note{font-size:.76rem;color:#cfd8d2;margin-top:10px}
 .g-section:not(.tone-forest) .ins-note{color:#8a8275}
+
+/* ---- Homepage: Meet the Team cards (Oct 2026 redesign) ---- */
+.team-card{display:flex;flex-direction:column;align-items:center;text-align:center}
+.team-card .team-photo{width:104px;height:104px;border-radius:50%;overflow:hidden;background:var(--gold-tint);margin-bottom:14px;border:1px solid rgba(163,123,44,.3)}
+.team-card .team-photo img{width:100%;height:100%;object-fit:cover}
+.team-card .team-name{font-family:"Playfair Display",serif;font-weight:700;font-size:1.15rem;color:var(--ink)}
+.team-card .team-title{font-size:.8rem;color:var(--forest);font-weight:600;margin-top:4px}
+.team-card .team-spec{font-size:.76rem;color:#6b6458;margin-top:8px;line-height:1.5;min-height:2.3em}
+.team-card .cta-btn{margin-top:18px}

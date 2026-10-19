@@ -370,3 +370,42 @@ export interface GuideRegistryEntry {
   dataIssues: string[];
   provenance: MetricProvenance[];
 }
+
+// Team profile pages (lib/team.ts / app/team/[slug]/page.tsx) — separate,
+// shareable pages for each DUNA GROUP team member, introduced Oct 2026
+// alongside the homepage's "Meet the Team" section. Deliberately a much
+// simpler model than GuideContent/GuideData above: a profile has no
+// market dataset, so it isn't shoehorned into that shape. Every field
+// here must be an already-approved fact (reused from that person's own
+// guide specialist block, or supplied directly) — never invented.
+export interface TeamSocialLink {
+  label: string;
+  href: string;
+}
+
+export interface TeamGuideLink {
+  /** Guide display name, e.g. "Stella Maris" or "Damac Lagoons". */
+  label: string;
+  /** Path to the guide, e.g. "/stella-maris". */
+  href: string;
+}
+
+export interface TeamMemberProfile {
+  slug: string;
+  name: string;
+  /** e.g. "CEO & Real Estate Advisor" */
+  title: string;
+  /** Area/project specialisation shown under the title, e.g. "Stella Maris & Cayan Tower, Dubai Marina". */
+  specialisation: string;
+  photoSrc: string;
+  phoneDisplay: string;
+  whatsappHref: string;
+  emailHref: string;
+  emailDisplay: string;
+  bioParagraphs: string[];
+  languagesLine: string;
+  socials: TeamSocialLink[];
+  /** This person's own area/project guide(s) — each a separate, unmodified existing URL. */
+  guides: TeamGuideLink[];
+  metaDescription?: string;
+}

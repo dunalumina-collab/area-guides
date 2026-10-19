@@ -1,48 +1,48 @@
-// Homepage hub. Content/copy/order is ported verbatim from the approved
-// "Area & Project Guides" mockup — only the three real-guide cards' status
-// and href are driven by the central registry (lib/registry.ts); every
-// other card and all non-card content is literal JSX, matching the approved
-// file. Never hand-edit this to "simplify" copy — it is a literal spec.
+// Homepage hub.
 //
-// Oct 2026 redesign: presentation rebuilt onto the same premium system as
-// the guide pages (sticky g-header, alternating forest/ivory/white g-section
-// rhythm, sec-intro headings, varied card-row/card-plain/card-stat styling,
-// premium g-footer) — see components/guide/GuideHeader.tsx and
-// components/HomeFooter.tsx. No section, copy, table or link was removed.
-import { registry } from "@/lib/registry";
-import type { GuideRegistryEntry } from "@/lib/types";
+// Oct 2026 redesign (team-page redesign): the former top-of-page area/
+// project directory (hero banner + "Guides" grid pulling every published
+// registry entry) is replaced with an About Duna Group section and a
+// "Meet the Team" section, per Vesna's explicit instruction — guide
+// discovery now happens through each specialist's own profile page
+// (app/team/[slug]/page.tsx, lib/team.ts), not a homepage grid. Every
+// section from WhyDuna onward (Why Work With Us, Listing Packages, the
+// cost-comparison section, Duna Intelligence) is untouched, verbatim.
+//
+// Presentation still sits on the same premium system as the guide pages
+// (sticky g-header, alternating forest/ivory/white g-section rhythm,
+// sec-intro headings, card-row/card-plain styling, premium g-footer) —
+// see components/guide/GuideHeader.tsx and components/HomeFooter.tsx.
+import Link from "next/link";
+import Image from "next/image";
+import { getTeamMembers } from "@/lib/team";
+import type { TeamMemberProfile } from "@/lib/types";
 import GuideHeader from "@/components/guide/GuideHeader";
 import HomeFooter from "@/components/HomeFooter";
 import WhyDuna from "@/components/guide/WhyDuna";
 
 const SECTIONS = [
-  { id: "guides", label: "Guides" },
+  { id: "about", label: "About" },
+  { id: "team", label: "Meet the Team" },
   { id: "why-duna", label: "Why Work With Us" },
 ];
 
-function GuideCard({ entry }: { entry: GuideRegistryEntry }) {
-  const live = entry.status === "published";
-  const body = (
-    <>
-      <span className={`guide-status ${live ? "live" : "soon"}`}>{live ? "Live guide" : "In progress"}</span>
-      <div className="n">{entry.name}</div>
-      <span className="l">{entry.areaLabel}</span>
-      <span className="l2">{entry.specialist}</span>
-      {live && <span className="arrow">Open report &rarr;</span>}
-    </>
-  );
-  return live ? (
-    <a className="card-plain guide-card" href={`/${entry.slug}`} target="_blank" rel="noopener noreferrer">
-      {body}
-    </a>
-  ) : (
-    <div className="card-plain guide-card">{body}</div>
+function TeamCard({ member }: { member: TeamMemberProfile }) {
+  return (
+    <Link className="card-plain team-card" href={`/team/${member.slug}`}>
+      <div className="team-photo">
+        <Image src={member.photoSrc} alt={member.name} width={104} height={104} style={{ objectFit: "cover" }} />
+      </div>
+      <div className="team-name">{member.name}</div>
+      <span className="team-title">{member.title}</span>
+      <span className="team-spec">{member.specialisation}</span>
+      <span className="cta-btn">View Profile &rarr;</span>
+    </Link>
   );
 }
 
 export default function Home() {
-  const areaGuides = registry.filter((g) => g.type === "area" && !g.unlisted);
-  const projectGuides = registry.filter((g) => g.type === "project" && !g.unlisted);
+  const team = getTeamMembers();
 
   return (
     <div className="guide-page" id="top">
@@ -52,54 +52,40 @@ export default function Home() {
         extraLink={{ label: "dunagroup.ae", href: "https://dunagroup.ae/" }}
       />
 
-      {/* HERO — same premium dark band as the guide pages' hero, homepage copy unchanged */}
-      <section className="g-section tone-forest home-hero">
+      {/* ABOUT — same premium dark band as the guide pages' hero */}
+      <section className="g-section tone-forest home-hero" id="about">
         <div className="wrap">
-          <span className="eyebrow">Dubai Area &amp; Project Guides</span>
-          <h1>Every building we cover, backed by the numbers behind it.</h1>
+          <span className="eyebrow">About Duna Group</span>
+          <h1>Dubai real estate, backed by the numbers behind it.</h1>
           <p className="home-hero-lead">
-            One home for Duna Group&rsquo;s area and project guides &mdash; registered DLD transactions, rental
-            comparables and real yield data, not developer brochure copy. Each guide is built and owned by the
-            area specialist who works that building.
+            Duna Group is a Dubai-based real estate advisory team working with owners, buyers, tenants and
+            investors across the city&rsquo;s residential market. Every recommendation is backed by registered DLD
+            transactions, rental comparables and real yield data &mdash; not developer brochure copy &mdash; and
+            every area or project we cover is handled by a dedicated specialist who knows the building, the
+            numbers, and the client.
           </p>
           <div className="about-note home-hero-note">
             <p>
-              <b>Growing every month.</b> New areas and projects go live as each specialist&rsquo;s guide is
-              finished. Own a building and want it added? Message us on WhatsApp.
+              <b>One team, every specialism covered.</b> Meet the specialist for your building or area below, or
+              message us on WhatsApp and we&rsquo;ll connect you with the right person.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="g-section tone-ivory" id="guides">
+      {/* MEET THE TEAM */}
+      <section className="g-section tone-ivory" id="team">
         <div className="wrap">
           <div className="sec-intro">
-            <span className="eyebrow">Browse by Area / Project</span>
-            <h2>Guides</h2>
-            <p>
-              Live guides open in a new tab, with the same report format: specialist bio, building facts,
-              unit-type pricing, transaction history and a live transaction table.
-            </p>
+            <span className="eyebrow">Duna Group Team</span>
+            <h2>Meet the Team</h2>
+            <p>Five dedicated specialists, each with their own area or project guide &mdash; backed by the same registered transaction data.</p>
           </div>
-          <div className="guide-group">
-            <h3 className="guide-group-label">Area Guides</h3>
-            <div className="card-row cols-3">
-              {areaGuides.map((entry) => (
-                <GuideCard key={entry.slug} entry={entry} />
-              ))}
-            </div>
+          <div className="card-row cols-3">
+            {team.map((member) => (
+              <TeamCard key={member.slug} member={member} />
+            ))}
           </div>
-          <div className="guide-group">
-            <h3 className="guide-group-label">Project Guides</h3>
-            <div className="card-row cols-3">
-              {projectGuides.map((entry) => (
-                <GuideCard key={entry.slug} entry={entry} />
-              ))}
-            </div>
-          </div>
-          <p className="guides-note">
-            New guides are added here as each one is finished &mdash; same format, same design, every time.
-          </p>
         </div>
       </section>
 
