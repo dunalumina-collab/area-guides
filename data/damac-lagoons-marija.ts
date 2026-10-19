@@ -19,10 +19,10 @@ import darkoGuide from "./damac-lagoons";
 // 2. specialist block — name, photo, phone, WhatsApp, email, bio, social
 //    links — using the exact details Vesna supplied directly for this
 //    page: bio (three paragraphs, her exact wording, including "...
-//    connect, helping..." — a comma, not an em dash), email, phone, and a
-//    single Instagram link (https://www.instagram.com/maria_geleva/) —
-//    no other contact/social link, per her explicit "do not invent
-//    additional contact or social links." Photo is her existing
+//    connect, helping..." — a comma, not an em dash), email, phone, and
+//    (per her 19 Oct follow-up adding LinkedIn/Facebook) three social
+//    links — LinkedIn, Facebook, Instagram — all explicitly supplied by
+//    her, none invented. Photo is her existing
 //    /marija-photo.jpg (same file as the Emaar 6 Towers guide, reused per
 //    her instruction). languagesLine (not addressed in her messages) is
 //    left as carried over from the Emaar 6 Towers guide — a real,
@@ -129,7 +129,12 @@ const guide: GuideData = {
         "She combines commercial experience with a strong interest in human behaviour, performance and personal development.",
       ],
       languagesLine: "Native: Macedonian · Fluent: English, Serbo-Croatian",
-      socials: [{ label: "Instagram", href: "https://www.instagram.com/maria_geleva/" }],
+      socials: [
+        { label: "LinkedIn", href: "https://www.linkedin.com/in/marija-gjeleva/" },
+        { label: "Facebook", href: "https://www.facebook.com/marija.geleva" },
+        { label: "Instagram", href: "https://www.instagram.com/maria_geleva/" },
+        { label: "WhatsApp", href: MARIJA_WHATSAPP_HREF },
+      ],
     },
     cta: {
       ...darkoGuide.content.cta,
