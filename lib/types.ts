@@ -361,6 +361,8 @@ export interface GuideRegistryEntry {
   areaLabel: string;
   specialist: string;
   status: GuideStatus;
+  /** True hides this entry from the homepage guide grid while keeping it fully routable at /<slug>. For an alternate-specialist view of an existing guide shared with a client, not a general-purpose visibility toggle. */
+  unlisted?: boolean;
   /** Module path under data/, imported dynamically by app/[slug]/page.tsx. */
   dataFile: string;
   lastUpdated: string; // ISO date

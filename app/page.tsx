@@ -41,8 +41,8 @@ function GuideCard({ entry }: { entry: GuideRegistryEntry }) {
 }
 
 export default function Home() {
-  const areaGuides = registry.filter((g) => g.type === "area");
-  const projectGuides = registry.filter((g) => g.type === "project");
+  const areaGuides = registry.filter((g) => g.type === "area" && !g.unlisted);
+  const projectGuides = registry.filter((g) => g.type === "project" && !g.unlisted);
 
   return (
     <div className="guide-page" id="top">
