@@ -3,13 +3,13 @@ import { damacLagoonsSale, damacLagoonsRent } from "./damac-lagoons-transactions
 import damacLagoonsTransactions from "./damac-lagoons-full-transactions";
 
 // Ported from the approved "Darko - Damac Lagoons" guide HTML. Damac Lagoons
-// is a multi-cluster, 1,286-registered-transaction community guide, not a
+// is a multi-cluster, 1,821-registered-transaction community guide, not a
 // single building like Stella Maris/Cayan Tower, so several sections are
 // mapped into the shared GuideData shape rather than carried 1:1 — every
 // such adaptation is called out in lib/registry.ts's dataIssues for this
 // guide. All copy (specialist bio, cluster facts, CTA copy) and every
 // number below is taken verbatim or computed directly from the source
-// file's own embedded transaction data (1,286 records, Jul–Sep 2026) —
+// file's own embedded transaction data (1,821 records, Jul–Oct 2026) —
 // nothing is invented.
 
 const guide: GuideData = {
@@ -69,7 +69,7 @@ const guide: GuideData = {
       ],
       unitTypesHeading: "What's registered selling and renting right now",
       unitTypesSub:
-        "Bedroom mix seen in registered Jul–Sep 2026 transactions across villas/townhouses and the two off-plan apartment sub-communities (Valencia, Lagoon Views).",
+        "Bedroom mix seen in registered Jul–Oct 2026 transactions across villas/townhouses and the two off-plan apartment sub-communities (Valencia, Lagoon Views).",
       unitFacts: [
         { n: "Studio-2 Bed", l: "Apartments (Valencia, Lagoon Views - off-plan only)" },
         { n: "3-7 Bed", l: "Villas &amp; townhouses (across all 11 clusters)" },
@@ -95,75 +95,75 @@ const guide: GuideData = {
         { cells: ["Morocco", "30 Jun 2023", "1,025", "Phase 1 expected Apr 2027; Phase 2 Oct 2027", "4BR 2,228&ndash;2,231; 5BR TH 3,175&ndash;3,183; large villas ~11,650&ndash;25,012"] },
       ],
       fullNotes: [
-        'Figures marked "~" are estimated completion percentages, not verified handover dates. Pricing elsewhere on this page reflects transactions registered over the last three months (July&ndash;September 2026); where a figure conflicts with another source, this registered data takes precedence.',
+        'Figures marked "~" are estimated completion percentages, not verified handover dates. Pricing elsewhere on this page reflects transactions registered over the last four months (July&ndash;October 2026); where a figure conflicts with another source, this registered data takes precedence.',
         "Two off-plan apartment sub-communities, Valencia and Lagoon Views, sell directly from DAMAC within the wider Damac Lagoons masterplan and are tracked separately from the 11 villa/townhouse clusters above (see market data below).",
       ],
       mediaHref: "https://darko.dunagroup.ae/",
       mediaLabel: "Register for a free valuation report on your Damac Lagoons property →",
       footnote:
-        "All figures on this page are registered DLD transaction data for Damac Lagoons (July–September 2026) and DAMAC's own published cluster launch/unit data; where a figure conflicts with another source, registered data takes precedence.",
+        "All figures on this page are registered DLD transaction data for Damac Lagoons (July–October 2026) and DAMAC's own published cluster launch/unit data; where a figure conflicts with another source, registered data takes precedence.",
     },
     market: {
       heading: "Damac Lagoons, in numbers",
       intro:
-        "Live transaction activity across apartments and villas/townhouses for July–September 2026, drawn from registered sale and rent contracts.",
-      rangeTag3m: "Jul - Sep 2026 (only reporting window currently available)",
+        "Live transaction activity across apartments and villas/townhouses for July–October 2026, drawn from registered sale and rent contracts.",
+      rangeTag3m: "Jul - Oct 2026 (only reporting window currently available)",
       secondaryNote:
-        "Villa and townhouse rents climbed through the quarter &mdash; new lease registrations rose from <b>115</b> in July to <b>170</b> in September, up <b>48%</b>. <b>Costa Brava</b> commands the highest resale value per square foot among the villa clusters, while <b>Santorini</b> currently shows the strongest rough gross yield at roughly <b>5.2%</b> (average annual rent versus average resale price). Apartments remain entirely off-plan for now &mdash; no secondary rental market exists yet &mdash; so villa owners sit in the only segment of Damac Lagoons currently generating rental income, with demand for leases visibly accelerating month over month. Of the 555 apartment sales this quarter, <b>545</b> were primary (bought directly from DAMAC, still off-plan) and <b>10</b> were off-plan resale (bought from an earlier off-plan buyer, before handover). Among villas and townhouses, <b>280</b> sales were ready resale (already handed over) and <b>33</b> were off-plan resale &mdash; the unit itself not yet complete, only the right to it changing hands.",
+        "Villa and townhouse rents climbed over the period &mdash; new lease registrations rose from <b>115</b> in July to <b>172</b> in October, up <b>50%</b>. <b>Costa Brava</b> commands the highest resale value per square foot among the villa clusters, while <b>Santorini</b> currently shows the strongest rough gross yield at roughly <b>5.2%</b> (average annual rent versus average resale price). Apartments remain entirely off-plan for now &mdash; no secondary rental market exists yet &mdash; so villa owners sit in the only segment of Damac Lagoons currently generating rental income, with demand for leases visibly accelerating month over month. Of the 812 apartment sales in this window, <b>800</b> were primary (bought directly from DAMAC, still off-plan) and <b>12</b> were off-plan resale (bought from an earlier off-plan buyer, before handover). Among villas and townhouses, <b>377</b> sales were ready resale (already handed over) and <b>42</b> were off-plan or pre-completion &mdash; the unit itself not yet complete, only the right to it changing hands.",
       rangeTagYtd: "Same window, by deal type (no separate YTD window available)",
       bedPills: [
-        "<b>Studio</b> (apt) &middot; 240 sales (Jul&ndash;Sep) &middot; off-plan only, no rentals yet",
-        "<b>1 Bed</b> (apt) &middot; 216 sales (Jul&ndash;Sep) &middot; off-plan only, no rentals yet",
-        "<b>2 Beds</b> (apt) &middot; 99 sales (Jul&ndash;Sep) &middot; off-plan only, no rentals yet",
-        "<b>3 Beds</b> (villa/TH) &middot; 22 sales &middot; 49 leases (Jul&ndash;Sep)",
-        "<b>4 Beds</b> (villa/TH) &middot; 183 sales &middot; 261 leases (Jul&ndash;Sep)",
-        "<b>5 Beds</b> (villa/TH) &middot; 77 sales &middot; 100 leases (Jul&ndash;Sep)",
-        "<b>6 Beds</b> (villa/TH) &middot; 23 sales &middot; 8 leases (Jul&ndash;Sep)",
-        "<b>7 Beds</b> (villa/TH) &middot; 8 sales &middot; 0 leases (Jul&ndash;Sep)",
+        "<b>Studio</b> (apt) &middot; 402 sales (Jul&ndash;Oct) &middot; off-plan only, no rentals yet",
+        "<b>1 Bed</b> (apt) &middot; 276 sales (Jul&ndash;Oct) &middot; off-plan only, no rentals yet",
+        "<b>2 Beds</b> (apt) &middot; 134 sales (Jul&ndash;Oct) &middot; off-plan only, no rentals yet",
+        "<b>3 Beds</b> (villa/TH) &middot; 32 sales &middot; 80 leases (Jul&ndash;Oct)",
+        "<b>4 Beds</b> (villa/TH) &middot; 228 sales &middot; 360 leases (Jul&ndash;Oct)",
+        "<b>5 Beds</b> (villa/TH) &middot; 111 sales &middot; 136 leases (Jul&ndash;Oct)",
+        "<b>6 Beds</b> (villa/TH) &middot; 30 sales &middot; 14 leases (Jul&ndash;Oct)",
+        "<b>7 Beds</b> (villa/TH) &middot; 11 sales &middot; 0 leases (Jul&ndash;Oct)",
       ],
       bedPillsNote:
         "Apartments at Damac Lagoons (Valencia, Lagoon Views) are still under construction, so every apartment transaction is an off-plan sale &mdash; there is no apartment rental market yet. Villas and townhouses are the only segment currently generating rental income.",
       sinceEyebrow: "Reporting Window",
-      sinceHeading: "Damac Lagoons, July-September 2026",
+      sinceHeading: "Damac Lagoons, July-October 2026",
       sinceSub:
-        "Damac Lagoons' own guide tracks one rolling quarter (Jul–Sep 2026), not a multi-year trend like a completed single building — most clusters only finished handover in 2025–2026, so a 2021-to-date chart would mean comparing years before the community existed. See dataIssues in lib/registry.ts.",
+        "Damac Lagoons' own guide tracks one rolling window (Jul–Oct 2026), not a multi-year trend like a completed single building — most clusters only finished handover in 2025–2026, so a 2021-to-date chart would mean comparing years before the community existed. See dataIssues in lib/registry.ts.",
       rentChartNote:
         "No prior-year rent trend exists for Damac Lagoons as a whole — most clusters completed handover in 2025 or 2026, so year-on-year rent history starts only once a full year of leasing has registered.",
       insightEyebrow: "For Damac Lagoons owners",
       insightText:
-        "Villa and townhouse rents climbed through the quarter - new lease registrations rose from <b>115</b> in July to <b>170</b> in September, up <b>48%</b>. <b>Costa Brava</b> commands the highest resale value per square foot among the villa clusters, while <b>Santorini</b> currently shows the strongest rough gross yield at roughly <b>5.2%</b> (average annual rent versus average resale price). Apartments remain entirely off-plan for now - no secondary rental market exists yet - so villa owners sit in the only segment of Damac Lagoons currently generating rental income, with demand for leases visibly accelerating month over month. Of the 555 apartment sales this quarter, <b>545</b> were primary (bought directly from DAMAC, still off-plan) and <b>10</b> were off-plan resale (bought from an earlier off-plan buyer, before handover). Among villas and townhouses, <b>280</b> sales were ready resale (already handed over) and <b>33</b> were off-plan resale - the unit itself not yet complete, only the right to it changing hands.",
+        "Villa and townhouse rents climbed over the period - new lease registrations rose from <b>115</b> in July to <b>172</b> in October, up <b>50%</b>. <b>Costa Brava</b> commands the highest resale value per square foot among the villa clusters, while <b>Santorini</b> currently shows the strongest rough gross yield at roughly <b>5.2%</b> (average annual rent versus average resale price). Apartments remain entirely off-plan for now - no secondary rental market exists yet - so villa owners sit in the only segment of Damac Lagoons currently generating rental income, with demand for leases visibly accelerating month over month. Of the 812 apartment sales in this window, <b>800</b> were primary (bought directly from DAMAC, still off-plan) and <b>12</b> were off-plan resale (bought from an earlier off-plan buyer, before handover). Among villas and townhouses, <b>377</b> sales were ready resale (already handed over) and <b>42</b> were off-plan or pre-completion - the unit itself not yet complete, only the right to it changing hands.",
       topSellingRows: [
-        { cells: ["Malta", "69", "—", "2,650,000", "1,629"] },
-        { cells: ["Costa Brava", "65", "—", "2,770,000", "1,699"] },
-        { cells: ["Portofino", "42", "—", "2,750,000", "1,537"] },
-        { cells: ["Nice", "35", "—", "2,550,000", "1,550"] },
-        { cells: ["Santorini", "34", "—", "3,100,000", "1,710"] },
+        { cells: ["Malta", "88", "—", "2,650,000", "1,632"] },
+        { cells: ["Costa Brava", "87", "—", "2,770,000", "1,713"] },
+        { cells: ["Portofino", "57", "—", "2,700,000", "1,529"] },
+        { cells: ["Nice", "52", "—", "2,650,000", "1,580"] },
+        { cells: ["Santorini", "43", "—", "3,200,000", "1,710"] },
       ],
       topSellingNote:
-        "Source: Damac Lagoons villa/townhouse resale transactions registered Jul–Sep 2026, by cluster. “vs prior 90d” is shown as —: unlike the single-building guides, no prior-quarter comparison window was available in the source data for this community-wide view.",
+        "Source: Damac Lagoons villa/townhouse resale transactions registered Jul–Oct 2026, by cluster. “vs prior 90d” is shown as —: unlike the single-building guides, no prior-quarter comparison window was available in the source data for this community-wide view.",
       topRentedRows: [
-        { cells: ["1", "Costa Brava", "145"] },
-        { cells: ["2", "Santorini", "122"] },
-        { cells: ["3", "Portofino", "78"] },
-        { cells: ["4", "Malta", "72"] },
-        { cells: ["5", "Nice", "1"] },
+        { cells: ["1", "Costa Brava", "207"] },
+        { cells: ["2", "Santorini", "158"] },
+        { cells: ["3", "Portofino", "112"] },
+        { cells: ["4", "Malta", "107"] },
+        { cells: ["5", "Nice", "6"] },
       ],
       topRentedNote:
-        "Source: Damac Lagoons villa/townhouse rent contracts registered Jul–Sep 2026, ranked by contract count (labelled “this year” by the shared template; the real window is the Jul–Sep 2026 quarter — see dataIssues).",
+        "Source: Damac Lagoons villa/townhouse rent contracts registered Jul–Oct 2026, ranked by contract count (labelled “this year” by the shared template; the real window is the Jul–Oct 2026 period — see dataIssues).",
       browseHeading: "Browse every Damac Lagoons transaction",
       countNoteSuffix: " across apartments and villas/townhouses, all 11 clusters plus Valencia and Lagoon Views",
-      // Restates the real, already-verified July→September rent-contract
+      // Restates the real, already-verified July→October rent-contract
       // figures from secondaryNote/insightText above as a structured
       // headline card — same numbers, no new ones.
       headline: {
-        label: "Villa & townhouse leasing momentum, Jul–Sep 2026",
-        value: "170",
-        deltaText: "+48% vs July",
+        label: "Villa & townhouse leasing momentum, Jul–Oct 2026",
+        value: "172",
+        deltaText: "+50% vs July",
         deltaPositive: true,
         secondary: [
           { k: "July", v: "115 leases" },
-          { k: "September", v: "170 leases" },
-          { k: "Quarter total", v: "418 rent contracts" },
+          { k: "October", v: "172 leases" },
+          { k: "4-month total", v: "590 rent contracts" },
         ],
       },
     },
@@ -171,7 +171,7 @@ const guide: GuideData = {
       intro:
         "DAMAC Lagoons spans 11 themed clusters and two off-plan apartment sub-communities &mdash; comparables live scattered across whichever portal a buyer happens to check. Here's what changes when Duna Lumina handles it.",
       cards: [
-        { heading: "A specialist who tracks every cluster, not just one", body: "Darko tracks registered sale and rental activity across all 11 villa/townhouse clusters plus Valencia and Lagoon Views, so your pricing reflects this quarter's real comparables &mdash; not a brochure from 2022." },
+        { heading: "A specialist who tracks every cluster, not just one", body: "Darko tracks registered sale and rental activity across all 11 villa/townhouse clusters plus Valencia and Lagoon Views, so your pricing reflects this period's real comparables &mdash; not a brochure from 2022." },
         { heading: "On-site read, not a desk estimate", body: "A 12-year background in construction and HSE project delivery means Darko can read build quality and real handover timing on a walk-through, not just from a developer's completion percentage." },
         { heading: "Duna Market Intelligence pricing", body: "Every listing is priced against Duna's live Dubai data platform, so you list at a number that's defensible to a buyer's agent &mdash; not a guess." },
         { heading: "Completion-order clarity", body: "Clusters didn't hand over in launch order &mdash; Darko tracks the real completion sequence so owners and buyers price against what's actually ready, not what sold first." },
@@ -197,25 +197,25 @@ const guide: GuideData = {
   },
   dataset: {
     bedroomTypes: [0, 1, 2, 3, 4, 5, 6, 7],
-    // Full registered dataset (not a sample) — all 868 sale + 418 rent
-    // records from the source file's own embedded data, Jul–Sep 2026.
+    // Full registered dataset (not a sample) — all 1,231 sale + 590 rent
+    // records from the source file's own embedded data, Jul–Oct 2026.
     isSample: false,
-    // The same 1,286 records restructured per-transaction (type/txn/cluster/
+    // The same 1,821 records restructured per-transaction (type/txn/cluster/
     // clusterGroup/month) — powers the Transactions browser, the market
     // summary cards, and the computed insight panel. See
     // data/damac-lagoons-full-transactions.ts.
     fullTransactions: damacLagoonsTransactions,
     kpis3m: [
-      [868, "Sale transactions · Jul–Sep"],
-      [418, "New rent contracts · Jul–Sep"],
-      [555, "Apartment (off-plan) sales"],
-      [731, "Villa / townhouse records"],
+      [1231, "Sale transactions · Jul–Oct"],
+      [590, "New rent contracts · Jul–Oct"],
+      [812, "Apartment (off-plan) sales"],
+      [1009, "Villa / townhouse records"],
     ],
     kpisYtd: [
-      [545, "Apartment sales – off-plan primary"],
-      [10, "Apartment sales – off-plan resale"],
-      [280, "Villa/townhouse sales – ready resale"],
-      [33, "Villa/townhouse sales – off-plan resale"],
+      [800, "Apartment sales – off-plan primary"],
+      [12, "Apartment sales – off-plan resale"],
+      [377, "Villa/townhouse sales – ready resale"],
+      [42, "Villa/townhouse sales – off-plan resale"],
     ],
     // No multi-year (2021–2026) history exists for Damac Lagoons: most
     // clusters only completed handover in 2025–2026, so a yearly trend
