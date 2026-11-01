@@ -11,7 +11,7 @@ import { useMemo, useState } from "react";
 import type { PricingRow, TxnRecord } from "@/lib/types";
 import EmptyState from "./EmptyState";
 
-const MONTHS = ["July", "August", "September"];
+const MONTHS = ["July", "August", "September", "October"];
 
 const DEAL_LABEL: Record<string, string> = {
   "Off-Plan Primary": "Off-Plan · Primary",
@@ -403,7 +403,8 @@ export function DamacInsightPanel({ records }: { records: TxnRecord[] }) {
   const rent = allRent.filter((r) => /^1[23] /.test(r.subtype));
   const sale = V.filter((r) => r.txn === "Sale" && r.subtype.indexOf("Resale") === 0);
   const rt = MONTHS.map((m) => allRent.filter((r) => r.month === m).length);
-  const growth = rt[0] > 0 ? Math.round((rt[2] / rt[0] - 1) * 100) : 0;
+  const latest = rt.length - 1;
+  const growth = rt[0] > 0 ? Math.round((rt[latest] / rt[0] - 1) * 100) : 0;
   const r4 = rent.filter((r) => r.beds === "4");
   const s4 = sale.filter((r) => r.beds === "4");
   const share4 = allRent.length ? Math.round((allRent.filter((r) => r.beds === "4").length / allRent.length) * 100) : 0;
@@ -440,7 +441,7 @@ export function DamacInsightPanel({ records }: { records: TxnRecord[] }) {
         <div className="ins-tile">
           <div className="n">{growth >= 0 ? "+" : ""}{growth}%</div>
           <div className="l">
-            more new leases registered in September ({rt[2]}) than in July ({rt[0]})
+            more new leases registered in {MONTHS[latest]} ({rt[latest]}) than in July ({rt[0]})
           </div>
         </div>
         <div className="ins-tile">
@@ -488,7 +489,7 @@ export function DamacInsightPanel({ records }: { records: TxnRecord[] }) {
         </p>
       )}
       <p className="ins-note">
-        Medians of registered transactions, July to September 2026. Rents are 12 to 13 month new leases and resales
+        Medians of registered transactions, July to October 2026. Rents are 12 to 13 month new leases and resales
         are ready units. Gross yield is before service charges and costs. Indicative only.
       </p>
     </>
